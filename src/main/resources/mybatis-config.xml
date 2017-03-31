@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	
+	<typeAliases>
+		<package name="com.webleader.appms.bean.alarm"/>
+		<package name="com.webleader.appms.bean.attendance"/>
+		<package name="com.webleader.appms.bean.communication"/>
+		<package name="com.webleader.appms.bean.positioning"/>
+		<package name="com.webleader.appms.bean.setting"/>
+		<package name="com.webleader.appms.bean.staff"/>
+		<package name="com.webleader.appms.bean.system"/>
+	</typeAliases>
+	
+</configuration>

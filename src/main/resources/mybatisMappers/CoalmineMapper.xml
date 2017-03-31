@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.setting.CoalmineMapper">
+  <resultMap id="BaseResultMap" type="com.webleader.appms.bean.setting.Coalmine">
+    <id column="coalmine_id" jdbcType="VARCHAR" property="coalmineId" />
+    <result column="coalmine_name" jdbcType="VARCHAR" property="coalmineName" />
+    <result column="coalmine_abbr" jdbcType="VARCHAR" property="coalmineAbbr" />
+    <result column="coalmine_output" jdbcType="DOUBLE" property="coalmineOutput" />
+    <result column="coalmine_num" jdbcType="INTEGER" property="coalmineNum" />
+    <result column="coalmine_type" jdbcType="VARCHAR" property="coalmineType" />
+    <result column="gas_grade" jdbcType="VARCHAR" property="gasGrade" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    coalmine_id, coalmine_name, coalmine_abbr, coalmine_output, coalmine_num, coalmine_type, 
+    gas_grade, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_base_coalmine_info
+    where coalmine_id = #{coalmineId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_base_coalmine_info
+    where coalmine_id = #{coalmineId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.webleader.appms.bean.setting.Coalmine">
+    insert into t_base_coalmine_info (coalmine_id, coalmine_name, coalmine_abbr, 
+      coalmine_output, coalmine_num, coalmine_type, 
+      gas_grade, remark)
+    values (#{coalmineId,jdbcType=VARCHAR}, #{coalmineName,jdbcType=VARCHAR}, #{coalmineAbbr,jdbcType=VARCHAR}, 
+      #{coalmineOutput,jdbcType=DOUBLE}, #{coalmineNum,jdbcType=INTEGER}, #{coalmineType,jdbcType=VARCHAR}, 
+      #{gasGrade,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.webleader.appms.bean.setting.Coalmine">
+    insert into t_base_coalmine_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="coalmineId != null">
+        coalmine_id,
+      </if>
+      <if test="coalmineName != null">
+        coalmine_name,
+      </if>
+      <if test="coalmineAbbr != null">
+        coalmine_abbr,
+      </if>
+      <if test="coalmineOutput != null">
+        coalmine_output,
+      </if>
+      <if test="coalmineNum != null">
+        coalmine_num,
+      </if>
+      <if test="coalmineType != null">
+        coalmine_type,
+      </if>
+      <if test="gasGrade != null">
+        gas_grade,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="coalmineId != null">
+        #{coalmineId,jdbcType=VARCHAR},
+      </if>
+      <if test="coalmineName != null">
+        #{coalmineName,jdbcType=VARCHAR},
+      </if>
+      <if test="coalmineAbbr != null">
+        #{coalmineAbbr,jdbcType=VARCHAR},
+      </if>
+      <if test="coalmineOutput != null">
+        #{coalmineOutput,jdbcType=DOUBLE},
+      </if>
+      <if test="coalmineNum != null">
+        #{coalmineNum,jdbcType=INTEGER},
+      </if>
+      <if test="coalmineType != null">
+        #{coalmineType,jdbcType=VARCHAR},
+      </if>
+      <if test="gasGrade != null">
+        #{gasGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.webleader.appms.bean.setting.Coalmine">
+    update t_base_coalmine_info
+    <set>
+      <if test="coalmineName != null">
+        coalmine_name = #{coalmineName,jdbcType=VARCHAR},
+      </if>
+      <if test="coalmineAbbr != null">
+        coalmine_abbr = #{coalmineAbbr,jdbcType=VARCHAR},
+      </if>
+      <if test="coalmineOutput != null">
+        coalmine_output = #{coalmineOutput,jdbcType=DOUBLE},
+      </if>
+      <if test="coalmineNum != null">
+        coalmine_num = #{coalmineNum,jdbcType=INTEGER},
+      </if>
+      <if test="coalmineType != null">
+        coalmine_type = #{coalmineType,jdbcType=VARCHAR},
+      </if>
+      <if test="gasGrade != null">
+        gas_grade = #{gasGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where coalmine_id = #{coalmineId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.webleader.appms.bean.setting.Coalmine">
+    update t_base_coalmine_info
+    set coalmine_name = #{coalmineName,jdbcType=VARCHAR},
+      coalmine_abbr = #{coalmineAbbr,jdbcType=VARCHAR},
+      coalmine_output = #{coalmineOutput,jdbcType=DOUBLE},
+      coalmine_num = #{coalmineNum,jdbcType=INTEGER},
+      coalmine_type = #{coalmineType,jdbcType=VARCHAR},
+      gas_grade = #{gasGrade,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where coalmine_id = #{coalmineId,jdbcType=VARCHAR}
+  </update>
+  <select id="getCoalmineList" resultMap="BaseResultMap">
+	SELECT *
+	FROM t_base_coalmine_info
+  </select>
+</mapper>
