@@ -2,94 +2,109 @@ package com.webleader.appms.bean.alarm;
 
 import java.util.Date;
 
+/**
+ * @className StaffAlarm
+ * @description 井下人员呼叫井上人员报警表
+ * @author ding
+ * @date 2017年3月31日 下午2:31:20
+ * @version 1.0.0
+ */
 public class StaffAlarm {
-    private Date alarmTime;
+	private Date alarmTime;// 报警时间
 
-    private Double readerDis;
+	private Double readerDis;// 离分站的距离
 
-    private String readerAntId;
+	private String readerAntId;// 天线编号
 
-    private String staffName;
+	private String staffName;// 员工姓名
 
-    private String unitId;
+	private String unitId;// 部门ID
 
-    private String unitName;
-    
-    private String readerId;
+	private String unitName;// 部门名称
 
-    private String alarmId;
+	private String readerId;// 分站ID
 
-    private String cardId;
+	private String alarmId;// 报警ID
 
-    public String getReaderId() {
-        return readerId;
-    }
+	private String cardId;// 定位卡ID
 
-    public void setReaderId(String readerId) {
-        this.readerId = readerId == null ? null : readerId.trim();
-    }
+	public String getReaderId() {
+		return readerId;
+	}
 
-    public String getAlarmId() {
-        return alarmId;
-    }
+	public void setReaderId(String readerId) {
+		this.readerId = readerId == null ? null : readerId.trim();
+	}
 
-    public void setAlarmId(String alarmId) {
-        this.alarmId = alarmId == null ? null : alarmId.trim();
-    }
+	public String getAlarmId() {
+		return alarmId;
+	}
 
-    public String getCardId() {
-        return cardId;
-    }
+	public void setAlarmId(String alarmId) {
+		this.alarmId = alarmId == null ? null : alarmId.trim();
+	}
 
-    public void setCardId(String cardId) {
-        this.cardId = cardId == null ? null : cardId.trim();
-    }
-    
-    public Date getAlarmTime() {
-        return alarmTime;
-    }
+	public String getCardId() {
+		return cardId;
+	}
 
-    public void setAlarmTime(Date alarmTime) {
-        this.alarmTime = alarmTime;
-    }
+	public void setCardId(String cardId) {
+		this.cardId = cardId == null ? null : cardId.trim();
+	}
 
-    public Double getReaderDis() {
-        return readerDis;
-    }
+	public Date getAlarmTime() {
+		return alarmTime;
+	}
 
-    public void setReaderDis(Double readerDis) {
-        this.readerDis = readerDis;
-    }
+	public void setAlarmTime(Date alarmTime) {
+		this.alarmTime = alarmTime;
+	}
 
-    public String getReaderAntId() {
-        return readerAntId;
-    }
+	public Double getReaderDis() {
+		return readerDis;
+	}
 
-    public void setReaderAntId(String readerAntId) {
-        this.readerAntId = readerAntId == null ? null : readerAntId.trim();
-    }
+	public void setReaderDis(Double readerDis) {
+		this.readerDis = readerDis;
+	}
 
-    public String getStaffName() {
-        return staffName;
-    }
+	public String getReaderAntId() {
+		return readerAntId;
+	}
 
-    public void setStaffName(String staffName) {
-        this.staffName = staffName == null ? null : staffName.trim();
-    }
+	public void setReaderAntId(String readerAntId) {
+		this.readerAntId = readerAntId == null ? null : readerAntId.trim();
+	}
 
-    public String getUnitId() {
-        return unitId;
-    }
+	public String getStaffName() {
+		return staffName;
+	}
 
-    public void setUnitId(String unitId) {
-        this.unitId = unitId == null ? null : unitId.trim();
-    }
+	public void setStaffName(String staffName) {
+		this.staffName = staffName == null ? null : staffName.trim();
+	}
 
-    public String getUnitName() {
-        return unitName;
-    }
+	public String getUnitId() {
+		return unitId;
+	}
 
-    public void setUnitName(String unitName) {
-        this.unitName = unitName == null ? null : unitName.trim();
-    }
+	public void setUnitId(String unitId) {
+		this.unitId = unitId == null ? null : unitId.trim();
+	}
+
+	public String getUnitName() {
+		return unitName;
+	}
+
+	public void setUnitName(String unitName) {
+		this.unitName = unitName == null ? null : unitName.trim();
+	}
+
+	@Override
+	public String toString() {
+		return "StaffAlarm [alarmTime=" + alarmTime + ", readerDis=" + readerDis + ", readerAntId=" + readerAntId
+				+ ", staffName=" + staffName + ", unitId=" + unitId + ", unitName=" + unitName + ", readerId="
+				+ readerId + ", alarmId=" + alarmId + ", cardId=" + cardId + "]";
+	}
+
 }

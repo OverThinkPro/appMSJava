@@ -2,174 +2,193 @@ package com.webleader.appms.bean.positioning;
 
 import java.util.Date;
 
+/**
+ * @className TLStaff
+ * @description 人员位置实时原始信息 分站每次采集回来的数据保存到该表中，采集回来的原始数据包括：
+ *              分站编号、天线编号、卡号、卡和分站天线的距离，采集时间
+ * @author ding
+ * @date 2017年3月31日 下午3:06:50
+ * @version 1.0.0
+ */
 public class TLStaff {
-    private String id;
+	private String id;// 逻辑主键
 
-    private String staffId;
+	private String staffId;// 员工ID
 
-    private String cardId;
+	private String cardId;// 定位卡ID
 
-    private String staffName;
+	private String staffName;// 员工姓名
 
-    private String unitId;
+	private String unitId;// 部门ID
 
-    private String staffPost;
+	private String staffPost;//
 
-    private String readerId;
+	private String readerId;// 分站ID
 
-    private String readerName;
+	private String readerName;// 分站名称
 
-    private String regionId;
+	private String regionId;// 区域ID
 
-    private String regionName;
+	private String regionName;// 区域名称
 
-    private String regionType;
+	private String regionType;// 区域类型
 
-    private Date daqTime;
+	private Date daqTime;// 采集时间
 
-    private Object geoPoint;
+	private Object geoPoint;// 卡在地图坐标
 
-    private Double distance;
+	private Double distance;// 卡与分站距离
 
-    private String daqTimeType;
+	private String daqTimeType;// 采集时间类型
+	// 0：正常时间； 1：进入重点区域时间； 2：出重点区域时间； 3：进入限制区域时间； 4：出限制区域时间';
 
-    private String antId;
+	private String antId;// 天线编号
 
-    private String flag;
+	private String flag;// 标志位
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
+	public void setId(String id) {
+		this.id = id == null ? null : id.trim();
+	}
 
-    public String getStaffId() {
-        return staffId;
-    }
+	public String getStaffId() {
+		return staffId;
+	}
 
-    public void setStaffId(String staffId) {
-        this.staffId = staffId == null ? null : staffId.trim();
-    }
+	public void setStaffId(String staffId) {
+		this.staffId = staffId == null ? null : staffId.trim();
+	}
 
-    public String getCardId() {
-        return cardId;
-    }
+	public String getCardId() {
+		return cardId;
+	}
 
-    public void setCardId(String cardId) {
-        this.cardId = cardId == null ? null : cardId.trim();
-    }
+	public void setCardId(String cardId) {
+		this.cardId = cardId == null ? null : cardId.trim();
+	}
 
-    public String getStaffName() {
-        return staffName;
-    }
+	public String getStaffName() {
+		return staffName;
+	}
 
-    public void setStaffName(String staffName) {
-        this.staffName = staffName == null ? null : staffName.trim();
-    }
+	public void setStaffName(String staffName) {
+		this.staffName = staffName == null ? null : staffName.trim();
+	}
 
-    public String getUnitId() {
-        return unitId;
-    }
+	public String getUnitId() {
+		return unitId;
+	}
 
-    public void setUnitId(String unitId) {
-        this.unitId = unitId == null ? null : unitId.trim();
-    }
+	public void setUnitId(String unitId) {
+		this.unitId = unitId == null ? null : unitId.trim();
+	}
 
-    public String getStaffPost() {
-        return staffPost;
-    }
+	public String getStaffPost() {
+		return staffPost;
+	}
 
-    public void setStaffPost(String staffPost) {
-        this.staffPost = staffPost == null ? null : staffPost.trim();
-    }
+	public void setStaffPost(String staffPost) {
+		this.staffPost = staffPost == null ? null : staffPost.trim();
+	}
 
-    public String getReaderId() {
-        return readerId;
-    }
+	public String getReaderId() {
+		return readerId;
+	}
 
-    public void setReaderId(String readerId) {
-        this.readerId = readerId == null ? null : readerId.trim();
-    }
+	public void setReaderId(String readerId) {
+		this.readerId = readerId == null ? null : readerId.trim();
+	}
 
-    public String getReaderName() {
-        return readerName;
-    }
+	public String getReaderName() {
+		return readerName;
+	}
 
-    public void setReaderName(String readerName) {
-        this.readerName = readerName == null ? null : readerName.trim();
-    }
+	public void setReaderName(String readerName) {
+		this.readerName = readerName == null ? null : readerName.trim();
+	}
 
-    public String getRegionId() {
-        return regionId;
-    }
+	public String getRegionId() {
+		return regionId;
+	}
 
-    public void setRegionId(String regionId) {
-        this.regionId = regionId == null ? null : regionId.trim();
-    }
+	public void setRegionId(String regionId) {
+		this.regionId = regionId == null ? null : regionId.trim();
+	}
 
-    public String getRegionName() {
-        return regionName;
-    }
+	public String getRegionName() {
+		return regionName;
+	}
 
-    public void setRegionName(String regionName) {
-        this.regionName = regionName == null ? null : regionName.trim();
-    }
+	public void setRegionName(String regionName) {
+		this.regionName = regionName == null ? null : regionName.trim();
+	}
 
-    public String getRegionType() {
-        return regionType;
-    }
+	public String getRegionType() {
+		return regionType;
+	}
 
-    public void setRegionType(String regionType) {
-        this.regionType = regionType == null ? null : regionType.trim();
-    }
+	public void setRegionType(String regionType) {
+		this.regionType = regionType == null ? null : regionType.trim();
+	}
 
-    public Date getDaqTime() {
-        return daqTime;
-    }
+	public Date getDaqTime() {
+		return daqTime;
+	}
 
-    public void setDaqTime(Date daqTime) {
-        this.daqTime = daqTime;
-    }
+	public void setDaqTime(Date daqTime) {
+		this.daqTime = daqTime;
+	}
 
-    public Object getGeoPoint() {
-        return geoPoint;
-    }
+	public Object getGeoPoint() {
+		return geoPoint;
+	}
 
-    public void setGeoPoint(Object geoPoint) {
-        this.geoPoint = geoPoint;
-    }
+	public void setGeoPoint(Object geoPoint) {
+		this.geoPoint = geoPoint;
+	}
 
-    public Double getDistance() {
-        return distance;
-    }
+	public Double getDistance() {
+		return distance;
+	}
 
-    public void setDistance(Double distance) {
-        this.distance = distance;
-    }
+	public void setDistance(Double distance) {
+		this.distance = distance;
+	}
 
-    public String getDaqTimeType() {
-        return daqTimeType;
-    }
+	public String getDaqTimeType() {
+		return daqTimeType;
+	}
 
-    public void setDaqTimeType(String daqTimeType) {
-        this.daqTimeType = daqTimeType == null ? null : daqTimeType.trim();
-    }
+	public void setDaqTimeType(String daqTimeType) {
+		this.daqTimeType = daqTimeType == null ? null : daqTimeType.trim();
+	}
 
-    public String getAntId() {
-        return antId;
-    }
+	public String getAntId() {
+		return antId;
+	}
 
-    public void setAntId(String antId) {
-        this.antId = antId == null ? null : antId.trim();
-    }
+	public void setAntId(String antId) {
+		this.antId = antId == null ? null : antId.trim();
+	}
 
-    public String getFlag() {
-        return flag;
-    }
+	public String getFlag() {
+		return flag;
+	}
 
-    public void setFlag(String flag) {
-        this.flag = flag == null ? null : flag.trim();
-    }
+	public void setFlag(String flag) {
+		this.flag = flag == null ? null : flag.trim();
+	}
+
+	@Override
+	public String toString() {
+		return "TLStaff [id=" + id + ", staffId=" + staffId + ", cardId=" + cardId + ", staffName=" + staffName
+				+ ", unitId=" + unitId + ", staffPost=" + staffPost + ", readerId=" + readerId + ", readerName="
+				+ readerName + ", regionId=" + regionId + ", regionName=" + regionName + ", regionType=" + regionType
+				+ ", daqTime=" + daqTime + ", geoPoint=" + geoPoint + ", distance=" + distance + ", daqTimeType="
+				+ daqTimeType + ", antId=" + antId + ", flag=" + flag + "]";
+	}
+
 }

@@ -1,21 +1,28 @@
 package com.webleader.appms.bean.setting;
 
+/**
+ * @className Coalmine
+ * @description 煤矿基本信息表
+ * @author ding
+ * @date 2017年3月31日 下午3:44:35
+ * @version 1.0.0
+ */
 public class Coalmine {
-	private String coalmineId;
+	private String coalmineId;// 煤矿ID
 
-	private String coalmineName;
+	private String coalmineName;// 煤矿名
 
-	private String coalmineAbbr;
+	private String coalmineAbbr;// 煤矿简称
 
-	private Double coalmineOutput;
+	private Double coalmineOutput;// 煤矿年产量（单位：万吨）
 
-	private Integer coalmineNum;
+	private Integer coalmineNum;// 核定井下人数
 
-	private String coalmineType;
+	private String coalmineType;// 矿井类型
 
-	private String gasGrade;
+	private String gasGrade;// 瓦斯级别
 
-	private String remark;
+	private String remark;// 备注
 
 	public String getCoalmineId() {
 		return coalmineId;

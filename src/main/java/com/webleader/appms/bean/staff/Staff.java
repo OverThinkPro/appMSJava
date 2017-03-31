@@ -2,124 +2,140 @@ package com.webleader.appms.bean.staff;
 
 import java.util.Date;
 
+/**
+ * @className Staff
+ * @description 员工基本信息表
+ * @author ding
+ * @date 2017年3月31日 下午3:50:06
+ * @version 1.0.0
+ */
 public class Staff {
-    private String staffId;
+	private String staffId;// 员工ID
 
-    private String staffName;
+	private String staffName;// 员工姓名
 
-    private String staffAbbr;
+	private String staffAbbr;//
 
-    private String staffBirthday;
+	private String staffBirthday;// 出生日期
 
-    private String staffGender;
+	private String staffGender;// 性别
 
-    private String staffPicPath;
+	private String staffPicPath;// 员工头像
 
-    private String staffIdCard;
+	private String staffIdCard;// 员工ID卡
 
-    private String staffNativePlace;
+	private String staffNativePlace;// 籍贯
 
-    private String staffTelephone;
+	private String staffTelephone;// 联系电话
 
-    private Date staffWorkDate;
+	private Date staffWorkDate;// 参见工作时间
 
-    private String unitId;
+	private String unitId;// 部门ID
 
-    private String jobId;
+	private String jobId;// 工种ID
 
-    public String getStaffId() {
-        return staffId;
-    }
+	public String getStaffId() {
+		return staffId;
+	}
 
-    public void setStaffId(String staffId) {
-        this.staffId = staffId == null ? null : staffId.trim();
-    }
+	public void setStaffId(String staffId) {
+		this.staffId = staffId == null ? null : staffId.trim();
+	}
 
-    public String getStaffName() {
-        return staffName;
-    }
+	public String getStaffName() {
+		return staffName;
+	}
 
-    public void setStaffName(String staffName) {
-        this.staffName = staffName == null ? null : staffName.trim();
-    }
+	public void setStaffName(String staffName) {
+		this.staffName = staffName == null ? null : staffName.trim();
+	}
 
-    public String getStaffAbbr() {
-        return staffAbbr;
-    }
+	public String getStaffAbbr() {
+		return staffAbbr;
+	}
 
-    public void setStaffAbbr(String staffAbbr) {
-        this.staffAbbr = staffAbbr == null ? null : staffAbbr.trim();
-    }
+	public void setStaffAbbr(String staffAbbr) {
+		this.staffAbbr = staffAbbr == null ? null : staffAbbr.trim();
+	}
 
-    public String getStaffBirthday() {
-        return staffBirthday;
-    }
+	public String getStaffBirthday() {
+		return staffBirthday;
+	}
 
-    public void setStaffBirthday(String staffBirthday) {
-        this.staffBirthday = staffBirthday == null ? null : staffBirthday.trim();
-    }
+	public void setStaffBirthday(String staffBirthday) {
+		this.staffBirthday = staffBirthday == null ? null : staffBirthday.trim();
+	}
 
-    public String getStaffGender() {
-        return staffGender;
-    }
+	public String getStaffGender() {
+		return staffGender;
+	}
 
-    public void setStaffGender(String staffGender) {
-        this.staffGender = staffGender == null ? null : staffGender.trim();
-    }
+	public void setStaffGender(String staffGender) {
+		this.staffGender = staffGender == null ? null : staffGender.trim();
+	}
 
-    public String getStaffPicPath() {
-        return staffPicPath;
-    }
+	public String getStaffPicPath() {
+		return staffPicPath;
+	}
 
-    public void setStaffPicPath(String staffPicPath) {
-        this.staffPicPath = staffPicPath == null ? null : staffPicPath.trim();
-    }
+	public void setStaffPicPath(String staffPicPath) {
+		this.staffPicPath = staffPicPath == null ? null : staffPicPath.trim();
+	}
 
-    public String getStaffIdCard() {
-        return staffIdCard;
-    }
+	public String getStaffIdCard() {
+		return staffIdCard;
+	}
 
-    public void setStaffIdCard(String staffIdCard) {
-        this.staffIdCard = staffIdCard == null ? null : staffIdCard.trim();
-    }
+	public void setStaffIdCard(String staffIdCard) {
+		this.staffIdCard = staffIdCard == null ? null : staffIdCard.trim();
+	}
 
-    public String getStaffNativePlace() {
-        return staffNativePlace;
-    }
+	public String getStaffNativePlace() {
+		return staffNativePlace;
+	}
 
-    public void setStaffNativePlace(String staffNativePlace) {
-        this.staffNativePlace = staffNativePlace == null ? null : staffNativePlace.trim();
-    }
+	public void setStaffNativePlace(String staffNativePlace) {
+		this.staffNativePlace = staffNativePlace == null ? null : staffNativePlace.trim();
+	}
 
-    public String getStaffTelephone() {
-        return staffTelephone;
-    }
+	public String getStaffTelephone() {
+		return staffTelephone;
+	}
 
-    public void setStaffTelephone(String staffTelephone) {
-        this.staffTelephone = staffTelephone == null ? null : staffTelephone.trim();
-    }
+	public void setStaffTelephone(String staffTelephone) {
+		this.staffTelephone = staffTelephone == null ? null : staffTelephone.trim();
+	}
 
-    public Date getStaffWorkDate() {
-        return staffWorkDate;
-    }
+	public Date getStaffWorkDate() {
+		return staffWorkDate;
+	}
 
-    public void setStaffWorkDate(Date staffWorkDate) {
-        this.staffWorkDate = staffWorkDate;
-    }
+	public void setStaffWorkDate(Date staffWorkDate) {
+		this.staffWorkDate = staffWorkDate;
+	}
 
-    public String getUnitId() {
-        return unitId;
-    }
+	public String getUnitId() {
+		return unitId;
+	}
 
-    public void setUnitId(String unitId) {
-        this.unitId = unitId == null ? null : unitId.trim();
-    }
+	public void setUnitId(String unitId) {
+		this.unitId = unitId == null ? null : unitId.trim();
+	}
 
-    public String getJobId() {
-        return jobId;
-    }
+	public String getJobId() {
+		return jobId;
+	}
 
-    public void setJobId(String jobId) {
-        this.jobId = jobId == null ? null : jobId.trim();
-    }
+	public void setJobId(String jobId) {
+		this.jobId = jobId == null ? null : jobId.trim();
+	}
+
+	@Override
+	public String toString() {
+		return "Staff [staffId=" + staffId + ", staffName=" + staffName + ", staffAbbr=" + staffAbbr
+				+ ", staffBirthday=" + staffBirthday + ", staffGender=" + staffGender + ", staffPicPath=" + staffPicPath
+				+ ", staffIdCard=" + staffIdCard + ", staffNativePlace=" + staffNativePlace + ", staffTelephone="
+				+ staffTelephone + ", staffWorkDate=" + staffWorkDate + ", unitId=" + unitId + ", jobId=" + jobId + "]";
+	}
+
 }
