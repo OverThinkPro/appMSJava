@@ -18,8 +18,8 @@ import com.webleader.appms.db.service.setting.CoalmineService;
  * @version 1.0.0
  */
 
-@Service("coalmieService")
-public class CoalmineServerImpl implements CoalmineService{
+@Service("coalmineService")
+public class CoalmineServiceImpl implements CoalmineService{
 	
 	@Resource
 	private CoalmineMapper coalmineMapper;

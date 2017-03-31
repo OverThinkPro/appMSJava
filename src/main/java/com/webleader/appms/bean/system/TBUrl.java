@@ -1,7 +1,10 @@
 package com.webleader.appms.bean.system;
 
+import java.util.List;
+
 public class TBUrl {
-    private String moduleId;
+    
+	private String moduleId;
 
     private String moduleName;
 
@@ -12,6 +15,8 @@ public class TBUrl {
     private String description;
 
     private String moduleUrl;
+    
+    private List<TBUrl> subUrls;
 
     public String getModuleId() {
         return moduleId;
@@ -60,4 +65,22 @@ public class TBUrl {
     public void setModuleUrl(String moduleUrl) {
         this.moduleUrl = moduleUrl == null ? null : moduleUrl.trim();
     }
+
+	public List<TBUrl> getSubUrls() {
+		return subUrls;
+	}
+
+	public void setSubUrls(List<TBUrl> subUrls) {
+		this.subUrls = subUrls;
+	}
+
+	@Override
+	public String toString() {
+		return "TBUrl [moduleId=" + moduleId + ", moduleName=" + moduleName
+				+ ", upModuleId=" + upModuleId + ", inUse=" + inUse
+				+ ", description=" + description + ", moduleUrl=" + moduleUrl
+				+ ", subUrls=" + subUrls + "]";
+	}
+	
+	
 }

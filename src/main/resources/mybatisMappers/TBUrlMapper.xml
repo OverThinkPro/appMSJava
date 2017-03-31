@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.system.TBUrlMapper">
+	
+									<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="TBUrlMap" type="TBUrl">
+		<id column="module_id" jdbcType="VARCHAR" property="moduleId" />
+		<result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+		<result column="up_module_id" jdbcType="VARCHAR" property="upModuleId" />
+		<result column="in_use" jdbcType="CHAR" property="inUse" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="module_url" jdbcType="VARCHAR" property="moduleUrl" />
+		<collection property="subUrls" ofType="TBUrl" column="module_id" select="getUrlByUpModuleId"></collection>
+	</resultMap>
+	
+	<!-- 列名 -->
+	<sql id="TBUrl_Column_List">
+		module_id, module_name, up_module_id, in_use, description, module_url
+	</sql>
+	
+								<!-- 查询语句开始 -->
+	
+	<!-- 主键查询菜单信息moduleId -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="TBUrlMap">
+		SELECT <include refid="TBUrl_Column_List" />
+		FROM t_base_defined_url
+		WHERE module_id = #{moduleId}
+	</select>
+	
+	<!-- 根据上级菜单编号查询子菜单 upModuleId-->
+	<select id="getUrlByUpModuleId" parameterType="String" resultMap="TBUrlMap">
+		SELECT <include refid="TBUrl_Column_List" />
+		FROM t_base_defined_url
+		WHERE up_module_id=#{upModuleId}
+		ORDER BY module_id ASC
+	</select>
+	
+	<!-- 查询一级菜单 -->
+	<select id="getUrlTree" resultMap="TBUrlMap">
+		SELECT <include refid="TBUrl_Column_List" />
+		FROM t_base_defined_url
+		WHERE up_module_id='1'
+		ORDER BY module_id ASC
+	</select>
+	
+	<!-- 组合条件分页查询菜单信息(菜单编号，菜单名称，上级菜单编号， 起始记录数，每页的记录数) -->
+	<select id="getUrlByPageCondition" parameterType="Map" resultMap="TBUrlMap">
+		SELECT <include refid="TBUrl_Column_List" />
+		FROM t_base_defined_url
+		<where>
+			<if test="moduleId!=null &amp;&amp; moduleId !='' ">
+				module_id=#{moduleId}
+			</if>
+			<if test="moduleName!=null &amp;&amp; moduleName!=''">
+				AND module_name LIKE CONCAT(CONCAT('%',#{moduleName}),'%')
+			</if>
+			<if test="upModuleId!=null &amp;&amp; upModuleId!=''">
+				AND up_module_id=#{upModuleId}
+			</if>
+		</where>
+		ORDER BY module_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+	
+	<!-- 统计符合条件的菜单数量(字典编号，字典名称 或者上级字典编号) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM t_base_defined_url 
+		<where>
+			<if test="moduleId!=null &amp;&amp; moduleId !='' ">
+				module_id=#{moduleId}
+			</if>
+			<if test="moduleName!=null &amp;&amp; moduleName!=''">
+				AND module_name LIKE CONCAT(CONCAT('%',#{moduleName}),'%')
+			</if>
+			<if test="upModuleId!=null &amp;&amp; upModuleId!=''">
+				AND up_module_id=#{upModuleId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 根据上级菜单id查询下一个要插入的子菜单的编号 -->
+	<select id="getMaxUrlId" parameterType="String"
+		resultType="String">
+		SELECT MAX(module_id) 
+		FROM t_base_defined_url 
+		WHERE up_module_id=#{upModuleId}
+	</select>
+	
+	<!-- 根据上级菜单id查询下一个要插入的模块id  这个待需求明确完善-->
+	<!-- <select id="getOneNextId" parameterType="String" resultType="String">
+		SELECT SUBSTR(MAX(module_id),1,3)+1 FROM t_base_defined_url;
+	</select> -->
+	
+								<!-- 查询语句结束 -->
+								<!-- 添加语句开始 -->
+	<!-- 添加菜单 -->
+	<insert id="insert" parameterType="TBUrl">
+		INSERT INTO
+		t_base_defined_url(<include refid="TBUrl_Column_List" />)
+		VALUES(#{moduleId},#{moduleName},#{upModuleId},#{inUse},#{description},#{moduleUrl})
+	</insert>
+	
+	<!-- 选择性的添加菜单 -->
+	<insert id="insertSelective" parameterType="TBUrl">
+		insert into t_base_defined_url
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				module_id,
+			</if>
+			<if test="moduleName != null">
+				module_name,
+			</if>
+			<if test="upModuleId != null">
+				up_module_id,
+			</if>
+			<if test="inUse != null">
+				in_use,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="moduleUrl != null">
+				module_url,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				#{moduleId,jdbcType=VARCHAR},
+			</if>
+			<if test="moduleName != null">
+				#{moduleName,jdbcType=VARCHAR},
+			</if>
+			<if test="upModuleId != null">
+				#{upModuleId,jdbcType=VARCHAR},
+			</if>
+			<if test="inUse != null">
+				#{inUse,jdbcType=CHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="moduleUrl != null">
+				#{moduleUrl,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+								<!-- 添加语句结束 -->
+								<!-- 删除语句开始 -->
+	<!-- 根据主键删除菜单 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_base_defined_url
+		WHERE module_id = #{moduleId} 
+	</delete>
+
+	<!-- 根据上级菜单编号删除菜单 -->
+	<delete id="deleteByUpModuleId" parameterType="String">
+		DELETE FROM t_base_defined_url
+		WHERE up_module_id = #{upModuleId}
+	</delete>
+								<!-- 删除语句结束 -->
+								<!-- 修改语句开始 -->
+	
+	<!-- 主键选择性修改菜单 -->
+	<update id="updateByPrimaryKeySelective" parameterType="TBUrl">
+		UPDATE t_base_defined_url
+		<set>
+			<if test="moduleName != null">
+				module_name = #{moduleName},
+			</if>
+			<if test="upModuleId != null">
+				up_module_id = #{upModuleId},
+			</if>
+			<if test="inUse != null">
+				in_use = #{inUse},
+			</if>
+			<if test="description != null">
+				description = #{description},
+			</if>
+			<if test="moduleUrl != null">
+				module_url = #{moduleUrl},
+			</if>
+		</set>
+		WHERE module_id = #{moduleId}
+	</update>
+
+								<!-- 修改语句结束 -->
+							  <!-- END BY HaoShaSha -->
+</mapper>
