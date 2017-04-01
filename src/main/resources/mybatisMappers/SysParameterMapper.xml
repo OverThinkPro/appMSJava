@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.system.SysParameterMapper">
+  
+  <!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="SysParameterMap" type="SysParameter">
+	    <id column="id" jdbcType="VARCHAR" property="id" />
+	    <result column="data_back_par" jdbcType="TIMESTAMP" property="dataBackPar" />
+	    <result column="sys_init_username" jdbcType="VARCHAR" property="sysInitUsername" />
+	    <result column="sys_init_pwd" jdbcType="VARCHAR" property="sysInitPwd" />
+	</resultMap>
+	
+	<!-- 列名 -->
+	<sql id="SysParameter_Column_List">
+	    id, data_back_par, sys_init_username, sys_init_pwd
+	</sql>
+								<!-- 查询语句开始 -->
+	
+	<!-- 主键查询系统参数信息id -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="SysParameterMap">
+	    SELECT id, TO_CHAR(data_back_par,'YYYY-MM-DD HH24:MI:SS') data_back_par, sys_init_username, sys_init_pwd
+	    FROM t_sys_parameter
+	    WHERE id = #{id}
+	 </select>
+								<!-- 查询语句结束 -->
+								<!-- 添加语句开始 -->
+	<!-- 添加系统参数 -->
+	<insert id="insert" parameterType="SysParameter">
+		INSERT INTO t_sys_parameter(<include refid="SysParameter_Column_List" />)
+		VALUES(#{id}, #{dataBackPar}, #{sysInitUsername}, #{sysInitPwd})
+	</insert>
+	
+  								<!-- 添加语句结束 -->
+								<!-- 删除语句开始 -->
+	<!-- 根据系统参数编号删除系统参数信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_sys_parameter
+		WHERE id = #{id}
+	</delete>
+	
+								<!-- 删除语句结束 -->
+								<!-- 修改语句开始 -->
+	<!-- 更新系统参数内容 -->
+	 <update id="updateByPrimaryKeySelective" parameterType="SysParameter">
+	    UPDATE t_sys_parameter
+	    <set>
+	      <if test="dataBackPar != null">
+	        data_back_par = #{dataBackPar},
+	      </if>
+	      <if test="sysInitUsername != null">
+	        sys_init_username = #{sysInitUsername},
+	      </if>
+	      <if test="sysInitPwd != null">
+	        sys_init_pwd = #{sysInitPwd},
+	      </if>
+	    </set>
+	    WHERE id = #{id}
+	 </update>
+	
+								<!-- 修改语句结束 -->
+							  <!-- END BY HaoShaSha -->
+ 
+</mapper>

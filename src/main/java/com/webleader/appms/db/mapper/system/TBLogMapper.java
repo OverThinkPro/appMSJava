@@ -67,11 +67,11 @@ public interface TBLogMapper {
 	
 	/** 
 	 * @description 根据日志编号删除日志
-	 * @param moduleId
+	 * @param logId
 	 * @return
 	 * @throws SQLException 
 	 */
-	public int deleteByPrimaryKey(String moduleId) throws SQLException;
+	public int deleteByPrimaryKey(String logId) throws SQLException;
 	
 
 	/*****************删除接口结束*******************/
