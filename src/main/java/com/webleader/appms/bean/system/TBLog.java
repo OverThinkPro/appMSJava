@@ -10,17 +10,17 @@ import java.util.Date;
  * @version 1.0.0
  */
 public class TBLog {
-	private String logId;// 日志ID
+	private String logId;		// 日志ID
 
-	private String userName;// 用户名
+	private String userName;	// 用户名
 
-	private String opType;//
+	private String opType;		//操作类型
 
-	private String opContent;//
+	private String opContent;	//操作内容
 
-	private Date opDate;//
+	private Date opDate;		//操作日期
 
-	private String userId;// 用户ID
+	private String userId;		// 用户ID
 
 	public String getLogId() {
 		return logId;
