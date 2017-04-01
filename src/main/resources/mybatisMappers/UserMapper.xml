@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.system.UserMapper">
+ 
+									<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="UserMap" type="User">
+	    <id column="user_id" jdbcType="VARCHAR" property="userId" />
+	    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+	    <result column="password" jdbcType="VARCHAR" property="password" />
+	    <result column="in_use" jdbcType="CHAR" property="inUse" />
+	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+	    <result column="remark" jdbcType="VARCHAR" property="remark" />
+	    <result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+	</resultMap>
+	
+	<!-- 列名 -->
+	<sql id="User_Column_List">
+	    user_id, user_name, password, in_use, create_time, last_login_time, remark, staff_id
+	</sql>
+								<!-- 查询语句开始 -->
+	
+	<!-- 验证用户是否存在(用于登陆) -->
+	<select id="getUserForLogin" parameterType="Map" resultMap="UserMap">
+		SELECT <include refid="User_Column_List" />
+		FROM t_base_user_info 
+		WHERE user_name=#{userName} and password=#{password}
+	</select>
+	
+	<!-- 验证用户是否存在(用于修改密码) -->
+	<select id="getUserForOldPwd" parameterType="Map" resultMap="UserMap">
+		SELECT <include refid="User_Column_List" />
+		FROM t_base_user_info 
+		WHERE user_id=#{userId} and password=#{password}
+	</select>
+	
+	
+	<!-- 主键查询用户信息userId -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="UserMap">
+		SELECT <include refid="User_Column_List" />
+		FROM t_base_user_info
+		WHERE user_id = #{userId}
+	</select>
+	
+	 
+	<!-- 组合条件分页查询用户信息(用户编号，用户名称，是否启用， 起始记录数，每页的记录数) -->
+	<select id="getUserByPageCondition" parameterType="Map" resultMap="UserMap">
+		SELECT <include refid="User_Column_List" />
+		FROM t_base_user_info
+		<where>
+			<if test="userId!=null &amp;&amp; userId !='' ">
+				user_id=#{userId}
+			</if>
+			<if test="userName!=null &amp;&amp; userName!=''">
+				AND user_name LIKE CONCAT(CONCAT('%',#{userName}),'%')
+			</if>
+			<if test="inUse!=null &amp;&amp; inUse!=''">
+				AND in_use=#{inUse}
+			</if>
+		</where>
+		ORDER BY user_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+	
+	<!-- 统计符合条件的用户数量(字典编号，字典名称 或者上级字典编号) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM t_base_user_info 
+		<where>
+			<if test="userId!=null &amp;&amp; userId !='' ">
+				user_id=#{userId}
+			</if>
+			<if test="userName!=null &amp;&amp; userName!=''">
+				AND user_name LIKE CONCAT(CONCAT('%',#{userName}),'%')
+			</if>
+			<if test="inUse!=null &amp;&amp; inUse!=''">
+				AND in_use=#{inUse}
+			</if>
+		</where>
+	</select>
+								<!-- 查询语句结束 -->
+								<!-- 添加语句开始 -->
+	<!-- 添加用户 -->
+	<insert id="insert" parameterType="User">
+		INSERT INTO t_base_user_info(<include refid="User_Column_List" />)
+		<if test="password ==null || password ==''">
+			<bind name="password" value="123456"/>
+		</if>
+		VALUES(#{userId}, #{userName}, #{password},#{inUse}, #{createTime}, #{lastLoginTime}, #{remark}, #{staffId})
+	</insert>
+	
+	<!-- 选择性的添加用户 -->
+	<insert id="insertSelective" parameterType="User">
+		INSERT INTO t_base_user_info
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="userId != null">
+	        user_id,
+	      </if>
+	      <if test="userName != null">
+	        user_name,
+	      </if>
+	      <if test="password != null">
+	        password,
+	      </if>
+	      <if test="inUse != null">
+	        in_use,
+	      </if>
+	      <if test="createTime != null">
+	        create_time,
+	      </if>
+	      <if test="lastLoginTime != null">
+	        last_login_time,
+	      </if>
+	      <if test="remark != null">
+	        remark,
+	      </if>
+	      <if test="staffId != null">
+	        staff_id,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="userId != null">
+	        #{userId},
+	      </if>
+	      <if test="userName != null">
+	        #{userName},
+	      </if>
+	      <if test="password != null">
+	        #{password},
+	      </if>
+	      <if test="inUse != null">
+	        #{inUse},
+	      </if>
+	      <if test="createTime != null">
+	        #{createTime},
+	      </if>
+	      <if test="lastLoginTime != null">
+	        #{lastLoginTime},
+	      </if>
+	      <if test="remark != null">
+	        #{remark},
+	      </if>
+	      <if test="staffId != null">
+	        #{staffId},
+	      </if>
+	    </trim>
+	</insert>
+								<!-- 添加语句结束 -->
+								<!-- 删除语句开始 -->
+	<!-- 根据主键删除用户 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_base_user_info
+		WHERE user_id = #{userId} 
+	</delete>
+
+								<!-- 删除语句结束 -->
+								<!-- 修改语句开始 -->
+	
+	<!-- 主键选择性修改用户 信息-->
+	<update id="updateByPrimaryKeySelective" parameterType="User">
+		UPDATE t_base_user_info
+		<set>
+	      <if test="userName != null">
+	        user_name = #{userName},
+	      </if>
+	      <if test="password != null">
+	        password = #{password},
+	      </if>
+	      <if test="inUse != null">
+	        in_use = #{inUse},
+	      </if>
+	      <if test="createTime != null">
+	        create_time = #{createTime},
+	      </if>
+	      <if test="lastLoginTime != null">
+	        last_login_time = #{lastLoginTime},
+	      </if>
+	      <if test="remark != null">
+	        remark = #{remark},
+	      </if>
+	      <if test="staffId != null">
+	        staff_id = #{staffId},
+	      </if>
+	    </set>
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 修改用户密码(批量或者单个) -->
+	<update id="updateUserPassword" parameterType="Map">
+		<if test="password!=null &amp;&amp; password!=''">
+			UPDATE t_base_user_info SET password=#{password}
+			<where>
+				<if test="userId!=null &amp;&amp; userId!=''">
+					user_id=#{userId}
+				</if>
+			</where>
+		</if>
+	</update>
+								<!-- 修改语句结束 -->
+							  <!-- END BY HaoShaSha -->
+</mapper>

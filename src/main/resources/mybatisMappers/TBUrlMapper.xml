@@ -63,7 +63,7 @@
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 	</select>
 	
-	<!-- 统计符合条件的菜单数量(字典编号，字典名称 或者上级字典编号) -->
+	<!-- 统计符合条件的菜单数量(菜单编号，菜单名称 或者上级菜单编号) -->
 	<select id="getCountByConditon" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM t_base_defined_url 
 		<where>

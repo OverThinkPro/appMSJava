@@ -52,7 +52,7 @@ public interface TBUrlMapper {
 	
 	/** 
 	 * @description 统计符合条件的菜单数量
-	 * @param pageCondition(moduleId,moduleName,upModuleId,pageSize,pageBegin)
+	 * @param pageCondition(moduleId,moduleName,upModuleId)
 	 * @return
 	 * @throws SQLException 
 	 */

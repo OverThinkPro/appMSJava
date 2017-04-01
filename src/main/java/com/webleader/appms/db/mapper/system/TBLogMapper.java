@@ -37,7 +37,7 @@ public interface TBLogMapper {
 	
 	/** 
 	 * @description 统计符合条件的日志数量
-	 * @param pageCondition(userId,userName,opType,opDate,pageSize,pageBegin)
+	 * @param pageCondition(userId,userName,opType,opDate)
 	 * @return
 	 * @throws SQLException 
 	 */
