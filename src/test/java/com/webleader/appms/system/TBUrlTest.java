@@ -98,8 +98,6 @@ public class TBUrlTest {
 	public void getCountByConditon(){
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
 		pageCondition.put("upModuleId", "1");
-		pageCondition.put("pageBegin", 0);	//必须是bigint
-		pageCondition.put("pageSize", 3);	//必须是bigint
 		try {
 			int totalCount = tbUrlMapper.getCountByConditon(pageCondition);
 			System.out.println(totalCount);

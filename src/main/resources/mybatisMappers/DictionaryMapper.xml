@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.system.DictionaryMapper">
+ 
+									<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	 <resultMap id="DictionaryMap" type="Dictionary">
+	    <id column="dictionary_id" jdbcType="VARCHAR" property="dictionaryId" />
+	    <result column="dictionary_name" jdbcType="VARCHAR" property="dictionaryName" />
+	    <result column="description" jdbcType="VARCHAR" property="description" />
+	    <result column="up_dictionary_id" jdbcType="VARCHAR" property="upDictionaryId" />
+	    <result column="in_use" jdbcType="CHAR" property="inUse" />
+	    <result column="englist_name" jdbcType="VARCHAR" property="englistName" />
+	    <result column="data_type" jdbcType="VARCHAR" property="dataType" />
+	    <result column="remark" jdbcType="VARCHAR" property="remark" />
+	    <collection property="subDics" ofType="Dictionary" column="dictionary_id" select="getDicByUpDicId"></collection>
+	</resultMap>
+	 
+	<!-- 列名 -->
+	<sql id="Dictionary_Column_List">
+	    dictionary_id, dictionary_name, description, up_dictionary_id, in_use, englist_name, data_type, remark
+	</sql>
+	
+								<!-- 查询语句开始 -->
+	
+	<!-- 根据字典编码查询字典名称 -->
+	<select id="getNameByCode" parameterType="String" resultType="String">
+		SELECT dictionary_name 
+		from t_base_sys_dic 
+		where dictionary_id=#{dictionaryId};
+	</select>
+	
+	<!-- 根据字典名称查询字典编码 -->
+	<select id="getCodeByName" parameterType="String" resultType="String">
+		SELECT dictionary_id 
+		From t_base_sys_dic 
+		WHERE dictionary_name=#{dictionaryName};
+	</select>
+	
+	<!-- 主键查询数字字典信息  -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="DictionaryMap">
+		SELECT <include refid="Dictionary_Column_List" />
+		FROM t_base_sys_dic
+		WHERE dictionary_id = #{dictionaryId}
+	</select>
+	
+	<!-- 根据上级数字字典编号查询子数字字典 -->
+	<select id="getDicByUpDicId" parameterType="String" resultMap="DictionaryMap">
+		SELECT <include refid="Dictionary_Column_List" />
+		FROM t_base_sys_dic
+		WHERE up_dictionary_id=#{upDictionaryId}
+		ORDER BY dictionary_id ASC
+	</select>
+	
+	<!-- 查询一级数字字典 -->
+	<select id="getDicTree" resultMap="DictionaryMap">
+		SELECT <include refid="Dictionary_Column_List" />
+		FROM t_base_sys_dic
+		WHERE up_dictionary_id='1'
+		ORDER BY dictionary_id ASC
+	</select>
+	
+	<!-- 组合条件分页查询数字字典信息(数字字典编号，数字字典名称，上级数字字典编号， 起始记录数，每页的记录数) -->
+	<select id="getDicByPageCondition" parameterType="Map" resultMap="DictionaryMap">
+		SELECT <include refid="Dictionary_Column_List" />
+		FROM t_base_sys_dic
+		<where>
+			<if test="dictionaryId!=null &amp;&amp; dictionaryId !='' ">
+				dictionary_id=#{dictionaryId}
+			</if>
+			<if test="dictionaryName!=null &amp;&amp; dictionaryName!=''">
+				AND dictionary_name LIKE CONCAT(CONCAT('%',#{dictionaryName}),'%')
+			</if>
+			<if test="upDictionaryId!=null &amp;&amp; upDictionaryId!=''">
+				AND up_dictionary_id=#{upDictionaryId}
+			</if>
+		</where>
+		ORDER BY dictionary_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+	
+	<!-- 统计符合条件的数字字典数量(字典编号，字典名称 或者上级字典编号) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM t_base_sys_dic 
+		<where>
+			<if test="dictionaryId!=null &amp;&amp; dictionaryId !='' ">
+				dictionary_id=#{dictionaryId}
+			</if>
+			<if test="dictionaryName!=null &amp;&amp; dictionaryName!=''">
+				AND dictionary_name LIKE CONCAT(CONCAT('%',#{dictionaryName}),'%')
+			</if>
+			<if test="upDictionaryId!=null &amp;&amp; upDictionaryId!=''">
+				AND up_dictionary_id=#{upDictionaryId}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 根据上级数字字典id查询下一个要插入的子数字字典的编号 -->
+	<select id="getMaxDicId" parameterType="String" resultType="String">
+		SELECT MAX(dictionary_id) 
+		FROM t_base_sys_dic 
+		WHERE up_dictionary_id=#{upDictionaryId}
+	</select>
+	
+	<!-- 根据上级数字字典id查询下一个要插入的模块id  这个待需求明确完善-->
+	<!-- <select id="getNextId" parameterType="String" resultType="String">
+		SELECT SUBSTR(MAX(module_id),1,3)+1 FROM t_base_sys_dic;
+	</select> -->
+	
+								<!-- 查询语句结束 -->
+								<!-- 添加语句开始 -->
+	<!-- 添加数字字典 -->
+	<insert id="insert" parameterType="Dictionary">
+		INSERT INTO t_base_sys_dic(<include refid="Dictionary_Column_List" />)
+		VALUES(#{dictionaryId}, #{dictionaryName}, #{description}, #{upDictionaryId}, #{inUse}, #{englistName}, #{dataType}, #{remark})
+	</insert>
+	
+	<!-- 选择性的添加数字字典 -->
+	<insert id="insertSelective" parameterType="Dictionary">
+		INSERT INTO t_base_sys_dic
+		 <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="dictionaryId != null">
+	        dictionary_id,
+	      </if>
+	      <if test="dictionaryName != null">
+	        dictionary_name,
+	      </if>
+	      <if test="description != null">
+	        description,
+	      </if>
+	      <if test="upDictionaryId != null">
+	        up_dictionary_id,
+	      </if>
+	      <if test="inUse != null">
+	        in_use,
+	      </if>
+	      <if test="englistName != null">
+	        englist_name,
+	      </if>
+	      <if test="dataType != null">
+	        data_type,
+	      </if>
+	      <if test="remark != null">
+	        remark,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="dictionaryId != null">
+	        #{dictionaryId},
+	      </if>
+	      <if test="dictionaryName != null">
+	        #{dictionaryName},
+	      </if>
+	      <if test="description != null">
+	        #{description},
+	      </if>
+	      <if test="upDictionaryId != null">
+	        #{upDictionaryId},
+	      </if>
+	      <if test="inUse != null">
+	        #{inUse},
+	      </if>
+	      <if test="englistName != null">
+	        #{englistName},
+	      </if>
+	      <if test="dataType != null">
+	        #{dataType},
+	      </if>
+	      <if test="remark != null">
+	        #{remark},
+	      </if>
+	    </trim>
+	</insert>
+								<!-- 添加语句结束 -->
+								<!-- 删除语句开始 -->
+	<!-- 根据主键删除数字字典 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_base_sys_dic
+		WHERE dictionary_id = #{dictionaryId} 
+	</delete>
+
+	<!-- 根据上级数字字典编号删除数字字典 -->
+	<delete id="deleteByUpDicId" parameterType="String">
+		DELETE FROM t_base_sys_dic
+		WHERE up_dictionary_id = #{upDictionaryId}
+	</delete>
+								<!-- 删除语句结束 -->
+								<!-- 修改语句开始 -->
+	
+	<!-- 主键选择性修改数字字典 -->
+	<update id="updateByPrimaryKeySelective" parameterType="TBUrl">
+		UPDATE t_base_sys_dic
+		<set>
+	      <if test="dictionaryName != null">
+	        dictionary_name = #{dictionaryName},
+	      </if>
+	      <if test="description != null">
+	        description = #{description},
+	      </if>
+	      <if test="upDictionaryId != null">
+	        up_dictionary_id = #{upDictionaryId},
+	      </if>
+	      <if test="inUse != null">
+	        in_use = #{inUse},
+	      </if>
+	      <if test="englistName != null">
+	        englist_name = #{englistName},
+	      </if>
+	      <if test="dataType != null">
+	        data_type = #{dataType},
+	      </if>
+	      <if test="remark != null">
+	        remark = #{remark},
+	      </if>
+	    </set>
+	    WHERE dictionary_id = #{dictionaryId}
+	</update>
+
+								<!-- 修改语句结束 -->
+							  <!-- END BY HaoShaSha -->
+</mapper>

@@ -71,8 +71,6 @@ public class TBLogTest {
 	@Test
 	public void getCountByConditon(){
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
-		pageCondition.put("pageBegin", 0);	//必须是bigint
-		pageCondition.put("pageSize", 3);	//必须是bigint
 		try {
 			int totalCount = tbLogMapper.getCountByConditon(pageCondition);
 			System.out.println(totalCount);

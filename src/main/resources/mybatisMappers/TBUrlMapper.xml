@@ -80,8 +80,7 @@
 	</select>
 	
 	<!-- 根据上级菜单id查询下一个要插入的子菜单的编号 -->
-	<select id="getMaxUrlId" parameterType="String"
-		resultType="String">
+	<select id="getMaxUrlId" parameterType="String"	resultType="String">
 		SELECT MAX(module_id) 
 		FROM t_base_defined_url 
 		WHERE up_module_id=#{upModuleId}

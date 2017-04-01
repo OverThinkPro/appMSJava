@@ -26,7 +26,7 @@ public class Dictionary {
 
 	private String remark;// 备注
 
-	private List<Dictionary> dictionaryList;
+	private List<Dictionary> subDics;
 
 	public String getDictionaryId() {
 		return dictionaryId;
@@ -93,18 +93,18 @@ public class Dictionary {
 	}
 
 	public List<Dictionary> getDictionaryList() {
-		return dictionaryList;
+		return subDics;
 	}
 
-	public void setDictionaryList(List<Dictionary> dictionaryList) {
-		this.dictionaryList = dictionaryList;
+	public void setDictionaryList(List<Dictionary> subDics) {
+		this.subDics = subDics;
 	}
 
 	@Override
 	public String toString() {
 		return "Dictionary [dictionaryId=" + dictionaryId + ", dictionaryName=" + dictionaryName + ", description="
 				+ description + ", upDictionaryId=" + upDictionaryId + ", inUse=" + inUse + ", englistName="
-				+ englistName + ", dataType=" + dataType + ", remark=" + remark + ", dictionaryList=" + dictionaryList
+				+ englistName + ", dataType=" + dataType + ", remark=" + remark + ", subDics=" + subDics
 				+ "]";
 	}
 }
