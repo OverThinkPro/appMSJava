@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.system.TBLogMapper">
+	
+						<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="TBLogMap" type="TBLog">
+	    <id column="log_id" jdbcType="VARCHAR" property="logId" />
+	    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+	    <result column="op_type" jdbcType="VARCHAR" property="opType" />
+	    <result column="op_content" jdbcType="VARCHAR" property="opContent" />
+	    <result column="op_date" jdbcType="TIMESTAMP" property="opDate" />
+	    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+	</resultMap>
+	
+	<!-- 列名 -->
+	<sql id="TBLog_Column_List">
+    	log_id, user_name, op_type, op_content, op_date, user_id
+  	</sql>
+	
+								<!-- 查询语句开始 -->
+	
+	<!-- 主键查询日志信息logId -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="TBLogMap">
+	    SELECT <include refid="TBLog_Column_List" />
+	    FROM t_base_log
+	    WHERE log_id = #{logId}
+	</select>
+	
+	<!-- 组合条件分页查询日志信息(用户编号，用户姓名，操作类型，操作日期， 起始记录数，每页的记录数) -->
+	<select id="getLogByPageCondition" parameterType="Map" resultMap="TBLogMap">
+		SELECT <include refid="TBLog_Column_List" />
+		FROM t_base_log
+		<where>
+			<if test="user_id!=null &amp;&amp; user_id !='' ">
+				user_id=#{userId}
+			</if>
+			<if test="user_name!=null &amp;&amp; user_name!=''">
+				AND user_name LIKE CONCAT(CONCAT('%',#{userName}),'%')
+			</if>
+			<if test="op_type!=null &amp;&amp; op_type!=''">
+				AND op_type=#{opType}
+			</if>
+			<if test="op_date!=null &amp;&amp;op_date!=''">
+				AND op_date=#{opDate}
+			</if>
+		</where>
+		ORDER BY op_date ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+	
+	<!-- 统计符合条件的日志数量(用户编号，用户姓名，操作类型，操作日期， 起始记录数，每页的记录数) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM t_base_log
+		<where>
+			<if test="user_id!=null &amp;&amp; user_id !='' ">
+				user_id=#{userId}
+			</if>
+			<if test="user_name!=null &amp;&amp; user_name!=''">
+				AND user_name LIKE CONCAT(CONCAT('%',#{userName}),'%')
+			</if>
+			<if test="op_type!=null &amp;&amp; op_type!=''">
+				AND op_type=#{opType}
+			</if>
+			<if test="op_date!=null &amp;&amp;op_date!=''">
+				AND op_date=#{opDate}
+			</if>
+		</where>
+	</select>
+	
+								<!-- 添加语句开始 -->
+	<!-- 添加日志 -->
+	<insert id="insert" parameterType="TBLog">
+		INSERT INTO
+		t_base_log(<include refid="TBLog_Column_List" />)
+		VALUES(#{logId}, #{userName}, #{opType},#{opContent}, #{opDate}, #{userId})
+	</insert>
+	
+	<!-- 选择性的添加日志 -->
+	<insert id="insertSelective" parameterType="TBLog">
+	    insert into t_base_log
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="logId != null">
+	        log_id,
+	      </if>
+	      <if test="userName != null">
+	        user_name,
+	      </if>
+	      <if test="opType != null">
+	        op_type,
+	      </if>
+	      <if test="opContent != null">
+	        op_content,
+	      </if>
+	      <if test="opDate != null">
+	        op_date,
+	      </if>
+	      <if test="userId != null">
+	        user_id,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="logId != null">
+	        #{logId},
+	      </if>
+	      <if test="userName != null">
+	        #{userName},
+	      </if>
+	      <if test="opType != null">
+	        #{opType},
+	      </if>
+	      <if test="opContent != null">
+	        #{opContent},
+	      </if>
+	      <if test="opDate != null">
+	        #{opDate},
+	      </if>
+	      <if test="userId != null">
+	        #{userId},
+	      </if>
+	    </trim>
+	</insert>		
+  								<!-- 添加语句结束 -->
+								<!-- 删除语句开始 -->
+	<!-- 根据日志编号删除日志信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_base_log
+		WHERE log_id = #{logId} 
+	</delete>
+	
+								<!-- 删除语句结束 -->
+								<!-- 修改语句开始 -->
+	<!-- 更新日志内容，应该用不到 -->
+	<update id="updateByPrimaryKeySelective" parameterType="TBLog">
+	    UPDATE t_base_log
+	    <set>
+	      <if test="userName != null">
+	        user_name = #{userName},
+	      </if>
+	      <if test="opType != null">
+	        op_type = #{opType},
+	      </if>
+	      <if test="opContent != null">
+	        op_content = #{opContent},
+	      </if>
+	      <if test="opDate != null">
+	        op_date = #{opDate},
+	      </if>
+	      <if test="userId != null">
+	        user_id = #{userId},
+	      </if>
+	    </set>
+	    WHERE log_id = #{logId}
+	</update>
+	
+								<!-- 修改语句结束 -->
+							  <!-- END BY HaoShaSha -->
+</mapper>
