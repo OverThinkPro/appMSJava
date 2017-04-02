@@ -49,7 +49,7 @@
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 	</select>
 	
-	<!-- 统计符合条件的日志数量(用户编号，用户姓名，操作类型，操作日期， 起始记录数，每页的记录数) -->
+	<!-- 统计符合条件的日志数量(用户编号，用户姓名，操作类型，操作日期) -->
 	<select id="getCountByConditon" parameterType="Map" resultType="int">
 		SELECT COUNT(*)
 		FROM t_base_log

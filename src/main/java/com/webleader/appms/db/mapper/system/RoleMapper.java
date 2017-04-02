@@ -1,17 +1,91 @@
 package com.webleader.appms.db.mapper.system;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
 import com.webleader.appms.bean.system.Role;
 
+/**
+ * @className RoleMapper
+ * @description 数据库关于Role的接口
+ * @author HaoShaSha
+ * @date 2017年4月1日 下午10:35:02
+ * @version 1.0.0
+ */
 public interface RoleMapper {
-    int deleteByPrimaryKey(String roleId);
+	
+	/*****************START BY HaoShaSha*********/
+	
+	/*****************查询接口开始*******************/
+	
+	/** 
+	 * @description 根据角色编号查询角色信息
+	 * @param moduleId 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Role selectByPrimaryKey(String roleId) throws SQLException;
+	
+	/** 
+	 * @description 组合条件分页查询角色信息
+	 * @param pageCondition(roleId,roleName,inUse,pageSize,pageBegin)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Role> getRoleByPageCondition(Map<Object,Object> pageCondition) throws SQLException;
+	
+	/** 
+	 * @description 统计符合条件的角色数量
+	 * @param pageCondition(roleId,roleName,inUse,)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int getCountByConditon(Map<Object,Object> pageCondition) throws SQLException;
+	
+	/*****************查询接口结束*******************/
+	/*****************插入接口开始*******************/
+	
+	/** 
+	 * @description 添加角色
+	 * @param role
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insert(Role role) throws SQLException;
+	
+	/** 
+	 * @description 选择性的添加角色（同insert）
+	 * @param role
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertSelective(Role role) throws SQLException;
+	
+	/*****************插入接口结束*******************/
+	/*****************删除接口开始*******************/
+	
+	/** 
+	 * @description 根据角色编号删除角色
+	 * @param roleId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int deleteByPrimaryKey(String roleId) throws SQLException;
+	
 
-    int insert(Role record);
+	/*****************删除接口结束*******************/
+	/*****************更新接口开始*******************/
+	
+	/** 
+	 * @description 更新角色信息
+	 * @param role
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateByPrimaryKeySelective(Role role) throws SQLException;
+	
+	/*****************更新接口结束*******************/
+	/*****************END BY HaoShaSha***********/
 
-    int insertSelective(Role record);
-
-    Role selectByPrimaryKey(String roleId);
-
-    int updateByPrimaryKeySelective(Role record);
-
-    int updateByPrimaryKey(Role record);
 }

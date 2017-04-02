@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.system.RoleMapper">
+ 
+    <!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="RoleMap" type="Role">
+	    <id column="role_id" jdbcType="VARCHAR" property="roleId" />
+	    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+	    <result column="description" jdbcType="VARCHAR" property="description" />
+	    <result column="in_use" jdbcType="CHAR" property="inUse" />
+	</resultMap>
+	
+	<!-- 列名 -->
+	<sql id="Role_Column_List">
+	    role_id, role_name, description, in_use
+	</sql>
+								<!-- 查询语句开始 -->
+	
+	<!-- 主键查询系统参数信息id -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="RoleMap">
+	    SELECT <include refid="Role_Column_List" />
+	    FROM t_base_role_info
+	    WHERE role_id = #{roleId}
+	 </select>
+	 
+	 <!-- 组合条件分页查询角色信息(角色编号，角色名称，是否启用， 起始记录数，每页的记录数) -->
+	<select id="getRoleByPageCondition" parameterType="Map" resultMap="RoleMap">
+		SELECT <include refid="Role_Column_List" />
+		FROM t_base_role_info
+		<where>
+			<if test="roleId != null  &amp;&amp; roleId !='' ">
+		        role_id = #{roleId},
+		    </if>
+		    <if test="roleName != null  &amp;&amp; roleName !='' ">
+		        AND role_name = #{roleName},
+		    </if>
+		    <if test="inUse != null  &amp;&amp; inUse !='' ">
+		        AND in_use = #{inUse}
+		    </if>
+		</where>
+		ORDER BY role_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+	
+	<!-- 统计符合条件的日志数量(角色编号，角色名称，是否启用) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM t_base_role_info
+		<where>
+			<if test="roleId != null  &amp;&amp; roleId !='' ">
+		        role_id = #{roleId},
+		    </if>
+		    <if test="roleName != null  &amp;&amp; roleName !='' ">
+		        role_name = #{roleName},
+		    </if>
+		    <if test="inUse != null  &amp;&amp; inUse !='' ">
+		        in_use = #{inUse}
+		    </if>
+		</where>
+	</select>
+								<!-- 查询语句结束 -->
+								<!-- 添加语句开始 -->
+	<!-- 添加系统参数 -->
+	<insert id="insert" parameterType="Role">
+		INSERT INTO t_base_role_info(<include refid="Role_Column_List" />)
+		VALUES(#{roleId}, #{roleName}, #{description}, #{inUse})
+	</insert>
+	
+  								<!-- 添加语句结束 -->
+								<!-- 删除语句开始 -->
+	<!-- 根据系统参数编号删除系统参数信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_base_role_info
+		WHERE role_id = #{roleId}
+	</delete>
+	
+								<!-- 删除语句结束 -->
+								<!-- 修改语句开始 -->
+	<!-- 更新系统参数内容 -->
+	 <update id="updateByPrimaryKeySelective" parameterType="Role">
+	    UPDATE t_base_role_info
+	    <set>
+	      <if test="roleName != null">
+	        role_name = #{roleName},
+	      </if>
+	      <if test="description != null">
+	        description = #{description},
+	      </if>
+	      <if test="inUse != null">
+	        in_use = #{inUse},
+	      </if>
+	    </set>
+	    WHERE role_id = #{roleId}
+	 </update>
+	
+								<!-- 修改语句结束 -->
+							  <!-- END BY HaoShaSha -->
+
+</mapper>
