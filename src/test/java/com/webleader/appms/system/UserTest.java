@@ -213,5 +213,48 @@ public class UserTest {
 		
 	}
 	/*****************更新接口结束*******************/
+	
+	/*********关联表t_base_user_role操作开始**********/
+	/*****************插入接口开始*******************/
+	
+	/** 
+	 * @description 给用户分配角色
+	 */
+	@Test
+	public void addRoleToUser(){
+		Map<Object, Object> data = new HashMap<Object, Object>();
+		data.put("userId", "1000002");
+		data.put("roleId", "10001");
+		try {
+			int count = userMapper.addRoleToUser(data);
+			System.out.println(count);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*****************插入接口结束*******************/
+	/*****************删除接口开始*******************/
+	
+	/** 
+	 * @description 撤销分配给用户的角色(全部或者单个角色)
+	 */
+	@Test
+	public void deleteRoleFromUser(){
+		Map<Object, Object> condition = new HashMap<Object, Object>();
+		condition.put("userId", "1000002");
+		condition.put("roleId", "10001");
+		try {
+			int count = userMapper.deleteRoleFromUser(condition);
+			System.out.println(count);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/*****************删除接口结束*******************/
+	/*******关联表t_base_user_role操作结束***********/
+	
 	/*****************END BY HaoShaSha***********/
 }

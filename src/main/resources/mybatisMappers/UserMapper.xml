@@ -19,24 +19,32 @@
 	<sql id="User_Column_List">
 	    user_id, user_name, password, in_use, create_time, last_login_time, remark, staff_id
 	</sql>
+							 <!-- 基本表数据库操作开始 -->
 								<!-- 查询语句开始 -->
 	
 	<!-- 验证用户是否存在(用于登陆) -->
 	<select id="getUserForLogin" parameterType="Map" resultMap="UserMap">
 		SELECT <include refid="User_Column_List" />
 		FROM t_base_user_info 
-		WHERE user_name=#{userName} and password=#{password}
+		WHERE user_name=#{userName} 
+		<if test="password!=null">
+			and password=#{password}
+		</if>
+		
 	</select>
 	
 	<!-- 验证用户是否存在(用于修改密码) -->
 	<select id="getUserForOldPwd" parameterType="Map" resultMap="UserMap">
 		SELECT <include refid="User_Column_List" />
 		FROM t_base_user_info 
-		WHERE user_id=#{userId} and password=#{password}
+		WHERE user_id=#{userId}
+		<if test="password!=null">
+			and password=#{password}
+		</if>
 	</select>
 	
 	
-	<!-- 主键查询用户信息userId -->
+	<!-- 主键查询用户信息   -->
 	<select id="selectByPrimaryKey" parameterType="String" resultMap="UserMap">
 		SELECT <include refid="User_Column_List" />
 		FROM t_base_user_info
@@ -197,5 +205,31 @@
 		</if>
 	</update>
 								<!-- 修改语句结束 -->
+							 <!-- 基本表数据库操作结束 -->
+							 
+			 	
+			 	<!-- 关联表t_base_user_role操作开始 -->
+	<!-- 列名 -->
+	<sql id="User_Role_Column_List">
+	    user_id, role_id
+	</sql>
+						<!-- 插入语句开始 -->
+	<!-- 给用户分配角色 -->
+	<insert id="addRoleToUser" parameterType="Map">
+		INSERT INTO t_base_user_role(<include refid="User_Role_Column_List" />) 
+		VALUES(#{userId},#{roleId})
+	</insert>			
+						<!-- 插入语句结束 -->
+						<!-- 删除语句开始 -->
+
+	<!-- 撤销分配给用户的角色(全部或者单个角色) -->
+	<delete id="deleteRoleFromUser" parameterType="map">
+		DELETE FROM t_base_user_role WHERE user_id=#{userId} 
+		<if test="roleId != null  &amp;&amp; roleId !=''">
+		AND role_id=#{roleId};
+		</if>
+	</delete>
+						<!-- 删除语句结束 -->
+				<!-- 关联表t_base_user_role操作结束 -->
 							  <!-- END BY HaoShaSha -->
 </mapper>

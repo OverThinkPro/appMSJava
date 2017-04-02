@@ -72,6 +72,9 @@
 								<!-- 添加语句开始 -->
 	<!-- 添加日志 -->
 	<insert id="insert" parameterType="TBLog">
+		<!-- <selectKey keyProperty="log_id" order="BEFORE" resultType="String">
+	     	SELECT uuid();
+		</selectKey> -->
 		INSERT INTO
 		t_base_log(<include refid="TBLog_Column_List" />)
 		VALUES(#{logId}, #{userName}, #{opType},#{opContent}, #{opDate}, #{userId})

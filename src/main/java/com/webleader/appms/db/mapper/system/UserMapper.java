@@ -16,7 +16,6 @@ import com.webleader.appms.bean.system.User;
 public interface UserMapper {
 	
 	/*****************START BY HaoShaSha*********/
-	
 	/*****************查询接口开始*******************/
 	
 	/** 
@@ -111,5 +110,34 @@ public interface UserMapper {
 	 */
 	public int updateUserPassword(Map<Object,Object> condition) throws SQLException;
 	/*****************更新接口结束*******************/
+	/************基本表数据库操作结束*******************/
+	
+	
+	/*********关联表t_base_user_role操作开始**********/
+	/*****************插入接口开始*******************/
+	
+	/** 
+	 * @description 给用户分配角色
+	 * @param data(userId, roleId)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int addRoleToUser(Map<Object, Object> data) throws SQLException;
+	
+	/*****************插入接口结束*******************/
+	/*****************删除接口开始*******************/
+	
+	/** 
+	 * @description 撤销分配给用户的角色(全部或者单个角色)
+	 * @param condition(userId, roleId)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int deleteRoleFromUser(Map<Object, Object> condition)throws SQLException;
+	
+	/*****************删除接口结束*******************/
+	/*******关联表t_base_user_role操作结束***********/
+	
+						
 	/*****************END BY HaoShaSha***********/
 }
