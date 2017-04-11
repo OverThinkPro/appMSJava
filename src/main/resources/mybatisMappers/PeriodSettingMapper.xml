@@ -17,13 +17,20 @@
 		</sql>
 
 		<!-- 查询语句开始 -->
-		<!-- 主键查询周期类型信息alarmTypeId -->
+		<!-- 主键查询周期类型信息 -->
 		<select id="selectByPrimaryKey" parameterType="String" resultMap="PeriodSettingMap">
 			SELECT <include refid="PeriodSetting_Column_List" />
 			FROM t_base_period_setting
 			WHERE period_id = #{periodId}
 		</select>
-
+		
+		<!-- 根据周期类型名称查询周期类型信息 -->
+		<select id="selectByPeriodName" parameterType="String" resultMap="PeriodSettingMap">
+			SELECT <include refid="PeriodSetting_Column_List" />
+			FROM t_base_period_setting
+			WHERE period_name = #{periodName}
+		</select>
+		
 		<!-- 查询所有的周期类型 -->
 		<select id="getAllPeriodTypes" resultMap="PeriodSettingMap">
 			SELECT <include refid="PeriodSetting_Column_List" />

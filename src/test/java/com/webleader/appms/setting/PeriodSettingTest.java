@@ -45,6 +45,19 @@ public class PeriodSettingTest {
 		}
 	}
 	/** 
+	 * @description 根据周期类型编号查询周期类型信息
+	 */
+	@Test
+	public void selectByPeriodName(){
+		String periodName = "历史数据保存周期";
+		try {
+			PeriodSetting periodSetting = periodSettingMapper.selectByPeriodName(periodName);
+			System.out.println(periodSetting);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	/** 
 	 * @description 根据所有的周期类型
 	 */
 	@Test

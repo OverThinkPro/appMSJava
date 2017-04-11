@@ -27,6 +27,13 @@ public interface PeriodSettingMapper {
 	public PeriodSetting selectByPrimaryKey(String periodId) throws SQLException;
 	
 	/** 
+	 * @description 根据周期类型名称查询周期类型信
+	 * @param periodName
+	 * @return
+	 * @throws SQLException 
+	 */
+	public PeriodSetting selectByPeriodName(String periodName) throws SQLException;
+	/** 
 	 * @description 获得所有的周期类型
 	 * @return
 	 * @throws SQLException 
