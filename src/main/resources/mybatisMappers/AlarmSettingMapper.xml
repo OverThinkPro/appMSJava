@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.alarm.AlarmSettingMapper">
+
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="AlarmSettingMap" type="AlarmSetting">
+		<id column="alarm_type_id" jdbcType="VARCHAR" property="alarmTypeId" />
+		<result column="alarm_name" jdbcType="VARCHAR" property="alarmName" />
+		<result column="alarm_in_use" jdbcType="BIT" property="alarmInUse" />
+		<result column="alarm_file" jdbcType="VARCHAR" property="alarmFile" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+
+	<!-- 列名 -->
+	<sql id="Alarm_Type_Column_List">
+		alarm_type_id, alarm_name, alarm_in_use, alarm_file, remark
+	</sql>
+
+	<!-- 查询语句开始 -->
+	<!-- 主键查询报警类型信息alarmTypeId -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="AlarmSettingMap">
+		SELECT	<include refid="Alarm_Type_Column_List" />
+		FROM t_base_alarm_sound_setting
+		WHERE alarm_type_id = #{alarmTypeId}
+	</select>
+	
+	<!-- 查询所有的报警类型 -->
+	<select id="getAllAlarmTypes" resultMap="AlarmSettingMap">
+		SELECT	<include refid="Alarm_Type_Column_List" />
+		FROM t_base_alarm_sound_setting
+	</select>
+	<!-- 查询语句结束 -->
+	
+	<!-- 添加语句开始 -->
+	<!-- 添加报警类型 -->
+	<insert id="insert" parameterType="AlarmSetting">
+		INSERT INTO t_base_alarm_sound_setting (<include refid="Alarm_Type_Column_List" />)
+		VALUES (#{alarmTypeId}, #{alarmName}, #{alarmInUse}, #{alarmFile}, #{remark})
+	</insert>
+
+	<!-- 选择性的添加报警类型 -->
+	<insert id="insertSelective" parameterType="AlarmSetting">
+		INSERT INTO t_base_alarm_sound_setting
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="alarmTypeId != null">
+				alarm_type_id,
+			</if>
+			<if test="alarmName != null">
+				alarm_name,
+			</if>
+			<if test="alarmInUse != null">
+				alarm_in_use,
+			</if>
+			<if test="alarmFile != null">
+				alarm_file,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="alarmTypeId != null">
+				#{alarmTypeId},
+			</if>
+			<if test="alarmName != null">
+				#{alarmName},
+			</if>
+			<if test="alarmInUse != null">
+				#{alarmInUse},
+			</if>
+			<if test="alarmFile != null">
+				#{alarmFile},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+	<!-- 添加语句结束 -->
+	<!-- 删除语句开始 -->
+	<!-- 根据报警类型编号删除报警类型信息 -->
+	
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_base_alarm_sound_setting
+		WHERE alarm_type_id = #{alarmTypeId}
+	</delete>
+
+	<!-- 删除语句结束 -->
+	<!-- 修改语句开始 -->
+	<!-- 更新报警类型内容，应该用不到 -->
+	<update id="updateByPrimaryKeySelective" parameterType="AlarmSetting">
+		UPDATE t_base_alarm_sound_setting
+		<set>
+			<if test="alarmName != null">
+				alarm_name = #{alarmName},
+			</if>
+			<if test="alarmInUse != null">
+				alarm_in_use = #{alarmInUse},
+			</if>
+			<if test="alarmFile != null">
+				alarm_file = #{alarmFile},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+		</set>
+		WHERE alarm_type_id = #{alarmTypeId}
+	</update>
+
+	<!-- 修改语句结束 -->
+	<!-- END BY HaoShaSha -->
+</mapper>

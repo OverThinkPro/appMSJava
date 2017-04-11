@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.setting.PeriodSettingMapper">
+	
+		<!-- START BY HaoShaSha -->
+		<!-- 普通的POJO与数据库映射Map -->
+		<resultMap id="PeriodSettingMap" type="PeriodSetting">
+			<id column="period_id" jdbcType="VARCHAR" property="periodId" />
+			<result column="period_name" jdbcType="VARCHAR" property="periodName" />
+			<result column="description" jdbcType="VARCHAR" property="description" />
+			<result column="period_num" jdbcType="INTEGER" property="periodNum" />
+			<result column="remark" jdbcType="VARCHAR" property="remark" />
+		</resultMap>
+		<!-- 列名 -->
+		<sql id="PeriodSetting_Column_List">
+			period_id, period_name, description, period_num, remark
+		</sql>
+
+		<!-- 查询语句开始 -->
+		<!-- 主键查询周期类型信息alarmTypeId -->
+		<select id="selectByPrimaryKey" parameterType="String" resultMap="PeriodSettingMap">
+			SELECT <include refid="PeriodSetting_Column_List" />
+			FROM t_base_period_setting
+			WHERE period_id = #{periodId}
+		</select>
+
+		<!-- 查询所有的周期类型 -->
+		<select id="getAllPeriodTypes" resultMap="PeriodSettingMap">
+			SELECT <include refid="PeriodSetting_Column_List" />
+			FROM t_base_period_setting
+		</select>
+		<!-- 查询语句结束 -->
+
+		<!-- 添加语句开始 -->
+		<!-- 添加周期类型 -->
+		<insert id="insert" parameterType="PeriodSetting">
+			INSERT INTO t_base_period_setting (<include refid="PeriodSetting_Column_List" />)
+			VALUES (#{periodId}, #{periodName},	#{description}, #{periodNum}, #{remark})
+		</insert>
+
+		<!-- 选择性的添加周期类型 -->
+		<insert id="insertSelective" parameterType="PeriodSetting">
+			INSERT INTO t_base_period_setting
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="periodId != null">
+					period_id,
+				</if>
+				<if test="periodName != null">
+					period_name,
+				</if>
+				<if test="description != null">
+					description,
+				</if>
+				<if test="periodNum != null">
+					period_num,
+				</if>
+				<if test="remark != null">
+					remark,
+				</if>
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test="periodId != null">
+					#{periodId},
+				</if>
+				<if test="periodName != null">
+					#{periodName},
+				</if>
+				<if test="description != null">
+					#{description},
+				</if>
+				<if test="periodNum != null">
+					#{periodNum},
+				</if>
+				<if test="remark != null">
+					#{remark},
+				</if>
+			</trim>
+		</insert>
+		<!-- 添加语句结束 -->
+		<!-- 删除语句开始 -->
+		<!-- 根据周期类型编号删除周期类型信息 -->
+
+		<delete id="deleteByPrimaryKey" parameterType="String">
+			DELETE FROM t_base_period_setting
+			WHERE period_id = #{periodId}
+		</delete>
+
+		<!-- 删除语句结束 -->
+		<!-- 修改语句开始 -->
+		<!-- 更新周期类型内容，应该用不到 -->
+		<update id="updateByPrimaryKeySelective" parameterType="PeriodSetting">
+			UPDATE t_base_period_setting
+			<set>
+				<if test="periodName != null">
+					period_name = #{periodName},
+				</if>
+				<if test="description != null">
+					description = #{description},
+				</if>
+				<if test="periodNum != null">
+					period_num = #{periodNum},
+				</if>
+				<if test="remark != null">
+					remark = #{remark},
+				</if>
+			</set>
+			WHERE period_id = #{periodId}
+		</update>
+
+		<!-- 修改语句结束 -->
+		<!-- END BY HaoShaSha -->
+	
+</mapper>
