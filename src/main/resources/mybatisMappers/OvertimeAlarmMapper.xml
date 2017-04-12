@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.alarm.OvertimeAlarmMapper">
+  	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="AlarmMap" type="Alarm">
+		<id column="alarm_id" jdbcType="VARCHAR" property="alarmId" />
+		<result column="alarm_start_time" jdbcType="TIMESTAMP"
+			property="alarmStartTime" />
+		<result column="alarm_inhandle" jdbcType="CHAR" property="alarmInhandle" />
+		<result column="alarm_end_time" jdbcType="TIMESTAMP" property="alarmEndTime" />
+		<result column="alarm_type_id" jdbcType="VARCHAR" property="alarmTypeId" />
+		<result column="alarm_name" jdbcType="VARCHAR" property="alarmTypeName" />
+	</resultMap>
+	<resultMap id="OvertimeAlarmMap" type="OvertimeAlarm" extends="AlarmMap">
+		<id column="overtime_id" jdbcType="VARCHAR" property="overtimeId" />
+		<result column="arrival_time" jdbcType="TIMESTAMP" property="arrivalTime" />
+		<result column="arrival_loc" jdbcType="OTHER" property="arrivalLoc" />
+		<result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+		<result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+		<result column="card_id" jdbcType="VARCHAR" property="cardId" />
+		<result column="unit_id" jdbcType="VARCHAR" property="unitId" />
+		<result column="unit_name" jdbcType="VARCHAR" property="unitName" />
+		<result column="region_id" jdbcType="VARCHAR" property="regionId" />
+		<result column="region_name" jdbcType="VARCHAR" property="regionName" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="OvertimeAlarm_Column_List">
+		overtime_id, arrival_time, arrival_loc, staff_id, alarm_id, staff_name, card_id,
+		unit_id, unit_name, region_id, region_name
+	</sql>
+
+	<sql id="Alarm_Column_List">
+		alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time,
+		alarm_type_id
+	</sql>
+	<!-- 查询语句开始 -->
+	<!-- 主键查询报警信息 -->
+	<!-- 组合条件分页查询超员报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数) -->
+	<select id="listOvertimeByPageCondition" parameterType="Map" resultMap="OvertimeAlarmMap">
+		SELECT overtime_id, arrival_time, arrival_loc, staff_id, staff_name, 
+			card_id,unit_id, unit_name, region_id, region_name,
+			alarm.alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time,
+			alarm.alarm_type_id,alarm_name
+		FROM t_overtime_alarm overtime,
+			 t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
+		WHERE
+			overtime.alarm_id=alarm.alarm_id
+			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
+		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
+			AND alarm_inhandle = #{alarmInhandle}
+		</if>
+		<if test="alarmInhandle==null &amp;&amp; alarmInhandle==''">
+			AND alarm_inhandle='0'
+		</if>
+		<if test="regionName!=null &amp;&amp; regionName!=''">
+			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
+		</if>
+		<if test="alarmStartTime!=null &amp;&amp; alarmStartTime!=''">
+			AND alarm_start_time &gt; #{alarmStartTime}
+		</if>
+		<if test="alarmEndTime!=null &amp;&amp; alarmEndTime!=''">
+			AND alarm_end_time &lt; #{alarmEndTime}
+		</if>
+		ORDER BY overtime_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+
+	</select>
+
+
+	<!-- 统计符合条件的超员报警信息数量(警报处理状态，区域名称，警报开始时间，警报结束时间) -->
+	<select id="countOvertimeByConditon" parameterType="Map"	resultType="int">
+		SELECT COUNT(*)
+		FROM t_overtime_alarm overtime,
+			 t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
+		WHERE overtime.alarm_id=alarm.alarm_id
+			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
+		<if test="alarm_inhandle!=null &amp;&amp; alarm_inhandle!=''">
+			AND alarm_inhandle = #{regionName}
+		</if>
+		<if test="alarm_inhandle==null &amp;&amp; alarm_inhandle==''">
+			AND alarm_inhandle='0';
+		</if>
+		<if test="regionName!=null &amp;&amp; regionName!=''">
+			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
+		</if>
+		<if test="alarmStartTime!=null &amp;&amp; alarmStartTime!=''">
+			AND alarm_start_time &gt; #{alarmStartTime}
+		</if>
+		<if test="alarmEndTime!=null &amp;&amp; alarmEndTime!=''">
+			AND alarm_end_time &lt; #{alarmEndTime}
+		</if>
+	</select>
+	<!-- END BY HaoShaSha -->
+</mapper>

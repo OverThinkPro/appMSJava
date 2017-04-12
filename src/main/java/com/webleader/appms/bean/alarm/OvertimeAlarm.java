@@ -9,7 +9,7 @@ import java.util.Date;
  * @date 2017年3月31日 下午2:40:14
  * @version 1.0.0
  */
-public class OvertimeAlarm {
+public class OvertimeAlarm extends Alarm{
 	private String overtimeId;// 超时ID
 
 	private Date arrivalTime;// 到达时间
@@ -18,7 +18,7 @@ public class OvertimeAlarm {
 
 	private String staffId;// 员工ID
 
-	private String alarmId;// 警报ID
+	//private String alarmId;// 警报ID
 
 	private String staffName;// 员工姓名
 
@@ -62,14 +62,6 @@ public class OvertimeAlarm {
 
 	public void setStaffId(String staffId) {
 		this.staffId = staffId == null ? null : staffId.trim();
-	}
-
-	public String getAlarmId() {
-		return alarmId;
-	}
-
-	public void setAlarmId(String alarmId) {
-		this.alarmId = alarmId == null ? null : alarmId.trim();
 	}
 
 	public String getStaffName() {
@@ -119,13 +111,17 @@ public class OvertimeAlarm {
 	public void setRegionName(String regionName) {
 		this.regionName = regionName == null ? null : regionName.trim();
 	}
-
+	
 	@Override
 	public String toString() {
-		return "OvertimeAlarm [overtimeId=" + overtimeId + ", arrivalTime=" + arrivalTime + ", arrivalLoc=" + arrivalLoc
-				+ ", staffId=" + staffId + ", alarmId=" + alarmId + ", staffName=" + staffName + ", cardId=" + cardId
-				+ ", unitId=" + unitId + ", unitName=" + unitName + ", regionId=" + regionId + ", regionName="
-				+ regionName + "]";
+		return "OvertimeAlarm [overtimeId=" + overtimeId + ", arrivalTime="
+				+ arrivalTime + ", arrivalLoc=" + arrivalLoc + ", staffId="
+				+ staffId + ", staffName=" + staffName + ", cardId=" + cardId
+				+ ", unitId=" + unitId + ", unitName=" + unitName
+				+ ", regionId=" + regionId + ", regionName=" + regionName +
+				"alarmId=" + getAlarmId() + ", alarmStartTime="+ getAlarmStartTime() + ", alarmEndTime=" + getAlarmEndTime()
+				+ ", alarmInhandle=" + getAlarmInhandle() + ", alarmTypeId="
+				+ getAlarmTypeId() + ", alarmTypeName=" + getAlarmTypeName()+  "]";
 	}
 
 }
