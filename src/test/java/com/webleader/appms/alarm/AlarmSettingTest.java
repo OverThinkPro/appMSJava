@@ -44,7 +44,7 @@ public class AlarmSettingTest {
 		}
 	}
 	/** 
-	 * @description 根据所有的报警类型
+	 * @description 获得所有的报警类型
 	 */
 	@Test
 	public void getAllAlarmTypes(){

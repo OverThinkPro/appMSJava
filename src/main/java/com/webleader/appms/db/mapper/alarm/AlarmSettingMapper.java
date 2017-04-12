@@ -20,7 +20,7 @@ public interface AlarmSettingMapper {
 	/*****************查询接口开始*******************/
 	
 	/** 
-	 * @description 根据周期类型编号查询周期类型
+	 * @description 根据报警类型编号查询报警类型
 	 * @param periodId
 	 * @return
 	 * @throws SQLException 
@@ -28,7 +28,7 @@ public interface AlarmSettingMapper {
 	public AlarmSetting selectByPrimaryKey(String periodId) throws SQLException;
 	
 	/** 
-	 * @description 获得所有的周期类型
+	 * @description 获得所有的报警类型
 	 * @return
 	 * @throws SQLException 
 	 */
@@ -38,7 +38,7 @@ public interface AlarmSettingMapper {
     /*****************插入接口开始*******************/
 
     /** 
-     * @description 添加周期类型
+     * @description 添加报警类型
      * @param record
      * @return
      * @throws SQLException 
@@ -46,7 +46,7 @@ public interface AlarmSettingMapper {
     public int insert(AlarmSetting alarmSetting) throws SQLException;
     
     /** 
-     * @description 选择性的添加周期类型（同insert）
+     * @description 选择性的添加报警类型（同insert）
      * @param record
      * @return
      * @throws SQLException 
@@ -56,7 +56,7 @@ public interface AlarmSettingMapper {
 	/*****************删除接口开始*******************/
     
     /** 
-     * @description 根据周期类型编号删除周期类型
+     * @description 根据报警类型编号删除报警类型
      * @param periodId
      * @return
      * @throws SQLException 
@@ -67,7 +67,7 @@ public interface AlarmSettingMapper {
 	/*****************更新接口开始*******************/
     
     /** 
-     * @description 更新周期类型
+     * @description 更新报警类型
      * @param record
      * @return
      * @throws SQLException 

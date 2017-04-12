@@ -31,7 +31,6 @@
 		alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time,	alarm_type_id
 	</sql>
 	<!-- 查询语句开始 -->
-	<!-- 主键查询报警信息 -->
 	<!-- 组合条件分页查询呼叫报警信息(警报处理状态，警报开始时间，警报结束时间， 起始记录数，每页的记录数) -->
 	<select id="listStaffAlarmByPageCondition" parameterType="Map"	resultMap="StaffAlarmMap">
 		SELECT reader_id, card_id, reader_dis, reader_ant_id, staff_name, unit_id, unit_name,

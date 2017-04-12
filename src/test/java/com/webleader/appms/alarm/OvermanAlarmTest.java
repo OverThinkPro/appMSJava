@@ -33,7 +33,7 @@ public class OvermanAlarmTest {
 	
 	/*****************查询接口开始*******************/
 	/** 
-	 * @description 根据报警编号查询报警信息
+	 * @description 组合条件分页查询超员报警信息
 	 */
 	@Test
 	public void listOvermanByPageCondition(){
@@ -60,7 +60,7 @@ public class OvermanAlarmTest {
 		}
 	}
 	/** 
-	 * @description 统计未被处理的各个类型的报警信息的数量
+	 * @description 统计符合条件的超员报警信息数量
 	 */
 	@Test
 	public void countOvermanByConditon(){

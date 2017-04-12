@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.positioning.PastDocMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="PastDocMap" type="PastDoc">
+		<id column="staff_info_his_id" jdbcType="VARCHAR" property="staffInfoHisId" />
+		<result column="reader_id" jdbcType="VARCHAR" property="readerId" />
+		<result column="reader_dir" jdbcType="CHAR" property="readerDir" />
+		<result column="reader_dis" jdbcType="DOUBLE" property="readerDis" />
+		<result column="card_id" jdbcType="VARCHAR" property="cardId" />
+		<result column="daq_date" jdbcType="TIMESTAMP" property="daqDate" />
+		<result column="geo_point" jdbcType="OTHER" property="geoPoint" />
+		<result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+		<result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+		<result column="unit_id" jdbcType="VARCHAR" property="unitId" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="PastDoc_Column_List">
+		staff_info_his_id, reader_id, reader_dir, reader_dis, card_id, daq_date, geo_point,	staff_id, staff_name, unit_id
+	</sql>
+	<!-- 查询语句开始 -->
+	<!-- 组合条件分页查询历史轨迹信息(部门编号，员工姓名，定位卡号，开始时间，结束时间， 起始记录数，每页的记录数) -->
+	<select id="listPastDocByPageCondition" parameterType="Map"	resultMap="PastDocMap">
+		SELECT <include refid="PastDoc_Column_List"/>
+		FROM t_ls_staff_info_his
+		<where>
+			<if test="unitId!=null &amp;&amp; unitId!=''">
+				AND unit_id = #{unitId}
+			</if>
+			<if test="cardId==null &amp;&amp; cardId==''">
+				AND card_id = #{cardId}
+			</if>
+			<if test="staffName!=null &amp;&amp; staffName!=''">
+				AND staff_name = #{staffName}
+			</if>
+			<if test="startTime!=null &amp;&amp; startTime!=''">
+				AND daq_date &gt; #{startTime}
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+				AND daq_date &lt; #{endTime}
+			</if>
+		</where>
+		ORDER BY staff_info_his_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+
+	</select>
+
+
+	<!-- 统计符合条件的历史轨迹信息数量(部门编号，员工姓名，定位卡号，开始时间，结束时间) -->
+	<select id="countPastDocByConditon" parameterType="Map"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM t_ls_staff_info_his
+		<where>
+			<if test="unitId!=null &amp;&amp; unitId!=''">
+				AND unit_id = #{unitId}
+			</if>
+			<if test="cardId==null &amp;&amp; cardId==''">
+				AND card_id = #{cardId}
+			</if>
+			<if test="staffName!=null &amp;&amp; staffName!=''">
+				AND staff_name = #{staffName}
+			</if>
+			<if test="startTime!=null &amp;&amp; startTime!=''">
+				AND daq_date &gt; #{startTime}
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+				AND daq_date &lt; #{endTime}
+			</if>
+		</where>
+	</select>
+	<!-- 查询语句结束 -->
+	<!-- END BY HaoShaSha -->
+</mapper>

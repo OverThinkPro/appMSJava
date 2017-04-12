@@ -1,4 +1,4 @@
-package com.webleader.appms.alarm;
+package com.webleader.appms.positioning;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -11,39 +11,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.webleader.appms.bean.alarm.OvertimeAlarm;
-import com.webleader.appms.db.mapper.alarm.OvertimeAlarmMapper;
-
+import com.webleader.appms.bean.positioning.PastDoc;
+import com.webleader.appms.db.mapper.positioning.PastDocMapper;
 
 /**
- * @className OvertimeAlarmTest
- * @description 测试数据库接口OvertimeAlarmMapper
+ * @className PastDocTest
+ * @description 测试数据库接口PastDocMapper
  * @author HaoShaSha
- * @date 2017年4月12日 下午9:43:47
+ * @date 2017年4月12日 下午11:58:59
  * @version 1.0.0
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-public class OvertimeAlarmTest {
+public class PastDocTest {
 	
 	@Autowired
-	private OvertimeAlarmMapper overtimeAlarmMapper;
+	private PastDocMapper pastDocMapper;
 	
 	
 	/*****************START BY HaoShaSha*********/
 	
 	/*****************查询接口开始*******************/
 	/** 
-	 * @description 组合条件分页查询超时报警信息
+	 * @description 组合条件分页查询历史轨迹信息
 	 */
 	@Test
-	public void listOvertimeByPageCondition(){
+	public void listPastDocByPageCondition(){
 		//注意此处的格式必须是 yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
 		//Timestamp alarmEndTime = Timestamp.valueOf("2011-05-09 11:49:45");
 		//Timestamp alarmStartTime = Timestamp.valueOf("2011-05-09 11:49:45"); 
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
-		pageCondition.put("alarmInhandle", "0");
-		pageCondition.put("regionName", "");
+		pageCondition.put("unitId", "1");
+		pageCondition.put("staffName", "hss");
+		pageCondition.put("cardId", "1");
 		//pageCondition.put("alarmStartTime", alarmStartTime);
 		//pageCondition.put("alarmEndTime", alarmEndTime);
 		pageCondition.put("alarmStartTime", "");
@@ -51,32 +51,33 @@ public class OvertimeAlarmTest {
 		pageCondition.put("pageBegin", 0);	//必须是bigint
 		pageCondition.put("pageSize", 2);	//必须是bigint
 		try {
-			List<OvertimeAlarm> overtimeAlarmList = overtimeAlarmMapper.listOvertimeByPageCondition(pageCondition);
-			for (int i = 0; i < overtimeAlarmList.size(); i++) {
-				System.out.println(overtimeAlarmList.get(i));
+			List<PastDoc> pastDocList = pastDocMapper.listPastDocByPageCondition(pageCondition);
+			for (int i = 0; i < pastDocList.size(); i++) {
+				System.out.println(pastDocList.get(i));
 			}
-			System.out.println(overtimeAlarmList.size());
+			System.out.println(pastDocList.size());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	/** 
-	 * @description 统计符合条件的超时报警信息数量
+	 * @description 统计符合条件的历史轨迹信息数量
 	 */
 	@Test
-	public void countOvertimeByConditon(){
+	public void countPastDocByConditon(){
 		//注意此处的格式必须是 yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
 		//Timestamp alarmEndTime = Timestamp.valueOf("2011-05-09 11:49:45");
 		//Timestamp alarmStartTime = Timestamp.valueOf("2011-05-09 11:49:45"); 
 		Map<Object,Object> condition = new HashMap<Object,Object>();
-		condition.put("alarmInhandle", "0");
-		condition.put("regionName", "");
+		condition.put("unitId", "1");
+		condition.put("staffName", "hss");
+		condition.put("cardId", "1");
 		//condition.put("alarmStartTime", alarmStartTime);
 		//condition.put("alarmEndTime", alarmEndTime);
 		condition.put("alarmStartTime", "");
 		condition.put("alarmEndTime", "");
 		try {
-			int total = overtimeAlarmMapper.countOvertimeByConditon(condition);
+			int total = pastDocMapper.countPastDocByConditon(condition);
 			System.out.println(total);
 		} catch (SQLException e) {
 			e.printStackTrace();
