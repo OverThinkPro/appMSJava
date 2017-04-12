@@ -5,25 +5,29 @@
 	<!-- 普通的POJO与数据库映射Map -->
 	<resultMap id="AlarmMap" type="Alarm">
 		<id column="alarm_id" jdbcType="VARCHAR" property="alarmId" />
-		<result column="alarm_time" jdbcType="TIMESTAMP" property="alarmTime" />
+		<result column="alarm_start_time" jdbcType="TIMESTAMP" property="alarmStartTime" />
 		<result column="alarm_inhandle" jdbcType="CHAR" property="alarmInhandle" />
+		<result column="alarm_end_time" jdbcType="TIMESTAMP" property="alarmEndTime" />
 		<result column="alarm_type_id" jdbcType="VARCHAR" property="alarmTypeId" />
+		<result column="alarm_name" jdbcType="VARCHAR" property="alarmTypeName" />
 	</resultMap>
+
 	<!-- 列名 -->
 	<sql id="Alarm_Column_List">
-		alarm_id, alarm_time, alarm_inhandle, alarm_type_id
+		alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time, alarm_type_id
 	</sql>
 	
 	<!-- 查询语句开始 -->
 	<!-- 主键查询报警信息 -->
 	<select id="selectByPrimaryKey" parameterType="String" resultMap="AlarmMap">
-		SELECT <include refid="Alarm_Column_List" />
-		FROM t_base_alarm_info
-		WHERE alarm_id = #{alarmId}
+		SELECT alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time, alarm.alarm_type_id,alarm_name
+		FROM t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
+		WHERE alarm_id = #{alarmId} 
+		AND alarm.alarm_type_id = alarm_sound.alarm_type_id
 	</select>
 	
 	<!-- 统计未被处理的各个类型的报警信息的数量 -->
-	<select id="countByAlarmType" resultType="Map">
+	<select id="countRealAlarmType" resultType="Map">
 		SELECT count(alarm_id) total,alarm_type_id,alarm_name
 		FROM	
 			(SELECT alarm_sound.alarm_type_id, alarm_name,alarm_id
@@ -48,8 +52,11 @@
 			<if test="alarmId!=null">
 				AND alarm_id = #{alarmId}
 			</if>
-			<if test="alarmTime!=null">
-				AND alarm_time &lt; #{alarmTime}
+			<if test="alarmStartTime!=null">
+				AND alarm_start_time &gt; #{alarmStartTime}
+			</if>
+			<if test="alarmEndTime!=null">
+				AND alarm_end_time &lt; #{alarmEndTime}
 			</if>
 		</where>
 	</delete>
@@ -62,6 +69,9 @@
 		<set>
 			<if test="alarmInhandle != null">
 				alarm_inhandle = #{alarmInhandle},
+			</if>
+			<if test="alarmEndTime!=null">
+				alarm_end_time = #{alarmEndTime},
 			</if>
 		</set>
 		WHERE alarm_id = #{alarmId}

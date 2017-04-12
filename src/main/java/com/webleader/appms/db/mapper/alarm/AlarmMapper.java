@@ -34,7 +34,7 @@ public interface AlarmMapper {
 	 * @return List<Map<Object,Object>>(alarm_type_id,alarm_name,total)
 	 * @throws SQLException 
 	 */
-	public List<Map<Object,Object>> countByAlarmType() throws SQLException;
+	public List<Map<Object,Object>> countRealAlarmType() throws SQLException;
     
 	/*****************查询接口结束*******************/
     /*****************删除接口开始*******************/
@@ -42,7 +42,7 @@ public interface AlarmMapper {
    
     /** 
      * @description 根据条件删除报警信息or清空表
-     * @param condition(alarm_inhandle,alarmId,alarmTime)
+     * @param condition(alarm_inhandle,alarmId,alarmTime,alarmEndTime)
      * @return
      * @throws SQLException 
      */
@@ -53,7 +53,7 @@ public interface AlarmMapper {
    
     /** 
      * @description 更新报警处理结果
-     * @param alarm (alarmInhandle,alarmId)
+     * @param alarm (alarmInhandle,alarmId,alarmEndTime)
      * @return
      * @throws SQLException 
      */

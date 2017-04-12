@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.alarm.OvermanAlarmMapper">
+  
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="AlarmMap" type="Alarm">
+		<id column="alarm_id" jdbcType="VARCHAR" property="alarmId" />
+		<result column="alarm_start_time" jdbcType="TIMESTAMP" property="alarmStartTime" />
+		<result column="alarm_inhandle" jdbcType="CHAR" property="alarmInhandle" />
+		<result column="alarm_end_time" jdbcType="TIMESTAMP" property="alarmEndTime" />
+		<result column="alarm_type_id" jdbcType="VARCHAR" property="alarmTypeId" />
+		<result column="alarm_name" jdbcType="VARCHAR" property="alarmTypeName" />
+	</resultMap>
+	<resultMap id="OvermanAlarmMap" type="OvermanAlarm" extends="AlarmMap">
+		<id column="overman_id" jdbcType="VARCHAR" property="overmanId" />
+		<result column="region_name" jdbcType="VARCHAR" property="regionName" />
+		<result column="req_number" jdbcType="INTEGER" property="reqNumber" />
+		<result column="real_number" jdbcType="INTEGER" property="realNumber" />
+		<result column="region_id" jdbcType="VARCHAR" property="regionId" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="OvermanAlarm_Column_List">
+		overman_id, alarm_id, region_name, req_number, real_number, region_id
+	</sql>
+	<sql id="Alarm_Column_List">
+		alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time, alarm_type_id
+	</sql>
+	<!-- 查询语句开始 -->
+	<!-- 主键查询报警信息 -->
+	<!-- 组合条件分页查询超员报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数) -->
+	<select id="listOvermanByPageCondition" parameterType="Map" resultMap="OvermanAlarmMap">
+		SELECT overman_id,real_number,req_number,region_id,region_name,
+			   alarm.alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time, 
+			   alarm.alarm_type_id,alarm_name
+		FROM t_overman_alarm overman, t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
+		WHERE overman.alarm_id=alarm.alarm_id 
+		AND alarm.alarm_type_id=alarm_sound.alarm_type_id 
+		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
+			AND alarm_inhandle = #{alarmInhandle}
+		</if>
+		<if test="alarmInhandle==null &amp;&amp; alarmInhandle==''">
+			AND alarm_inhandle='0'
+		</if>
+		<if test="regionName!=null &amp;&amp; regionName!=''">
+			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
+		</if>
+		<if test="alarmStartTime!=null &amp;&amp; alarmStartTime!=''">
+			AND alarm_start_time &gt; #{alarmStartTime}
+		</if>
+		<if test="alarmEndTime!=null &amp;&amp; alarmEndTime!=''">
+			AND alarm_end_time &lt; #{alarmEndTime}
+		</if>
+		ORDER BY overman_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	
+	</select>
+	
+	
+	<!-- 统计符合条件的超员报警信息数量(警报处理状态，区域名称，警报开始时间，警报结束时间) -->
+	<select id="countOvermanByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM t_overman_alarm overman, t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
+		WHERE overman.alarm_id=alarm.alarm_id 
+		AND alarm.alarm_type_id=alarm_sound.alarm_type_id 
+		<if test="alarm_inhandle!=null &amp;&amp; alarm_inhandle!=''">
+			AND alarm_inhandle = #{regionName}
+		</if>
+		<if test="alarm_inhandle==null &amp;&amp; alarm_inhandle==''">
+			AND alarm_inhandle='0';
+		</if>
+		<if test="regionName!=null &amp;&amp; regionName!=''">
+			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
+		</if>
+		<if test="alarmStartTime!=null &amp;&amp; alarmStartTime!=''">
+			AND alarm_start_time &gt; #{alarmStartTime}
+		</if>
+		<if test="alarmEndTime!=null &amp;&amp; alarmEndTime!=''">
+			AND alarm_end_time &lt; #{alarmEndTime}
+		</if>
+	</select>
+	<!-- END BY HaoShaSha -->
+</mapper>

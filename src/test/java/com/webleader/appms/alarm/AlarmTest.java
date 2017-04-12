@@ -1,6 +1,7 @@
 package com.webleader.appms.alarm;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,16 +51,16 @@ public class AlarmTest {
 	 * @description 统计未被处理的各个类型的报警信息的数量
 	 */
 	@Test
-	public void countByAlarmType(){
+	public void countRealAlarmType(){
 		try {
-			List<Map<Object,Object>> countInfo = alarmMapper.countByAlarmType();
+			List<Map<Object,Object>> countInfo = alarmMapper.countRealAlarmType();
 			System.out.println(countInfo);
 			System.out.println(countInfo.size());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*****************查询接口结束*******************/
 	/*****************删除接口开始*******************/
     /** 
@@ -70,7 +71,8 @@ public class AlarmTest {
     	Map<Object,Object> condition = new HashMap<Object,Object>();
     	//condition.put("alarm_inhandle", "1");
     	condition.put("alarmId", "1");
-    	//condition.put("alarmTime", "2017-04-12 22:25:16");
+    	//condition.put("alarmStartTime", "2017-04-12 22:25:16");
+    	//condition.put("alarmEndTime", "2017-04-12 22:25:16");
 		try {
 			int count = alarmMapper.deleteByCondition(condition);
 			System.out.println(count);
@@ -85,8 +87,13 @@ public class AlarmTest {
 	 */
 	@Test
 	public void updateByPrimaryKeySelective(){
+		//注意此处的格式必须是 yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
+		Timestamp alarmStartTime = Timestamp.valueOf("2017-04-12 22:25:16");
+		Timestamp alarmEndTime = Timestamp.valueOf("2017-04-12 23:25:16");
 		Alarm alarm = new Alarm();
 		alarm.setAlarmInhandle("1");
+		alarm.setAlarmStartTime(alarmStartTime);
+		alarm.setAlarmEndTime(alarmEndTime);
 		alarm.setAlarmId("1");
 		try {
 			int count = alarmMapper.updateByPrimaryKeySelective(alarm);
