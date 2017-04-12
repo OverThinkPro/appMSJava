@@ -36,7 +36,7 @@
 	</sql>
 	<!-- 查询语句开始 -->
 	<!-- 主键查询报警信息 -->
-	<!-- 组合条件分页查询超时报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数) -->
+	<!-- 组合条件分页查询超员报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数) -->
 	<select id="listOvertimeByPageCondition" parameterType="Map" resultMap="OvertimeAlarmMap">
 		SELECT overtime_id, arrival_time, arrival_loc, staff_id, staff_name, 
 			card_id,unit_id, unit_name, region_id, region_name,
@@ -62,30 +62,24 @@
 		<if test="alarmEndTime!=null &amp;&amp; alarmEndTime!=''">
 			AND alarm_end_time &lt; #{alarmEndTime}
 		</if>
-		<if test="alarmStartTime!=null &amp;&amp; alarmStartTime!=''">
-			AND alarm_start_time &gt; #{alarmStartTime}
-		</if>
-		<if test="alarmEndTime!=null &amp;&amp; alarmEndTime!=''">
-			AND alarm_end_time &lt; #{alarmEndTime}
-		</if>
 		ORDER BY overtime_id ASC
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 
 	</select>
 
 
-	<!-- 统计符合条件的超时报警信息数量(警报处理状态，区域名称，警报开始时间，警报结束时间) -->
+	<!-- 统计符合条件的超员报警信息数量(警报处理状态，区域名称，警报开始时间，警报结束时间) -->
 	<select id="countOvertimeByConditon" parameterType="Map"	resultType="int">
 		SELECT COUNT(*)
 		FROM t_overtime_alarm overtime,
 			 t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
 		WHERE overtime.alarm_id=alarm.alarm_id
 			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
-		<if test="alarm_inhandle!=null &amp;&amp; alarm_inhandle!=''">
-			AND alarm_inhandle = #{regionName}
+		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
+			AND alarm_inhandle = #{alarmInhandle}
 		</if>
-		<if test="alarm_inhandle==null &amp;&amp; alarm_inhandle==''">
-			AND alarm_inhandle='0';
+		<if test="alarmInhandle==null &amp;&amp; alarmInhandle==''">
+			AND alarm_inhandle='0'
 		</if>
 		<if test="regionName!=null &amp;&amp; regionName!=''">
 			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')

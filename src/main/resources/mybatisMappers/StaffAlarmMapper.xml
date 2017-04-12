@@ -68,11 +68,11 @@
 		WHERE
 			staff_alarm.alarm_id=alarm.alarm_id
 			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
-		<if test="alarm_inhandle!=null &amp;&amp; alarm_inhandle!=''">
-			AND alarm_inhandle = #{regionName}
+		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
+			AND alarm_inhandle = #{alarmInhandle}
 		</if>
-		<if test="alarm_inhandle==null &amp;&amp; alarm_inhandle==''">
-			AND alarm_inhandle='0';
+		<if test="alarmInhandle==null &amp;&amp; alarmInhandle==''">
+			AND alarm_inhandle='0'
 		</if>
 		<if test="alarmStartTime!=null &amp;&amp; alarmStartTime!=''">
 			AND alarm_start_time &gt; #{alarmStartTime}
