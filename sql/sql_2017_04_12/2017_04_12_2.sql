@@ -12,3 +12,5 @@ ALTER TABLE t_overman_alarm DROP alarm_end_time;
 ALTER TABLE t_ls_staff_alarm DROP alarm_time;
 ALTER TABLE t_region_special_alarm DROP alert_time;
 
+/*修改卡的字段 staff_name int8*/
+ALTER TABLE t_ls_card_info ALTER COLUMN staff_name TYPE VARCHAR(40);

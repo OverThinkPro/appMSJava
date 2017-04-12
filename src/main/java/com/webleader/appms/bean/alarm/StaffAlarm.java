@@ -1,6 +1,5 @@
 package com.webleader.appms.bean.alarm;
 
-import java.util.Date;
 
 /**
  * @className StaffAlarm
@@ -9,8 +8,16 @@ import java.util.Date;
  * @date 2017年3月31日 下午2:31:20
  * @version 1.0.0
  */
-public class StaffAlarm {
-	private Date alarmTime;// 报警时间
+
+/**
+ * @className StaffAlarm
+ * @description 继承Alarm并删掉冗余的字段
+ * @author HaoShaSha
+ * @date 2017年4月12日 下午9:59:58
+ * @version 1.0.0
+ */
+public class StaffAlarm extends Alarm{
+	//private Date alarmTime;// 报警时间
 
 	private Double readerDis;// 离分站的距离
 
@@ -24,7 +31,7 @@ public class StaffAlarm {
 
 	private String readerId;// 分站ID
 
-	private String alarmId;// 报警ID
+	//private String alarmId;// 报警ID
 
 	private String cardId;// 定位卡ID
 
@@ -36,28 +43,12 @@ public class StaffAlarm {
 		this.readerId = readerId == null ? null : readerId.trim();
 	}
 
-	public String getAlarmId() {
-		return alarmId;
-	}
-
-	public void setAlarmId(String alarmId) {
-		this.alarmId = alarmId == null ? null : alarmId.trim();
-	}
-
 	public String getCardId() {
 		return cardId;
 	}
 
 	public void setCardId(String cardId) {
 		this.cardId = cardId == null ? null : cardId.trim();
-	}
-
-	public Date getAlarmTime() {
-		return alarmTime;
-	}
-
-	public void setAlarmTime(Date alarmTime) {
-		this.alarmTime = alarmTime;
 	}
 
 	public Double getReaderDis() {
@@ -102,9 +93,14 @@ public class StaffAlarm {
 
 	@Override
 	public String toString() {
-		return "StaffAlarm [alarmTime=" + alarmTime + ", readerDis=" + readerDis + ", readerAntId=" + readerAntId
-				+ ", staffName=" + staffName + ", unitId=" + unitId + ", unitName=" + unitName + ", readerId="
-				+ readerId + ", alarmId=" + alarmId + ", cardId=" + cardId + "]";
+		return "StaffAlarm [readerDis=" + readerDis + ", readerAntId="
+				+ readerAntId + ", staffName=" + staffName + ", unitId="
+				+ unitId + ", unitName=" + unitName + ", readerId=" + readerId
+				+ ", cardId=" + cardId + ", alarmId=" + getAlarmId() + ", alarmStartTime="+ getAlarmStartTime() + ", alarmEndTime=" + getAlarmEndTime()
+				+ ", alarmInhandle=" + getAlarmInhandle() + ", alarmTypeId="
+				+ getAlarmTypeId() + ", alarmTypeName=" + getAlarmTypeName()+ "]";
 	}
+
+	
 
 }

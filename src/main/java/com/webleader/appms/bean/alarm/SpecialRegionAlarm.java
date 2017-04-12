@@ -1,6 +1,5 @@
 package com.webleader.appms.bean.alarm;
 
-import java.util.Date;
 
 /**
  * @className SpecialRegionAlarm
@@ -9,14 +8,22 @@ import java.util.Date;
  * @date 2017年3月31日 下午2:35:36
  * @version 1.0.0
  */
-public class SpecialRegionAlarm {
+
+/**
+ * @className SpecialRegionAlarm
+ * @description 继承Alarm,并删除冗余的字段
+ * @author HaoShaSha
+ * @date 2017年4月12日 下午10:00:59
+ * @version 1.0.0
+ */
+public class SpecialRegionAlarm extends Alarm{
 	private String regionName;// 区域名称
 
-	private Date alertTime;// 报警事件
+	//private Date alertTime;// 报警时间
 
 	private String regionDir;// 区域位置
 
-	private String alarmId;// 报警ID
+	//private String alarmId;// 报警ID
 
 	private String staffName;// 员工姓名
 
@@ -62,28 +69,12 @@ public class SpecialRegionAlarm {
 		this.regionName = regionName == null ? null : regionName.trim();
 	}
 
-	public Date getAlertTime() {
-		return alertTime;
-	}
-
-	public void setAlertTime(Date alertTime) {
-		this.alertTime = alertTime;
-	}
-
 	public String getRegionDir() {
 		return regionDir;
 	}
 
 	public void setRegionDir(String regionDir) {
 		this.regionDir = regionDir == null ? null : regionDir.trim();
-	}
-
-	public String getAlarmId() {
-		return alarmId;
-	}
-
-	public void setAlarmId(String alarmId) {
-		this.alarmId = alarmId == null ? null : alarmId.trim();
 	}
 
 	public String getStaffName() {
@@ -112,9 +103,15 @@ public class SpecialRegionAlarm {
 
 	@Override
 	public String toString() {
-		return "SpecialRegionAlarm [regionName=" + regionName + ", alertTime=" + alertTime + ", regionDir=" + regionDir
-				+ ", alarmId=" + alarmId + ", staffName=" + staffName + ", unitId=" + unitId + ", unitName=" + unitName
-				+ ", staffId=" + staffId + ", cardId=" + cardId + ", regionId=" + regionId + "]";
+		return "SpecialRegionAlarm [regionName=" + regionName + ", regionDir="
+				+ regionDir + ", staffName=" + staffName + ", unitId=" + unitId
+				+ ", unitName=" + unitName + ", staffId=" + staffId
+				+ ", cardId=" + cardId + ", regionId=" + regionId +
+				"alarmId=" + getAlarmId() + ", alarmStartTime="+ getAlarmStartTime() + ", alarmEndTime=" + getAlarmEndTime()
+				+ ", alarmInhandle=" + getAlarmInhandle() + ", alarmTypeId="
+				+ getAlarmTypeId() + ", alarmTypeName=" + getAlarmTypeName()+ "]";
 	}
+
+	
 
 }
