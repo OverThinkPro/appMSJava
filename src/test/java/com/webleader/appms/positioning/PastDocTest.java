@@ -38,16 +38,16 @@ public class PastDocTest {
 	@Test
 	public void listPastDocByPageCondition(){
 		//注意此处的格式必须是 yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
-		//Timestamp alarmEndTime = Timestamp.valueOf("2011-05-09 11:49:45");
-		//Timestamp alarmStartTime = Timestamp.valueOf("2011-05-09 11:49:45"); 
+		//Timestamp startTime = Timestamp.valueOf("2011-05-09 11:49:45");
+		//Timestamp endTime = Timestamp.valueOf("2011-05-09 11:49:45"); 
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
 		pageCondition.put("unitId", "1");
 		pageCondition.put("staffName", "hss");
 		pageCondition.put("cardId", "1");
-		//pageCondition.put("alarmStartTime", alarmStartTime);
-		//pageCondition.put("alarmEndTime", alarmEndTime);
-		pageCondition.put("alarmStartTime", "");
-		pageCondition.put("alarmEndTime", "");
+		//pageCondition.put("startTime", startTime);
+		//pageCondition.put("endTime", endTime);
+		pageCondition.put("startTime", "");
+		pageCondition.put("endTime", "");
 		pageCondition.put("pageBegin", 0);	//必须是bigint
 		pageCondition.put("pageSize", 2);	//必须是bigint
 		try {
@@ -66,16 +66,16 @@ public class PastDocTest {
 	@Test
 	public void countPastDocByConditon(){
 		//注意此处的格式必须是 yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
-		//Timestamp alarmEndTime = Timestamp.valueOf("2011-05-09 11:49:45");
-		//Timestamp alarmStartTime = Timestamp.valueOf("2011-05-09 11:49:45"); 
+		//Timestamp startTime = Timestamp.valueOf("2011-05-09 11:49:45");
+		//Timestamp endTime = Timestamp.valueOf("2011-05-09 11:49:45"); 
 		Map<Object,Object> condition = new HashMap<Object,Object>();
 		condition.put("unitId", "1");
 		condition.put("staffName", "hss");
 		condition.put("cardId", "1");
-		//condition.put("alarmStartTime", alarmStartTime);
-		//condition.put("alarmEndTime", alarmEndTime);
-		condition.put("alarmStartTime", "");
-		condition.put("alarmEndTime", "");
+		//condition.put("startTime", startTime);
+		//condition.put("endTime", endTime);
+		condition.put("startTime", "");
+		condition.put("endTime", "");
 		try {
 			int total = pastDocMapper.countPastDocByConditon(condition);
 			System.out.println(total);
