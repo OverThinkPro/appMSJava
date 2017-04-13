@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.positioning.TLStaffMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="TLStaffMap" type="TLStaff">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+		<result column="card_id" jdbcType="VARCHAR" property="cardId" />
+		<result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+		<result column="unit_id" jdbcType="VARCHAR" property="unitId" />
+		<result column="unit_name" jdbcType="VARCHAR" property="unitName" />
+		<result column="job_id" jdbcType="VARCHAR" property="jobId" />
+		<result column="job_name" jdbcType="VARCHAR" property="jobName" />
+		<result column="staff_post" jdbcType="VARCHAR" property="staffPost" />
+		<result column="reader_id" jdbcType="VARCHAR" property="readerId" />
+		<result column="reader_name" jdbcType="VARCHAR" property="readerName" />
+		<result column="region_id" jdbcType="VARCHAR" property="regionId" />
+		<result column="region_name" jdbcType="VARCHAR" property="regionName" />
+		<result column="region_type" jdbcType="VARCHAR" property="regionType" />
+		<result column="daq_time" jdbcType="TIMESTAMP" property="daqTime" />
+		<result column="geo_point" jdbcType="OTHER" property="geoPoint" />
+		<result column="distance" jdbcType="DOUBLE" property="distance" />
+		<result column="daq_time_type" jdbcType="CHAR" property="daqTimeType" />
+		<result column="ant_id" jdbcType="VARCHAR" property="antId" />
+		<result column="flag" jdbcType="CHAR" property="flag" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="TLStaff_Column_List">
+		id, staff_id, card_id, staff_name, unit_id, unit_name, job_id, job_name, staff_post, reader_id,
+		reader_name, region_id,region_name, region_type, daq_time, geo_point, 
+		distance, daq_time_type, ant_id,flag
+	</sql>
+	<!-- 查询语句开始 -->
+	<!-- 实时统计井下各个班组的员工数量 -->
+	<select id="countRealStaffByUnit" parameterType="Map" resultType="Map">
+		SELECT count(id) total,unit_id,unit_name
+		FROM	
+			(SELECT unit.unit_id, unit.unit_name,id
+			 FROM t_base_unit_info unit LEFT OUTER JOIN t_ls_staff_info
+			 	  ON unit.unit_id=t_ls_staff_info.unit_id
+			 WHERE daq_time <![CDATA[>= ]]>  #{startTime}
+			 	AND daq_time <![CDATA[<= ]]>  #{endTime}
+			 ) unit_detail
+		WHERE unit_id != '1'
+		GROUP BY unit_id, unit_name	
+		ORDER BY unit_id;
+	</select>
+	
+	<!-- 根据部门编号实时统计井下某一个部门的员工数量 -->
+	<select id="countRealStaffByUnitId" parameterType="Map" resultType="Map">
+		SELECT COUNT(*), unit_id, unit_name	
+		FROM t_ls_staff_info
+		WHERE unit_id=#{unitId}
+			AND daq_time<![CDATA[>= ]]> #{startTime}
+			AND daq_time<![CDATA[<= ]]> #{endTime}
+		GROUP BY unit_id, unit_name	
+	</select>
+	
+	<!-- 实时统计井下各个区域的员工数量 -->
+	<select id="countRealStaffByRegion" parameterType="Map" resultType="Map">
+		SELECT count(id) total,region_id,region_name
+		FROM	
+			(SELECT region.region_id, region.region_name,id
+			 FROM t_base_region_info region LEFT OUTER JOIN t_ls_staff_info
+			 	  ON region.region_id=t_ls_staff_info.region_id
+			 WHERE daq_time <![CDATA[>= ]]>  #{startTime}
+			      AND daq_time <![CDATA[<= ]]>  #{endTime}
+			 ) region_detail
+		GROUP BY region_id, region_name	
+		ORDER BY region_id;
+	</select>
+	
+	<!-- 根据区域编号实时统计井下某一个区域的员工数量 -->
+	<select id="countRealStaffByRegionId" parameterType="Map" resultType="Map">
+		SELECT COUNT(*), region_id, region_name
+		FROM t_ls_staff_info
+		WHERE region_id=#{regionId}
+			AND daq_time<![CDATA[>= ]]> #{startTime}
+			AND daq_time<![CDATA[<= ]]> #{endTime}
+		GROUP BY region_id, region_name	
+	</select>
+	
+	<!-- 组合条件分页查询实时员工位置信息(部门编号，区域编号，分站编号，员工编号，员工姓名，定位卡号，开始时间，结束时间， 起始记录数，每页的记录数) -->
+	<select id="listRealStaffByPageCondition" parameterType="Map"	resultMap="TLStaffMap">
+		SELECT <include refid="TLStaff_Column_List"/>
+		FROM t_ls_staff_info
+		WHERE daq_time<![CDATA[>= ]]> #{startTime} AND daq_time<![CDATA[<= ]]> #{endTime}
+			<if test="unitId!=null &amp;&amp; unitId!=''">
+				AND unit_id = #{unitId}
+			</if>
+			<if test="regionId!=null &amp;&amp; regionId!=''">
+				AND region_id = #{regionId}
+			</if>
+			<if test="cardId==null &amp;&amp; cardId==''">
+				AND card_id = #{cardId}
+			</if>
+			<if test="readerId==null &amp;&amp; readerId==''">
+				AND reader_id = #{readerId}
+			</if>
+			<if test="staffId!=null &amp;&amp; staffId !='' ">
+				AND staff_id=#{staffId}
+			</if>
+			<if test="staffName!=null &amp;&amp; staffName!=''">
+				AND staff_name LIKE CONCAT(CONCAT('%',#{staffName}),'%')
+			</if>
+		ORDER BY id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+
+	<!-- 实时统计符合条件的实时员工的数量(部门编号，区域编号，分站编号，员工编号，员工姓名，定位卡号，开始时间，结束时间) -->
+	<select id="countTotalStaffByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM t_ls_staff_info
+		WHERE daq_time<![CDATA[>= ]]> #{startTime} AND daq_time<![CDATA[<= ]]> #{endTime}
+			<if test="unitId!=null &amp;&amp; unitId!=''">
+				AND unit_id = #{unitId}
+			</if>
+			<if test="regionId!=null &amp;&amp; regionId!=''">
+				AND region_id = #{regionId}
+			</if>
+			<if test="cardId==null &amp;&amp; cardId==''">
+				AND card_id = #{cardId}
+			</if>
+			<if test="readerId==null &amp;&amp; readerId==''">
+				AND reader_id = #{readerId}
+			</if>
+			<if test="staffId!=null &amp;&amp; staffId !='' ">
+				AND staff_id=#{staffId}
+			</if>
+			<if test="staffName!=null &amp;&amp; staffName!=''">
+				AND staff_name LIKE CONCAT(CONCAT('%',#{staffName}),'%')
+			</if>
+	</select>
+	<!-- 查询语句结束 -->
+	<!-- END BY HaoShaSha -->
+</mapper>

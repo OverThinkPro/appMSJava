@@ -20,6 +20,12 @@ public class TLStaff {
 	private String staffName;// 员工姓名
 
 	private String unitId;// 部门ID
+	
+	private String unitName;//部门名称
+	
+	private String jobId;	//工种编号
+	
+	private String jobName; //工种名称
 
 	private String staffPost;//
 
@@ -182,13 +188,41 @@ public class TLStaff {
 		this.flag = flag == null ? null : flag.trim();
 	}
 
-	@Override
-	public String toString() {
-		return "TLStaff [id=" + id + ", staffId=" + staffId + ", cardId=" + cardId + ", staffName=" + staffName
-				+ ", unitId=" + unitId + ", staffPost=" + staffPost + ", readerId=" + readerId + ", readerName="
-				+ readerName + ", regionId=" + regionId + ", regionName=" + regionName + ", regionType=" + regionType
-				+ ", daqTime=" + daqTime + ", geoPoint=" + geoPoint + ", distance=" + distance + ", daqTimeType="
-				+ daqTimeType + ", antId=" + antId + ", flag=" + flag + "]";
+	public String getUnitName() {
+		return unitName;
 	}
 
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
+	}
+
+	public String getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(String jobId) {
+		this.jobId = jobId;
+	}
+
+	public String getJobName() {
+		return jobName;
+	}
+
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
+	}
+
+	@Override
+	public String toString() {
+		return "TLStaff [id=" + id + ", staffId=" + staffId + ", cardId="
+				+ cardId + ", staffName=" + staffName + ", unitId=" + unitId
+				+ ", unitName=" + unitName + ", jobId=" + jobId + ", jobName="
+				+ jobName + ", staffPost=" + staffPost + ", readerId="
+				+ readerId + ", readerName=" + readerName + ", regionId="
+				+ regionId + ", regionName=" + regionName + ", regionType="
+				+ regionType + ", daqTime=" + daqTime + ", geoPoint="
+				+ geoPoint + ", distance=" + distance + ", daqTimeType="
+				+ daqTimeType + ", antId=" + antId + ", flag=" + flag + "]";
+	}
+	
 }

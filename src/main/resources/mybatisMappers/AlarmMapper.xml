@@ -26,7 +26,7 @@
 		AND alarm.alarm_type_id = alarm_sound.alarm_type_id
 	</select>
 	
-	<!-- 统计未被处理的各个类型的报警信息的数量 -->
+	<!-- 实时统计未被处理的各个类型的报警信息的数量 -->
 	<select id="countRealAlarmType" resultType="Map">
 		SELECT count(alarm_id) total,alarm_type_id,alarm_name
 		FROM	
@@ -39,6 +39,7 @@
 				)alarm
 			 ON alarm.alarm_type_id=alarm_sound.alarm_type_id) alarm_detail
 		GROUP BY alarm_type_id,alarm_name
+		ORDER BY alarm_type_id
 	</select>
 	
 	<!-- 删除语句开始 -->
