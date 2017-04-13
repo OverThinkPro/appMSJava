@@ -28,7 +28,7 @@ public interface PastDocMapper {
 	
 
 	/** 
-	 * @description 统计符合条件的历史轨迹信息数量(警报处理状态，警报开始时间，警报结束时间)
+	 * @description 统计符合条件的历史轨迹信息数量(部门编号，员工姓名，定位卡号，开始时间，结束时间)
 	 * @param condition(unitId,staffName,cardId,startTime,endTime)
 	 * @return
 	 * @throws SQLException 

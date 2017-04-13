@@ -48,8 +48,7 @@
 
 
 	<!-- 统计符合条件的历史轨迹信息数量(部门编号，员工姓名，定位卡号，开始时间，结束时间) -->
-	<select id="countPastDocByConditon" parameterType="Map"
-		resultType="int">
+	<select id="countPastDocByConditon" parameterType="Map"	resultType="int">
 		SELECT COUNT(*)
 		FROM t_ls_staff_info_his
 		<where>
