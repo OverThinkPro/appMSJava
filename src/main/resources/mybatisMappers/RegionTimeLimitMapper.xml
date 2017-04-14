@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.setting.RegionTimeLimitMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="RegionTimeLimitMap" type="RegionTimeLimit">
+		<id column="region_time_limt_id" jdbcType="VARCHAR" property="regionTimeLimtId" />
+		<result column="duty_time" jdbcType="TIMESTAMP" property="dutyTime" />
+		<result column="region_id" jdbcType="VARCHAR" property="regionId" />
+		<result column="region_name" jdbcType="VARCHAR" property="regionName" />
+		<result column="job_id" jdbcType="VARCHAR" property="jobId" />
+		<result column="job_name" jdbcType="VARCHAR" property="jobName" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="RegionTimeLimit_Column_List">
+		region_time_limt_id, duty_time, region_id, job_id
+	</sql>
+									<!-- 查询语句开始 -->
+	<!-- 主键查询区域时间限制  -->
+	<select id="selectByPrimaryKey" parameterType="String"	resultMap="RegionTimeLimitMap">
+		SELECT region_time_limt_id, duty_time, time_limit.job_id, job_name,time_limit.region_id,region_name
+		FROM t_base_job_type job ,t_region_time_limit time_limit,t_base_region_info region
+		WHERE region_time_limt_id = #{regionTimeLimtId}
+		AND job.job_id = time_limit.job_id 
+		AND time_limit.region_id = region.region_id;
+	</select>
+	<!-- 根据区域编号查询该区域时间限制 -->
+	<select id="selectByRegionId" parameterType="String"	resultMap="RegionTimeLimitMap">
+		SELECT region_time_limt_id, duty_time, time_limit.job_id, job_name,time_limit.region_id,region_name
+		FROM t_base_job_type job ,t_region_time_limit time_limit,t_base_region_info region
+		WHERE time_limit.region_id= #{regionId}
+		AND job.job_id = time_limit.job_id 
+		AND time_limit.region_id = region.region_id;
+	</select>
+	<!-- 根据工种编号查询该工种收到的区域时间限制 -->
+	<select id="selectByJobId" parameterType="String"	resultMap="RegionTimeLimitMap">
+		SELECT region_time_limt_id, duty_time, time_limit.job_id, job_name,time_limit.region_id,region_name
+		FROM t_base_job_type job ,t_region_time_limit time_limit,t_base_region_info region
+		WHERE time_limit.job_id= #{jobId}
+		AND job.job_id = time_limit.job_id 
+		AND time_limit.region_id = region.region_id;
+	</select>
+								<!-- 查询语句结束 -->
+								<!-- 添加语句开始 -->
+	<!-- 添加区域时间限制 -->		
+	<insert id="insert" parameterType="RegionTimeLimit">
+		INSERT INTO t_region_time_limit (<include refid="RegionTimeLimit_Column_List" />)
+		VALUES (#{regionTimeLimtId}, #{dutyTime}, #{regionId}, #{jobId})
+	</insert>
+		
+								<!-- 添加语句结束 -->
+								<!-- 删除语句开始 -->
+	<!-- 根据主键删除区域时间限制 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_region_time_limit
+		WHERE region_time_limt_id = #{regionTimeLimtId}
+	</delete>
+	<!-- 根据区域编号删除区域时间限制 -->
+	<delete id="deleteByRegionId" parameterType="String">
+		DELETE FROM t_region_time_limit
+		WHERE region_id = #{regionId}
+	</delete>
+	<!-- 根据工种编号删除区域时间限制 -->
+	<delete id="deleteByJobId" parameterType="String">
+		DELETE FROM t_region_time_limit
+		WHERE job_id = #{jobId}
+	</delete>
+								<!-- 删除语句结束 -->
+								<!-- 修改语句开始 -->
+	
+	<!-- 主键选择性修改区域(注意：修改应该只针对时间字段) -->
+	<update id="updateByPrimaryKeySelective" parameterType="RegionTimeLimit">
+		UPDATE t_region_time_limit
+		<set>
+			<if test="dutyTime != null">
+				duty_time = #{dutyTime},
+			</if>
+			<if test="regionId != null">
+				region_id = #{regionId},
+			</if>
+			<if test="jobId != null">
+				job_id = #{jobId},
+			</if>
+		</set>
+		WHERE region_time_limt_id = #{regionTimeLimtId}
+	</update>
+								<!-- 修改语句结束 -->
+							  <!-- END BY HaoShaSha -->
+</mapper>

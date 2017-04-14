@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.positioning.RegionMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="RegionMap" type="Region">
+		<id column="region_id" jdbcType="VARCHAR" property="regionId" />
+		<result column="region_name" jdbcType="VARCHAR" property="regionName" />
+		<result column="region_type" jdbcType="VARCHAR" property="regionType" />
+		<result column="region_max_people" jdbcType="INTEGER" property="regionMaxPeople" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="geo_polygon" jdbcType="OTHER" property="geoPolygon" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="Region_Column_List">
+		region_id, region_name, region_type, region_max_people, description, geo_polygon, remark
+	</sql>
+
+	<!-- 查询语句开始 -->
+	<!-- 主键查询区域信息  -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="RegionMap">
+		SELECT <include refid="Region_Column_List" />
+		FROM t_base_region_info
+		WHERE region_id = #{regionId}
+	</select>
+	
+	<!-- 组合条件分页查询区域信息(区域名称，区域类型， 起始记录数，每页的记录数) -->
+	<select id="getRegionByPageCondition" parameterType="Map" resultMap="RegionMap">
+		SELECT <include refid="Region_Column_List" />
+		FROM t_base_region_info
+		<where>
+			<if test="regionType!=null &amp;&amp; regionType !='' ">
+				region_type=#{regionType}
+			</if>
+			<if test="regionName!=null &amp;&amp; regionName!=''">
+				AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
+			</if>
+		</where>
+		ORDER BY region_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+	
+	<!-- 统计符合条件的区域数量(区域名称，区域类型) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*) 
+		FROM t_base_region_info 
+		<where>
+			<if test="regionType!=null &amp;&amp; regionType !='' ">
+				region_type=#{regionType}
+			</if>
+			<if test="regionName!=null &amp;&amp; regionName!=''">
+				AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
+			</if>
+		</where>
+	</select>
+								<!-- 查询语句结束 -->
+								<!-- 添加语句开始 -->
+	<!-- 添加区域 -->
+	<insert id="insert" parameterType="Region">
+		INSERT INTO t_base_region_info(<include refid="Region_Column_List" />)
+		VALUES(#{regionId}, #{regionName}, #{regionType}, #{regionMaxPeople}, #{description}, #{geoPolygon}, #{remark})
+	</insert>
+	
+								<!-- 添加语句结束 -->
+								<!-- 删除语句开始 -->
+	<!-- 根据主键删除区域 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_base_region_info
+		WHERE region_id = #{regionId}
+	</delete>
+								<!-- 删除语句结束 -->
+								<!-- 修改语句开始 -->
+	
+	<!-- 主键选择性修改区域 -->
+	<update id="updateByPrimaryKeySelective" parameterType="Region">
+		UPDATE t_base_region_info
+		<set>
+			<if test="regionName != null">
+				region_name = #{regionName},
+			</if>
+			<if test="regionType != null">
+				region_type = #{regionType},
+			</if>
+			<if test="regionMaxPeople != null">
+				region_max_people = #{regionMaxPeople},
+			</if>
+			<if test="description != null">
+				description = #{description},
+			</if>
+			<if test="geoPolygon != null">
+				geo_polygon = #{geoPolygon},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+		</set>
+		WHERE region_id = #{regionId}
+	</update>
+								<!-- 修改语句结束 -->
+							  <!-- END BY HaoShaSha -->
+</mapper>

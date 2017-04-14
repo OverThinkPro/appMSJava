@@ -188,7 +188,7 @@
 								<!-- 修改语句开始 -->
 	
 	<!-- 主键选择性修改数字字典 -->
-	<update id="updateByPrimaryKeySelective" parameterType="TBUrl">
+	<update id="updateByPrimaryKeySelective" parameterType="Dictionary">
 		UPDATE t_base_sys_dic
 		<set>
 	      <if test="dictionaryName != null">
