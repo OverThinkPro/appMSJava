@@ -167,9 +167,6 @@
 			<if test="moduleName != null">
 				module_name = #{moduleName},
 			</if>
-			<if test="upModuleId != null">
-				up_module_id = #{upModuleId},
-			</if>
 			<if test="inUse != null">
 				in_use = #{inUse},
 			</if>

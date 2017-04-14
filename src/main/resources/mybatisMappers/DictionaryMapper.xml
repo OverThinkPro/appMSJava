@@ -197,9 +197,6 @@
 	      <if test="description != null">
 	        description = #{description},
 	      </if>
-	      <if test="upDictionaryId != null">
-	        up_dictionary_id = #{upDictionaryId},
-	      </if>
 	      <if test="inUse != null">
 	        in_use = #{inUse},
 	      </if>

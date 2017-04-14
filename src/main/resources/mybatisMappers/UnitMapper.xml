@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.staff.UnitMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="UnitMap" type="Unit">
+		<id column="unit_id" jdbcType="VARCHAR" property="unitId" />
+		<result column="up_unit_id" jdbcType="VARCHAR" property="upUnitId" />
+		<result column="up_unit_name" jdbcType="VARCHAR" property="upUnitName" />
+		<result column="unit_name" jdbcType="VARCHAR" property="unitName" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="contact_person" jdbcType="VARCHAR" property="contactPerson" />
+		<result column="header" jdbcType="VARCHAR" property="header" />
+		<result column="create_date" jdbcType="DATE" property="createDate" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<collection property="unitList" ofType="Unit" column="unit_id" select="getUnitByUpUnitId"></collection>
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="Unit_Column_List">
+		unit_id, up_unit_id, unit_name, telephone, contact_person, header, create_date, description, remark
+	</sql>
+
+	<!-- 查询语句开始 -->
+	<!-- 主键查询部门信息unitId -->
+	<select id="selectByPrimaryKey" parameterType="String"	resultMap="UnitMap">
+		SELECT unit1.unit_id, unit1.up_unit_id, unit1.unit_name, unit1.telephone, unit1.contact_person, 
+			   unit1.header, unit1.create_date, unit1.description, unit1.remark, 
+			   unit2.unit_name up_unit_name
+		FROM t_base_unit_info unit1, t_base_unit_info unit2
+		WHERE unit1.up_unit_id = unit2.unit_id
+		AND unit1.unit_id = #{unitId}
+	</select>
+
+	<!-- 根据上级部门编号查询子部门 upUnitId -->
+	<select id="getUnitByUpUnitId" parameterType="String"	resultMap="UnitMap">
+		SELECT <include refid="Unit_Column_List" />
+		FROM t_base_unit_info
+		WHERE up_unit_id=#{upUnitId}
+		ORDER BY unit_id ASC
+	</select>
+
+	<!-- 查询一级部门 -->
+	<select id="getUnitTree" resultMap="UnitMap">
+		SELECT <include refid="Unit_Column_List" />
+		FROM t_base_unit_info
+		<!-- WHERE up_unit_id='1' -->
+		ORDER BY unit_id ASC
+	</select>
+
+	<!-- 组合条件分页查询部门信息(部门编号，部门名称，上级部门编号， 起始记录数，每页的记录数) -->
+	<select id="getUnitByPageCondition" parameterType="Map"
+		resultMap="UnitMap">
+		SELECT <include refid="Unit_Column_List" />
+		FROM t_base_unit_info
+		<where>
+			<if test="unitId!=null &amp;&amp; unitId !='' ">
+				unit_id=#{unitId}
+			</if>
+			<if test="unitName!=null &amp;&amp; unitName!=''">
+				AND unit_name LIKE CONCAT(CONCAT('%',#{unitName}),'%')
+			</if>
+			<if test="upUnitId!=null &amp;&amp; upUnitId!=''">
+				AND up_unit_id=#{upUnitId}
+			</if>
+		</where>
+		ORDER BY unit_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+
+	<!-- 统计符合条件的部门数量(部门编号，部门名称 或者上级部门编号) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*) FROM t_base_unit_info
+		<where>
+			<if test="unitId!=null &amp;&amp; unitId !='' ">
+				unit_id=#{unitId}
+			</if>
+			<if test="unitName!=null &amp;&amp; unitName!=''">
+				AND unit_name LIKE CONCAT(CONCAT('%',#{unitName}),'%')
+			</if>
+			<if test="upUnitId!=null &amp;&amp; upUnitId!=''">
+				AND up_unit_id=#{upUnitId}
+			</if>
+		</where>
+	</select>
+
+	<!-- 根据上级部门id查询下一个要插入的子部门的编号 -->
+	<select id="getMaxUnitId" parameterType="String" resultType="String">
+		SELECT MAX(unit_id)
+		FROM t_base_unit_info
+		WHERE up_unit_id=#{upUnitId}
+	</select>
+
+	<!-- 查询语句结束 -->
+	<!-- 添加语句开始 -->
+	<!-- 添加部门 -->
+	<insert id="insert" parameterType="Unit">
+		INSERT INTO	t_base_unit_info(<include refid="Unit_Column_List" />)
+		VALUES(#{unitId}, #{upUnitId}, #{unitName},	#{telephone}, #{contactPerson}, #{header},
+			   #{createDate}, #{description}, #{remark})
+	</insert>
+
+	<!-- 删除语句开始 -->
+	<!-- 根据主键删除部门 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_base_unit_info
+		WHERE unit_id = #{unitId}
+	</delete>
+
+	<!-- 根据上级部门编号删除部门 -->
+	<delete id="deleteByUpUnitId" parameterType="String">
+		DELETE FROM t_base_unit_info
+		WHERE up_unit_id = #{upUnitId}
+	</delete>
+	<!-- 删除语句结束 -->
+	<!-- 修改语句开始 -->
+
+	<!-- 主键选择性修改部门 -->
+	<update id="updateByPrimaryKeySelective" parameterType="Unit">
+		UPDATE t_base_unit_info
+		<set>
+			<if test="unitName != null">
+				unit_name = #{unitName},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone},
+			</if>
+			<if test="contactPerson != null">
+				contact_person = #{contactPerson},
+			</if>
+			<if test="header != null">
+				header = #{header},
+			</if>
+			<if test="createDate != null">
+				create_date = #{createDate},
+			</if>
+			<if test="description != null">
+				description = #{description},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+		</set>
+		WHERE unit_id = #{unitId}
+	</update>
+
+	<!-- 修改语句结束 -->
+	<!-- END BY HaoShaSha -->
+	
+</mapper>

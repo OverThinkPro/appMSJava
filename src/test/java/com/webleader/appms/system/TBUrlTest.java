@@ -202,7 +202,6 @@ public class TBUrlTest {
 		TBUrl tbUrl = new TBUrl();
 		tbUrl.setModuleId("1000002");
 		tbUrl.setModuleName("1000002");
-		tbUrl.setUpModuleId("3");
 		tbUrl.setModuleUrl("http://localhost:8080/test");
 		tbUrl.setDescription("测试添加菜单");
 		tbUrl.setInUse("1");

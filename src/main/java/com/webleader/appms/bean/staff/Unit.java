@@ -1,6 +1,6 @@
 package com.webleader.appms.bean.staff;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -14,6 +14,8 @@ public class Unit {
 	private String unitId;// 部门ID
 
 	private String upUnitId;// 上级部门ID
+
+	private String upUnitName;// 上级部门名称
 
 	private String unitName;// 部门名称
 
@@ -68,7 +70,8 @@ public class Unit {
 	}
 
 	public void setContactPerson(String contactPerson) {
-		this.contactPerson = contactPerson == null ? null : contactPerson.trim();
+		this.contactPerson = contactPerson == null ? null : contactPerson
+				.trim();
 	}
 
 	public String getHeader() {
@@ -111,11 +114,22 @@ public class Unit {
 		this.unitList = unitList;
 	}
 
-	@Override
-	public String toString() {
-		return "Unit [unitId=" + unitId + ", upUnitId=" + upUnitId + ", unitName=" + unitName + ", telephone="
-				+ telephone + ", contactPerson=" + contactPerson + ", header=" + header + ", createDate=" + createDate
-				+ ", description=" + description + ", remark=" + remark + ", unitList=" + unitList + "]";
+	public String getUpUnitName() {
+		return upUnitName;
 	}
 
+	public void setUpUnitName(String upUnitName) {
+		this.upUnitName = upUnitName;
+	}
+
+	@Override
+	public String toString() {
+		return "Unit [unitId=" + unitId + ", upUnitId=" + upUnitId
+				+ ", upUnitName=" + upUnitName + ", unitName=" + unitName
+				+ ", telephone=" + telephone + ", contactPerson="
+				+ contactPerson + ", header=" + header + ", createDate="
+				+ createDate + ", description=" + description + ", remark="
+				+ remark + ", unitList=" + unitList + "]";
+	}
+	
 }

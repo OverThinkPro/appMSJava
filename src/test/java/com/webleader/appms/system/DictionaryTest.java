@@ -229,7 +229,6 @@ public class DictionaryTest {
 		Dictionary dictionary = new Dictionary();
 		dictionary.setDictionaryId("1000002");
 		dictionary.setDictionaryName("修改数字字典2");
-		dictionary.setUpDictionaryId("1");
 		dictionary.setEnglistName("English");
 		dictionary.setInUse("1");
 		try {
