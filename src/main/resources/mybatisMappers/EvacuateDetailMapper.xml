@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.webleader.appms.db.mapper.communication.EvacuateDetailMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="EvacuationMap" type="Evacuation">
+		<id column="evacuate_id" jdbcType="VARCHAR" property="evacuateId" />
+		<result column="user_id" jdbcType="VARCHAR" property="userId" />
+		<result column="call_time" jdbcType="TIMESTAMP" property="callTime" />
+		<result column="region_id" jdbcType="VARCHAR" property="regionId" />
+		<result column="region_name" jdbcType="VARCHAR" property="regionName" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+	</resultMap>
+	<resultMap id="EvacuateDetailMap" type="EvacuateDetail" extends="EvacuationMap">
+		<id column="detail_id" jdbcType="VARCHAR" property="detailId" />
+		<!-- <result column="evacuate_id" jdbcType="VARCHAR" property="evacuateId" /> -->
+		<result column="call_status" jdbcType="CHAR" property="callStatus" />
+		<result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+		<result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+		<result column="entering_time" jdbcType="TIMESTAMP" property="enteringTime" />
+		<result column="job_name" jdbcType="VARCHAR" property="jobName" />
+		<result column="unit_name" jdbcType="VARCHAR" property="unitName" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="EvacuateDetail_Column_List">
+		detail_id, evacuate_id, call_status, staff_id, staff_name, entering_time, job_name,	unit_name
+	</sql>
+	<sql id="Evacuation_Column_List">
+		evacuate_id, user_id, call_time, region_id, region_name, user_name
+	</sql>
+	
+	<!-- 查询语句开始 -->
+	<!-- 根据(某个区域最新的一条)总撤离编号查找已经被呼叫的用户数量(evacuateId,callStatus) -->
+	<select id="countCallStatusByCondition" parameterType="Map"	resultType="int">
+		SELECT COUNT(*) 
+		FROM t_base_evacuate_info evacute, t_evacuate_detail e_detail
+		WHERE evacute.evacuate_id=e_detail.evacuate_id
+			  AND call_status = #{callStatus}
+			<if test="evacuateId!=null &amp;&amp; evacuateId!=''">
+				AND e_detail.evacuate_id = #{evacuateId}
+			</if>
+	</select>
+	
+	<!-- 根据(某个区域最新的一条)总撤离编号查找正在被呼叫的详细呼叫信息(evacuateId,callStatus) -->
+	<select id="getCallStaffByCallStatus" parameterType="Map"	resultMap="EvacuateDetailMap">
+		SELECT detail_id, call_status, staff_id, staff_name, entering_time, job_name, unit_name,
+			   evacute.evacuate_id, user_id, call_time, region_id, region_name, user_name
+		FROM t_base_evacuate_info evacute, t_evacuate_detail e_detail
+		WHERE evacute.evacuate_id=e_detail.evacuate_id
+			  AND call_status = #{callStatus}
+			<if test="evacuateId!=null &amp;&amp; evacuateId!=''">
+			  AND e_detail.evacuate_id = #{evacuateId}
+			</if>
+		
+	</select>
+	
+	<!-- 分页查询满足条件的撤离呼叫详情记录(总撤退编号，区域编号，开始时间，结束时间，起始记录数，每页的记录数) -->
+	<select id="listEvacuateDetailByPageCondition" parameterType="Map"	resultMap="EvacuateDetailMap">
+		SELECT detail_id, call_status, staff_id, staff_name, entering_time, job_name, unit_name,
+			   evacute.evacuate_id, user_id, call_time, region_id, region_name, user_name
+		FROM t_base_evacuate_info evacute, t_evacuate_detail e_detail
+		WHERE evacute.evacuate_id=e_detail.evacuate_id
+			<if test="startTime!=null &amp;&amp; startTime!=''">
+				AND call_time <![CDATA[>= ]]> #{startTime}
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+				AND call_time <![CDATA[<= ]]> #{endTime}
+			</if>
+			<if test="regionId!=null &amp;&amp; regionId!=''">
+				AND region_id = #{regionId}
+			</if>
+			<if test="evacuateId!=null &amp;&amp; evacuateId!=''">
+				AND e_detail.evacuate_id = #{evacuateId}
+			</if>
+		ORDER BY call_time DESC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+
+	<!-- 统计满足条件的撤离呼叫详情记录(总撤退编号，区域编号，开始时间，结束时间) -->
+	<select id="countEvacuateDetailByCondition" parameterType="Map"	resultType="int">
+		SELECT COUNT(*)
+		FROM t_base_evacuate_info evacute, t_evacuate_detail e_detail
+		WHERE evacute.evacuate_id=e_detail.evacuate_id
+			<if test="startTime!=null &amp;&amp; startTime!=''">
+				AND call_time <![CDATA[>= ]]> #{startTime}
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+				AND call_time <![CDATA[<= ]]> #{endTime}
+			</if>
+			<if test="regionId!=null &amp;&amp; regionId!=''">
+				AND region_id = #{regionId}
+			</if>
+			<if test="evacuateId!=null &amp;&amp; evacuateId!=''">
+				AND e_detail.evacuate_id = #{evacuateId}
+			</if>
+	</select>
+	<!-- 查询语句结束 -->
+	<!-- 插入语句开始 -->
+	<insert id="insert" parameterType="EvacuateDetail">
+		INSERT INTO t_evacuate_detail (<include refid="EvacuateDetail_Column_List"/>) 
+		VALUES (#{detailId}, #{evacuateId}, #{callStatus},#{staffId}, #{staffName}, #{enteringTime}, #{jobName}, #{unitName})
+	</insert>
+	<!-- 插入语句结束 -->
+	<!-- 更新语句开始 -->
+	<!-- 更新撤离呼叫详情记录（主要针对呼叫的状态） -->
+	<update id="updateByPrimaryKeySelective" parameterType="EvacuateDetail">
+		UPDATE t_evacuate_detail
+		<set>
+			<if test="evacuateId != null">
+				evacuate_id = #{evacuateId},
+			</if>
+			<if test="callStatus != null">
+				call_status = #{callStatus},
+			</if>
+			<if test="staffId != null">
+				staff_id = #{staffId},
+			</if>
+			<if test="staffName != null">
+				staff_name = #{staffName},
+			</if>
+			<if test="enteringTime != null">
+				entering_time = #{enteringTime},
+			</if>
+			<if test="jobName != null">
+				job_name = #{jobName},
+			</if>
+			<if test="unitName != null">
+				unit_name = #{unitName},
+			</if>
+		</set>
+		WHERE detail_id = #{detailId}
+	</update>
+	<!-- 更新语句结束 -->
+	
+	<!-- END BY HaoShaSha -->
+</mapper>

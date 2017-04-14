@@ -21,10 +21,10 @@
 		FROM t_ls_call_staff
 		<where>
 			<if test="startTime!=null &amp;&amp; startTime!=''">
-				AND call_time &gt; #{startTime}
+				call_time <![CDATA[>= ]]> #{startTime}
 			</if>
 			<if test="endTime!=null &amp;&amp; endTime!=''">
-				AND call_time &lt; #{endTime}
+				AND call_time <![CDATA[<= ]]> #{endTime}
 			</if>
 		</where>
 		ORDER BY call_time ASC
@@ -37,10 +37,10 @@
 		FROM t_ls_call_staff
 		<where>
 			<if test="startTime!=null &amp;&amp; startTime!=''">
-				AND call_time &gt; #{startTime}
+				call_time <![CDATA[>= ]]> #{startTime}
 			</if>
 			<if test="endTime!=null &amp;&amp; endTime!=''">
-				AND call_time &lt; #{endTime}
+				AND call_time <![CDATA[<= ]]> #{endTime}
 			</if>
 		</where>
 	</select>

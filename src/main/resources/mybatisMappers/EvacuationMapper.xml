@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.communication.EvacuationMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="EvacuationMap" type="Evacuation">
+		<id column="evacuate_id" jdbcType="VARCHAR" property="evacuateId" />
+		<result column="user_id" jdbcType="VARCHAR" property="userId" />
+		<result column="call_time" jdbcType="TIMESTAMP" property="callTime" />
+		<result column="region_id" jdbcType="VARCHAR" property="regionId" />
+		<result column="region_name" jdbcType="VARCHAR" property="regionName" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="Evacuation_Column_List">
+		evacuate_id, user_id, call_time, region_id, region_name, user_name
+	</sql>
+
+	<!-- 查询语句开始 -->
+	<!-- 根据区域编号查询本区域的最新的一条撤离记录 -->
+	<select id="getLatestEvacuationOfRegion" parameterType="Map" resultMap="EvacuationMap">
+		SELECT	<include refid="Evacuation_Column_List" />
+		FROM t_base_evacuate_info
+		<where>
+			<if test="startTime!=null &amp;&amp; startTime!=''">
+				call_time <![CDATA[>= ]]>  #{startTime}
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+				AND call_time <![CDATA[<= ]]>  #{endTime}
+			</if>
+			<if test="regionId!=null &amp;&amp; regionId!=''">
+				AND region_id = #{regionId}
+			</if>
+		</where>
+		ORDER BY call_time DESC
+		LIMIT 1 OFFSET 0
+	</select>
+		
+	<!-- 分页查询满足条件的总撤离呼叫记录(开始时间，结束时间，起始记录数，每页的记录数) -->
+	<select id="listEvacuationByPageCondition" parameterType="Map" resultMap="EvacuationMap">
+		SELECT
+		<include refid="Evacuation_Column_List" />
+		FROM t_base_evacuate_info
+		<where>
+			<if test="startTime!=null &amp;&amp; startTime!=''">
+				call_time <![CDATA[>= ]]>  #{startTime}
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+				AND call_time <![CDATA[<= ]]>  #{endTime}
+			</if>
+		</where>
+		ORDER BY call_time DESC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+
+	<!-- 统计满足条件的总撤离呼叫记录(开始时间，结束时间) -->
+	<select id="countEvacuationByCondition" parameterType="Map"	resultType="int">
+		SELECT COUNT(*)
+		FROM t_base_evacuate_info
+		<where>
+			<if test="startTime!=null &amp;&amp; startTime!=''">
+			   call_time <![CDATA[>= ]]>  #{startTime}
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+				AND call_time <![CDATA[<= ]]> #{endTime}
+			</if>
+		</where>
+	</select>
+	<!-- 查询语句结束 -->
+	<!-- 插入语句开始 -->
+	<insert id="insert" parameterType="Evacuation">
+		INSERT INTO t_base_evacuate_info (<include refid="Evacuation_Column_List" />)
+		VALUES (#{evacuateId}, #{userId},#{callTime},#{regionId}, #{regionName}, #{userName})
+	</insert>
+	<!-- 插入语句结束 -->
+	<!-- END BY HaoShaSha -->
+</mapper>

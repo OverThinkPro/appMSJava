@@ -9,10 +9,10 @@ import java.util.Date;
  * @date 2017年3月31日 下午2:55:12
  * @version 1.0.0
  */
-public class EvacuateDetail {
+public class EvacuateDetail extends Evacuation{
 	private String detailId;// 撤离明细ID
 
-	private String evacuateId;// 撤离ID
+	//private String evacuateId;// 撤离ID
 
 	private String callStatus;// 呼叫状态
 
@@ -32,14 +32,6 @@ public class EvacuateDetail {
 
 	public void setDetailId(String detailId) {
 		this.detailId = detailId == null ? null : detailId.trim();
-	}
-
-	public String getEvacuateId() {
-		return evacuateId;
-	}
-
-	public void setEvacuateId(String evacuateId) {
-		this.evacuateId = evacuateId == null ? null : evacuateId.trim();
 	}
 
 	public String getCallStatus() {
@@ -92,9 +84,11 @@ public class EvacuateDetail {
 
 	@Override
 	public String toString() {
-		return "EvacuateDetail [detailId=" + detailId + ", evacuateId=" + evacuateId + ", callStatus=" + callStatus
-				+ ", staffId=" + staffId + ", staffName=" + staffName + ", enteringTime=" + enteringTime + ", jobName="
-				+ jobName + ", unitName=" + unitName + "]";
+		return "EvacuateDetail [detailId=" + detailId + ", callStatus=" + callStatus + ", staffId=" + staffId 
+				+ ", staffName=" + staffName + ", enteringTime=" + enteringTime + ", jobName="
+				+ jobName + ", unitName=" + unitName + ", evacuateId=" + getEvacuateId() 
+				+ ", userId=" + getUserId() + ", callTime=" + getCallTime() + ", regionId="
+				+ getRegionId() + ", regionName=" + getRegionName() + ", userName=" + getUserName() + "]";
 	}
 
 }
