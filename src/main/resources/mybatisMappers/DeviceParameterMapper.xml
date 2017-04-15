@@ -22,9 +22,8 @@
 	</sql>
 	
 									<!-- 查询语句开始 -->
-	<!-- 主键查询报警信息 -->
-	<select id="selectByPrimaryKey" parameterType="String"
-		resultMap="DeviceParameterMap">
+	<!-- 根据设备参数编号查询设备参数信息  -->
+	<select id="selectByPrimaryKey" parameterType="String"	resultMap="DeviceParameterMap">
 		SELECT	<include refid="DeviceParameter_Column_List" />
 		FROM t_base_device_parameter
 		WHERE device_id = #{deviceId}

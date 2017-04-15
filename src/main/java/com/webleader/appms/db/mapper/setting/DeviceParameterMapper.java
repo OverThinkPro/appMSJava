@@ -6,7 +6,7 @@ import com.webleader.appms.bean.setting.DeviceParameter;
 
 /**
  * @className DeviceParameterMapper
- * @description TODO
+ * @description 数据库关于DeviceParameter的接口
  * @author HaoShaSha
  * @date 2017年4月15日 下午6:24:49
  * @version 1.0.0
