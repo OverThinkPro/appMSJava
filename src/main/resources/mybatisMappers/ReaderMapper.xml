@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.positioning.ReaderMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="ReaderMap" type="Reader">
+		<id column="reader_id" jdbcType="VARCHAR" property="readerId" />
+		<result column="reader_name" jdbcType="VARCHAR" property="readerName" />
+		<result column="reader_type" jdbcType="VARCHAR" property="readerType" />
+		<result column="region_id" jdbcType="VARCHAR" property="regionId" />
+		<result column="reader_status" jdbcType="VARCHAR" property="readerStatus" />
+		<result column="install_date" jdbcType="TIMESTAMP" property="installDate" />
+		<result column="power_supply_mode" jdbcType="CHAR" property="powerSupplyMode" />
+		<result column="battery_capacity" jdbcType="DOUBLE" property="batteryCapacity" />
+		<result column="reader_ip" jdbcType="CHAR" property="readerIp" />
+		<result column="rf_number" jdbcType="INTEGER" property="rfNumber" />
+		<result column="geo_point" jdbcType="OTHER" property="geoPoint" />
+		<result column="geo_point_ref" jdbcType="OTHER" property="geoPointRef" />
+		<result column="ref_sin" jdbcType="DOUBLE" property="refSin" />
+		<result column="ref_cos" jdbcType="DOUBLE" property="refCos" />
+		<result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="Reader_Column_List">
+		reader_id, reader_name, reader_type, region_id, reader_status, install_date,
+		power_supply_mode,
+		battery_capacity, reader_ip, rf_number, geo_point, geo_point_ref, ref_sin, ref_cos,
+		device_id
+	</sql>
+  
+	<!-- 查询语句开始 -->
+	<!-- 主键查询分站信息 -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="ReaderMap">
+		SELECT	<include refid="Reader_Column_List" />
+		FROM t_ls_card_reader
+		WHERE reader_id = #{readerId}
+	</select>
+
+	<!-- 组合条件分页查询分站信息(区域类型，分站名称，分站IP，分站状态，区域编号， 起始记录数，每页的记录数) -->
+	<select id="getReaderByPageCondition" parameterType="Map" resultMap="ReaderMap">
+		SELECT	<include refid="Reader_Column_List" />
+		FROM t_ls_card_reader
+		<where>
+			<if test="readerId != null  &amp;&amp; readerId !='' ">
+				reader_id = #{readerId}
+			</if>
+			<if test="readerName != null  &amp;&amp; readerName !='' ">
+				AND reader_name = #{readerName}
+			</if>
+			<if test="readerIp != null &amp;&amp; readerIp !='' ">
+				AND reader_ip = #{readerIp}
+			</if>
+			<if test="readerStatus != null &amp;&amp; readerStatus !='' ">
+				AND reader_status = #{readerStatus}
+			</if>
+			<if test="regionId != null &amp;&amp; regionId !='' ">
+				AND region_id = #{regionId}
+			</if>
+		</where>
+		ORDER BY reader_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+
+	<!-- 统计符合条件的分站数量(区域类型，分站名称，分站IP，分站状态，区域编号) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM t_ls_card_reader
+		<where>
+			<if test="readerId != null  &amp;&amp; readerId !='' ">
+				reader_id = #{readerId}
+			</if>
+			<if test="readerName != null  &amp;&amp; readerName !='' ">
+				AND reader_name = #{readerName}
+			</if>
+			<if test="readerIp != null &amp;&amp; readerIp !='' ">
+				AND reader_ip = #{readerIp}
+			</if>
+			<if test="readerStatus != null &amp;&amp; readerStatus !='' ">
+				AND reader_status = #{readerStatus}
+			</if>
+			<if test="regionId != null &amp;&amp; regionId !='' ">
+				AND region_id = #{regionId}
+			</if>
+		</where>
+	</select>
+	<!-- 查询语句结束 -->
+	<!-- 添加语句开始 -->
+	<!-- 添加分站 -->
+	<insert id="insert" parameterType="Reader">
+		INSERT INTO t_ls_card_reader(<include refid="Reader_Column_List" />)
+		VALUES(#{readerId}, #{readerName},	#{readerType},#{regionId}, #{readerStatus}, #{installDate},
+			   #{powerSupplyMode}, #{batteryCapacity},	#{readerIp},#{rfNumber}, #{geoPoint}, #{geoPointRef},
+			   #{refSin}, #{refCos},#{deviceId})
+	</insert>
+
+	<!-- 添加语句结束 -->
+	<!-- 删除语句开始 -->
+	<!-- 根据分站编号删除分站信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM	t_ls_card_reader
+		WHERE reader_id = #{readerId}
+	</delete>
+
+	<!-- 删除语句结束 -->
+	<!-- 修改语句开始 -->
+	<!-- 更新分站内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="Reader">
+		UPDATE t_ls_card_reader
+		<set>
+			<if test="readerName != null">
+				reader_name = #{readerName},
+			</if>
+			<if test="readerType != null">
+				reader_type = #{readerType},
+			</if>
+			<if test="regionId != null">
+				region_id = #{regionId},
+			</if>
+			<if test="readerStatus != null">
+				reader_status = #{readerStatus},
+			</if>
+			<if test="installDate != null">
+				install_date = #{installDate},
+			</if>
+			<if test="powerSupplyMode != null">
+				power_supply_mode = #{powerSupplyMode},
+			</if>
+			<if test="batteryCapacity != null">
+				battery_capacity = #{batteryCapacity},
+			</if>
+			<if test="readerIp != null">
+				reader_ip = #{readerIp},
+			</if>
+			<if test="rfNumber != null">
+				rf_number = #{rfNumber},
+			</if>
+			<if test="geoPoint != null">
+				geo_point = #{geoPoint},
+			</if>
+			<if test="geoPointRef != null">
+				geo_point_ref = #{geoPointRef},
+			</if>
+			<if test="refSin != null">
+				ref_sin = #{refSin},
+			</if>
+			<if test="refCos != null">
+				ref_cos = #{refCos},
+			</if>
+			<if test="deviceId != null">
+				device_id = #{deviceId},
+			</if>
+		</set>
+		WHERE reader_id = #{readerId}
+	</update>
+
+	<!-- 修改语句结束 -->
+	<!-- END BY HaoShaSha -->
+</mapper>

@@ -1,17 +1,82 @@
 package com.webleader.appms.db.mapper.positioning;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
 import com.webleader.appms.bean.positioning.Reader;
 
+/**
+ * @className ReaderMapper
+ * @description 数据库关于Reader的接口
+ * @author HaoShaSha
+ * @date 2017年4月15日 上午2:02:11
+ * @version 1.0.0
+ */
 public interface ReaderMapper {
-    int deleteByPrimaryKey(String readerId);
+	
+	/*****************START BY HaoShaSha*********/
+	/*****************查询接口开始*******************/
+	
+	/** 
+	 * @description 根据分站编号查询分站信息
+	 * @param readerId 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Reader selectByPrimaryKey(String readerId) throws SQLException;
+	
+	/** 
+	 * @description 组合条件分页查询分站信息(区域类型，分站名称，分站IP，分站状态，区域编号， 起始记录数，每页的记录数)
+	 * @param pageCondition(readerId,readerName,readerIp,readerStatus,regionId,pageSize,pageBegin)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Reader> getReaderByPageCondition(Map<Object,Object> pageCondition) throws SQLException;
+	
+	/** 
+	 * @description 统计符合条件的分站数量(区域类型，分站名称，分站IP，分站状态，区域编号)
+	 * @param pageCondition(readerId,readerName,readerIp,readerStatus,regionId)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int getCountByConditon(Map<Object,Object> condition) throws SQLException;
+	
+	/*****************查询接口结束*******************/
+	/*****************插入接口开始*******************/
+	
+	/** 
+	 * @description 添加分站
+	 * @param reader
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insert(Reader reader) throws SQLException;
+	
+	/*****************插入接口结束*******************/
+	/*****************删除接口开始*******************/
+	
+	/** 
+	 * @description 根据分站编号删除分站
+	 * @param readerId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int deleteByPrimaryKey(String readerId) throws SQLException;
+	
 
-    int insert(Reader record);
+	/*****************删除接口结束*******************/
+	/*****************更新接口开始*******************/
+	
+	/** 
+	 * @description 更新分站信息
+	 * @param reader
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateByPrimaryKeySelective(Reader reader) throws SQLException;
+	
+	/*****************更新接口结束*******************/
+	/*****************END BY HaoShaSha***********/
 
-    int insertSelective(Reader record);
-
-    Reader selectByPrimaryKey(String readerId);
-
-    int updateByPrimaryKeySelective(Reader record);
-
-    int updateByPrimaryKey(Reader record);
 }

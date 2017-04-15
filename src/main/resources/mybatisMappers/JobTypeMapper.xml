@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.staff.JobTypeMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="JobTypeMap" type="JobType">
+		<id column="job_id" jdbcType="VARCHAR" property="jobId" />
+		<result column="job_name" jdbcType="VARCHAR" property="jobName" />
+		<result column="job_code" jdbcType="VARCHAR" property="jobCode" />
+		<result column="job_icon_url" jdbcType="VARCHAR" property="jobIconUrl" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="JobType_Column_List">
+		job_id, job_name, job_code, job_icon_url, remark
+	</sql>
+
+	<!-- 查询语句开始 -->
+	<!-- 主键查询工种信息 -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="JobTypeMap">
+		SELECT	<include refid="JobType_Column_List" />
+		FROM t_base_job_type
+		WHERE job_id = #{jobId}
+	</select>
+
+	<!-- 组合条件分页查询工种信息(工种编号，工种名称，起始记录数，每页的记录数) -->
+	<select id="getJobTypeByPageCondition" parameterType="Map" resultMap="JobTypeMap">
+		SELECT	<include refid="JobType_Column_List" />
+		FROM t_base_job_type
+		<where>
+			<if test="jobId != null  &amp;&amp; jobId !='' ">
+				job_id = #{jobId}
+			</if>
+			<if test="jobName != null  &amp;&amp; jobName !='' ">
+				AND job_name = #{jobName}
+			</if>
+		</where>
+		ORDER BY job_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+
+	<!-- 统计符合条件的工种数量(工种编号，工种名称) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM t_base_job_type
+		<where>
+			<if test="jobId != null  &amp;&amp; jobId !='' ">
+				job_id = #{jobId}
+			</if>
+			<if test="jobName != null  &amp;&amp; jobName !='' ">
+				AND job_name = #{jobName}
+			</if>
+		</where>
+	</select>
+	<!-- 查询语句结束 -->
+	<!-- 添加语句开始 -->
+	<!-- 添加工种 -->
+	<insert id="insert" parameterType="JobType">
+		INSERT INTO t_base_job_type(<include refid="JobType_Column_List" />)
+		VALUES(#{jobId}, #{jobName}, #{jobCode}, #{jobIconUrl}, #{remark})
+	</insert>
+
+	<!-- 添加语句结束 -->
+	<!-- 删除语句开始 -->
+	<!-- 根据工种编号删除工种信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM	t_base_job_type
+		WHERE job_id = #{jobId}
+	</delete>
+
+	<!-- 删除语句结束 -->
+	<!-- 修改语句开始 -->
+	<!-- 更新工种内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="JobType">
+		UPDATE t_base_job_type
+		<set>
+			<if test="jobName != null &amp;&amp; jobName !='' ">
+				job_name = #{jobName},
+			</if>
+			<if test="jobCode != null &amp;&amp; jobCode !='' ">
+				job_code = #{jobCode},
+			</if>
+			<if test="jobIconUrl != null &amp;&amp; jobIconUrl !='' ">
+				job_icon_url = #{jobIconUrl},
+			</if>
+			<if test="remark != null &amp;&amp; remark !='' ">
+				remark = #{remark},
+			</if>
+		</set>
+		WHERE job_id = #{jobId}
+	</update>
+
+	<!-- 修改语句结束 -->
+	<!-- END BY HaoShaSha -->
+
+</mapper>

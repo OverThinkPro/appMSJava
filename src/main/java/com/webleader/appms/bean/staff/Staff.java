@@ -1,6 +1,6 @@
 package com.webleader.appms.bean.staff;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @className Staff
@@ -16,7 +16,7 @@ public class Staff {
 
 	private String staffAbbr;//
 
-	private String staffBirthday;// 出生日期
+	private Date staffBirthday;// 出生日期
 
 	private String staffGender;// 性别
 
@@ -58,12 +58,12 @@ public class Staff {
 		this.staffAbbr = staffAbbr == null ? null : staffAbbr.trim();
 	}
 
-	public String getStaffBirthday() {
+	public Date getStaffBirthday() {
 		return staffBirthday;
 	}
 
-	public void setStaffBirthday(String staffBirthday) {
-		this.staffBirthday = staffBirthday == null ? null : staffBirthday.trim();
+	public void setStaffBirthday(Date staffBirthday) {
+		this.staffBirthday = staffBirthday;
 	}
 
 	public String getStaffGender() {

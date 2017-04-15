@@ -1,6 +1,6 @@
 package com.webleader.appms.bean.positioning;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @className Reader

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.staff.ScheduleMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="ScheduleMap" type="Schedule">
+		<id column="duty_id" jdbcType="VARCHAR" property="dutyId" />
+		<result column="duty_name" jdbcType="VARCHAR" property="dutyName" />
+		<result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+		<result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+	</resultMap>
+	
+	<!-- 列名 -->
+	<sql id="Schedule_Column_List">
+		duty_id, duty_name, start_time, end_time
+	</sql>
+
+	<!-- 查询语句开始 -->
+	<!-- 主键查询班次信息 -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="ScheduleMap">
+		SELECT	<include refid="Schedule_Column_List" />
+		FROM t_base_duty_schedule
+		WHERE duty_id = #{dutyId}
+	</select>
+
+	<!-- 组合条件分页查询班次信息(班次编号，班次名称， 起始记录数，每页的记录数) -->
+	<select id="getScheduleByPageCondition" parameterType="Map" resultMap="ScheduleMap">
+		SELECT	<include refid="Schedule_Column_List" />
+		FROM t_base_duty_schedule
+		<where>
+			<if test="dutyId != null  &amp;&amp; dutyId !='' ">
+				duty_id = #{dutyId}
+			</if>
+			<if test="dutyName != null  &amp;&amp; dutyName !='' ">
+				AND duty_name = #{dutyName}
+			</if>
+		</where>
+		ORDER BY duty_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+
+	<!-- 统计符合条件的班次数量(班次编号，班次名称) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM t_base_duty_schedule
+		<where>
+			<if test="dutyId != null  &amp;&amp; dutyId !='' ">
+				duty_id = #{dutyId}
+			</if>
+			<if test="dutyName != null  &amp;&amp; dutyName !='' ">
+				AND duty_name = #{dutyName}
+			</if>
+		</where>
+	</select>
+	<!-- 查询语句结束 -->
+	<!-- 添加语句开始 -->
+	<!-- 添加班次 -->
+	<insert id="insert" parameterType="Schedule">
+		INSERT INTO t_base_duty_schedule(<include refid="Schedule_Column_List" />)
+		VALUES(#{dutyId}, #{dutyName}, #{startTime}, #{endTime})
+	</insert>
+
+	<!-- 添加语句结束 -->
+	<!-- 删除语句开始 -->
+	<!-- 根据班次编号删除班次信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM	t_base_duty_schedule
+		WHERE duty_id = #{dutyId}
+	</delete>
+
+	<!-- 删除语句结束 -->
+	<!-- 修改语句开始 -->
+	<!-- 更新班次内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="Schedule">
+		UPDATE t_base_duty_schedule
+		<set>
+			<if test="dutyName != null &amp;&amp; dutyName !='' ">
+				duty_name = #{dutyName},
+			</if>
+			<if test="startTime != null &amp;&amp; startTime !='' ">
+				start_time = #{startTime},
+			</if>
+			<if test="endTime != null &amp;&amp; endTime !='' ">
+				end_time = #{endTime},
+			</if>
+		</set>
+		WHERE duty_id = #{dutyId}
+	</update>
+
+	<!-- 修改语句结束 -->
+	<!-- END BY HaoShaSha -->
+
+</mapper>

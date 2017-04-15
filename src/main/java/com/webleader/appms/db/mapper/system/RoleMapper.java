@@ -21,7 +21,7 @@ public interface RoleMapper {
 	
 	/** 
 	 * @description 根据角色编号查询角色信息
-	 * @param moduleId 
+	 * @param roleId 
 	 * @return
 	 * @throws SQLException 
 	 */
@@ -37,11 +37,11 @@ public interface RoleMapper {
 	
 	/** 
 	 * @description 统计符合条件的角色数量
-	 * @param pageCondition(roleId,roleName,inUse,)
+	 * @param condition(roleId,roleName,inUse)
 	 * @return
 	 * @throws SQLException 
 	 */
-	public int getCountByConditon(Map<Object,Object> pageCondition) throws SQLException;
+	public int getCountByConditon(Map<Object,Object> condition) throws SQLException;
 	
 	/*****************查询接口结束*******************/
 	/*****************插入接口开始*******************/

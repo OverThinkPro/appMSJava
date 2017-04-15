@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.staff.StaffMapper">
+    <!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="StaffMap" type="Staff">
+		<id column="staff_id" jdbcType="VARCHAR" property="staffId" />
+		<result column="staff_name" jdbcType="VARCHAR" property="staffName" />
+		<result column="staff_abbr" jdbcType="CHAR" property="staffAbbr" />
+		<result column="staff_birthday" jdbcType="VARCHAR" property="staffBirthday" />
+		<result column="staff_gender" jdbcType="CHAR" property="staffGender" />
+		<result column="staff_pic_path" jdbcType="VARCHAR" property="staffPicPath" />
+		<result column="staff_id_card" jdbcType="CHAR" property="staffIdCard" />
+		<result column="staff_native_place" jdbcType="VARCHAR"
+			property="staffNativePlace" />
+		<result column="staff_telephone" jdbcType="VARCHAR" property="staffTelephone" />
+		<result column="staff_work_date" jdbcType="DATE" property="staffWorkDate" />
+		<result column="unit_id" jdbcType="VARCHAR" property="unitId" />
+		<result column="job_id" jdbcType="VARCHAR" property="jobId" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="Staff_Column_List">
+		staff_id, staff_name, staff_abbr, staff_birthday, staff_gender, staff_pic_path,
+		staff_id_card, staff_native_place, staff_telephone, staff_work_date, unit_id, job_id
+	</sql>
+
+	<!-- 查询语句开始 -->
+	<!-- 主键查询员工信息 -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="StaffMap">
+		SELECT	<include refid="Staff_Column_List" />
+		FROM t_base_staff_info
+		WHERE staff_id = #{staffId}
+	</select>
+
+	<!-- 组合条件分页查询员工信息(员工编号，员工名称，工种编号，部门编号， 起始记录数，每页的记录数) -->
+	<select id="getStaffByPageCondition" parameterType="Map" resultMap="StaffMap">
+		SELECT	<include refid="Staff_Column_List" />
+		FROM t_base_staff_info
+		<where>
+			<if test="staffId != null  &amp;&amp; staffId !='' ">
+				staff_id = #{staffId} 
+			</if>
+			<if test="staffName != null  &amp;&amp; staffName !='' ">
+				AND staff_name = #{staffName}
+			</if>
+			<if test="unitId!= null  &amp;&amp; unitId !='' ">
+				AND unit_id = #{unitId}
+			</if>
+			<if test="jobId != null  &amp;&amp; jobId !='' ">
+				AND job_id = #{jobId}
+			</if>
+		</where>
+		ORDER BY staff_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+
+	<!-- 统计符合条件的员工数量(员工编号，员工名称，工种编号，部门编号) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM t_base_staff_info
+		<where>
+			<if test="staffId != null  &amp;&amp; staffId !='' ">
+				staff_id = #{staffId}
+			</if>
+			<if test="staffName != null  &amp;&amp; staffName !='' ">
+				AND staff_name = #{staffName}
+			</if>
+			<if test="unitId!= null  &amp;&amp; unitId !='' ">
+				AND unit_id = #{unitId}
+			</if>
+			<if test="jobId != null  &amp;&amp; jobId !='' ">
+				AND job_id = #{jobId}
+			</if>
+		</where>
+	</select>
+	<!-- 查询语句结束 -->
+	<!-- 添加语句开始 -->
+	<!-- 添加员工 -->
+	<insert id="insert" parameterType="Staff">
+		INSERT INTO t_base_staff_info(<include refid="Staff_Column_List" />)
+		VALUES(#{staffId}, #{staffName},#{staffAbbr},#{staffBirthday}, #{staffGender}, #{staffPicPath},
+			   #{staffIdCard}, #{staffNativePlace},#{staffTelephone},#{staffWorkDate}, #{unitId}, #{jobId})
+	</insert>
+
+	<!-- 添加语句结束 -->
+	<!-- 删除语句开始 -->
+	<!-- 根据员工编号删除员工信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM	t_base_staff_info
+		WHERE staff_id = #{staffId}
+	</delete>
+
+	<!-- 删除语句结束 -->
+	<!-- 修改语句开始 -->
+	<!-- 更新员工内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="Staff">
+		UPDATE t_base_staff_info
+		<set>
+		<if test="staffName != null">
+			staff_name = #{staffName},
+		</if>
+		<if test="staffAbbr != null">
+			staff_abbr = #{staffAbbr},
+		</if>
+		<if test="staffBirthday != null">
+			staff_birthday = #{staffBirthday},
+		</if>
+		<if test="staffGender != null">
+			staff_gender = #{staffGender},
+		</if>
+		<if test="staffPicPath != null">
+			staff_pic_path = #{staffPicPath},
+		</if>
+		<if test="staffIdCard != null">
+			staff_id_card = #{staffIdCard},
+		</if>
+		<if test="staffNativePlace != null">
+			staff_native_place = #{staffNativePlace},
+		</if>
+		<if test="staffTelephone != null">
+			staff_telephone = #{staffTelephone},
+		</if>
+		<if test="staffWorkDate != null">
+			staff_work_date = #{staffWorkDate},
+		</if>
+		<if test="unitId != null">
+			unit_id = #{unitId},
+		</if>
+		<if test="jobId != null">
+			job_id = #{jobId},
+		</if>
+	</set>
+		WHERE staff_id = #{staffId}
+	</update>
+
+	<!-- 修改语句结束 -->
+	<!-- END BY HaoShaSha -->
+
+</mapper>
