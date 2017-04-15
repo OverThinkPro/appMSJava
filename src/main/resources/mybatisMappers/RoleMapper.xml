@@ -94,7 +94,31 @@
 	    WHERE role_id = #{roleId}
 	 </update>
 	
-								<!-- 修改语句结束 -->
-							  <!-- END BY HaoShaSha -->
+							 <!-- 基本表数据库操作结束 -->
+							 
+			 	
+			 	<!-- 关联表t_base_role_module操作开始 -->
+	<!-- 列名 -->
+	<sql id="Role_Module_Column_List">
+	    role_id, module_id
+	</sql>
+						<!-- 插入语句开始 -->
+	<!-- 给角色分配权限 -->
+	<insert id="addUrlToRole" parameterType="Map">
+		INSERT INTO t_base_role_module(<include refid="Role_Module_Column_List" />) 
+		VALUES(#{roleId},#{moduleId})
+	</insert>			
+						<!-- 插入语句结束 -->
+						<!-- 删除语句开始 -->
 
+	<!-- 撤销分配给角色的权限(全部或者单个权限) -->
+	<delete id="deleteUrlFromRole" parameterType="map">
+		DELETE FROM t_base_role_module WHERE role_id=#{roleId} 
+		<if test="moduleId != null  &amp;&amp; moduleId !=''">
+		AND module_id=#{moduleId};
+		</if>
+	</delete>
+						<!-- 删除语句结束 -->
+				<!-- 关联表t_base_role_module操作结束 -->
+					<!-- END BY HaoShaSha -->
 </mapper>

@@ -86,6 +86,31 @@ public interface RoleMapper {
 	public int updateByPrimaryKeySelective(Role role) throws SQLException;
 	
 	/*****************更新接口结束*******************/
+	
+	/*********关联表t_base_role_module操作开始**********/
+	/*****************插入接口开始*******************/
+	
+	/** 
+	 * @description 给角色分配权限
+	 * @param data(roleId, moduleId)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int addUrlToRole(Map<Object, Object> data) throws SQLException;
+	
+	/*****************插入接口结束*******************/
+	/*****************删除接口开始*******************/
+	
+	/** 
+	 * @description 撤销分配给角色的权限(全部或者单个权限)
+	 * @param condition(roleId, moduleId)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int deleteUrlFromRole(Map<Object, Object> condition)throws SQLException;
+	
+	/*****************删除接口结束*******************/
+	/*******关联表t_base_role_module操作结束***********/
+	
 	/*****************END BY HaoShaSha***********/
-
 }

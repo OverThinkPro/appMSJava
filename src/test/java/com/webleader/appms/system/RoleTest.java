@@ -139,5 +139,48 @@ public class RoleTest {
 	}
 	
 	/*****************更新接口结束*******************/
+	
+	/*********关联表t_base_role_module操作开始**********/
+	/*****************插入接口开始*******************/
+	
+	/** 
+	 * @description 给角色分配权限
+	 */
+	@Test
+	public void addUrlToRole(){
+		Map<Object, Object> data = new HashMap<Object, Object>();
+		data.put("moduleId", "11");
+		data.put("roleId", "10001");
+		try {
+			int count = roleMapper.addUrlToRole(data);
+			System.out.println(count);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*****************插入接口结束*******************/
+	/*****************删除接口开始*******************/
+	
+	/** 
+	 * @description 撤销分配给角色的权限(全部或者单个权限)
+	 */
+	@Test
+	public void deleteUrlFromRole(){
+		Map<Object, Object> condition = new HashMap<Object, Object>();
+		condition.put("moduleId", "11");
+		condition.put("roleId", "10001");
+		try {
+			int count = roleMapper.deleteUrlFromRole(condition);
+			System.out.println(count);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/*****************删除接口结束*******************/
+	/*******关联表t_base_role_module操作结束***********/
+	
 	/*****************END BY HaoShaSha***********/
 }
