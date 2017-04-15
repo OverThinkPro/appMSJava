@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.positioning.CardMapper">
+	<!-- START BY HaoShaSha -->
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="CardMap" type="Card">
+		<id column="card_id" jdbcType="VARCHAR" property="cardId" />
+		<result column="card_status" jdbcType="VARCHAR" property="cardStatus" />
+		<result column="op_name" jdbcType="VARCHAR" property="opName" />
+		<result column="op_time" jdbcType="TIMESTAMP" property="opTime" />
+		<result column="battery_v" jdbcType="DOUBLE" property="batteryV" />
+		<result column="staff_name" jdbcType="BIGINT" property="staffName" />
+		<result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+	</resultMap>
+	<!-- 列名 -->
+	<sql id="Card_Column_List">
+		card_id, card_status, op_name, op_time, battery_v, staff_name, staff_id
+	</sql>
+	
+	<!-- 查询语句开始 -->
+	<!-- 主键查询定位卡信息 -->
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="CardMap">
+		SELECT <include refid="Card_Column_List" />
+		FROM t_ls_card_info
+		WHERE card_id = #{cardId}
+	</select>
+
+	<!-- 组合条件分页查询定位卡信息(定位卡状态，员工名字，员工编号，定位卡号， 起始记录数，每页的记录数) -->
+	<select id="getCardByPageCondition" parameterType="Map" resultMap="CardMap">
+		SELECT <include refid="Card_Column_List" />
+		FROM t_ls_card_info
+		<where>
+			<if test="cardStatus != null   &amp;&amp; cardStatus !='' ">
+				card_status = #{cardStatus}
+			</if>
+			<if test="staffName != null  &amp;&amp; staffName !='' ">
+				staff_name = #{staffName}
+			</if>
+			<if test="staffId != null &amp;&amp; staffId !='' ">
+				staff_id = #{staffId}
+			</if>
+			<if test="cardId != null &amp;&amp; cardId !='' ">
+				card_id = #{cardId}
+			</if>
+		</where>
+		ORDER BY card_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+
+	<!-- 统计符合条件的定位卡数量(定位卡状态，员工名字，员工编号，定位卡号) -->
+	<select id="getCountByConditon" parameterType="Map" resultType="int">
+		SELECT COUNT(*)
+		FROM t_ls_card_info
+		<where>
+			<if test="cardStatus != null   &amp;&amp; cardStatus !='' ">
+				card_status = #{cardStatus}
+			</if>
+			<if test="staffName != null  &amp;&amp; staffName !='' ">
+				staff_name = #{staffName}
+			</if>
+			<if test="staffId != null &amp;&amp; staffId !='' ">
+				staff_id = #{staffId}
+			</if>
+			<if test="cardId != null &amp;&amp; cardId !='' ">
+				card_id = #{cardId}
+			</if>
+		</where>
+	</select>
+	<!-- 查询语句结束 -->
+	<!-- 添加语句开始 -->
+	<!-- 添加定位卡 -->
+	<insert id="insert" parameterType="Card">
+		INSERT INTO t_ls_card_info(	<include refid="Card_Column_List" /> )
+		VALUES(#{cardId}, #{cardStatus}, #{opName},	#{opTime}, #{batteryV}, #{staffName}, #{staffId})
+	</insert>
+
+	<!-- 添加语句结束 -->
+	<!-- 删除语句开始 -->
+	<!-- 根据定位卡编号删除定位卡信息 -->
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		DELETE FROM t_ls_card_info
+		WHERE card_id = #{cardId}
+	</delete>
+
+	<!-- 删除语句结束 -->
+	<!-- 修改语句开始 -->
+	<!-- 更新定位卡内容 -->
+	<update id="updateByPrimaryKeySelective" parameterType="Card">
+		UPDATE t_ls_card_info
+		<set>
+			<if test="cardStatus != null   &amp;&amp; cardStatus !='' ">
+				card_status = #{cardStatus},
+			</if>
+			<if test="opName != null   &amp;&amp; opName !='' ">
+				op_name = #{opName},
+			</if>
+			<if test="opTime != null   &amp;&amp; opTime !='' ">
+				op_time = #{opTime},
+			</if>
+			<if test="batteryV != null   &amp;&amp; batteryV !='' ">
+				battery_v = #{batteryV},
+			</if>
+			<if test="staffName != null  &amp;&amp; staffName !='' ">
+				staff_name = #{staffName},
+			</if>
+			<if test="staffId != null &amp;&amp; staffId !='' ">
+				staff_id = #{staffId},
+			</if>
+		</set>
+		WHERE card_id = #{cardId}
+	</update>
+
+	<!-- 修改语句结束 -->
+	<!-- END BY HaoShaSha -->
+</mapper>
+	

@@ -9,6 +9,13 @@ import java.util.Date;
  * @date 2017年3月31日 下午3:01:47
  * @version 1.0.0
  */
+/**
+ * @className Card
+ * @description 修改字段staffName的类型Long为String
+ * @author HaoShaSha
+ * @date 2017年4月15日 下午10:47:47
+ * @version 1.0.0
+ */
 public class Card {
 	private String cardId;// 定位卡ID
 
@@ -20,7 +27,7 @@ public class Card {
 
 	private Double batteryV;// 定位卡电量
 
-	private Long staffName;// 员工姓名
+	private String staffName;// 员工姓名
 
 	private String staffId;// 员工ID
 
@@ -64,11 +71,11 @@ public class Card {
 		this.batteryV = batteryV;
 	}
 
-	public Long getStaffName() {
+	public String getStaffName() {
 		return staffName;
 	}
 
-	public void setStaffName(Long staffName) {
+	public void setStaffName(String staffName) {
 		this.staffName = staffName;
 	}
 
