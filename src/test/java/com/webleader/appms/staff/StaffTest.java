@@ -55,6 +55,7 @@ public class StaffTest {
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
 		//pageCondition.put("staffId", "1");
 		//pageCondition.put("staffName", "hss1");
+		//pageCondition.put("staffAbbr", "hss1");
 		pageCondition.put("unitId", "1");
 		pageCondition.put("jobId", "1");
 		pageCondition.put("pageBegin", 0);	//必须是bigint
@@ -79,6 +80,7 @@ public class StaffTest {
 		Map<Object,Object> condition = new HashMap<Object,Object>();
 		//condition.put("staffId", "1");
 		//condition.put("staffName", "hss1");
+		//condition.put("staffAbbr", "hss1");
 		condition.put("unitId", "1");
 		condition.put("jobId", "1");
 		try {

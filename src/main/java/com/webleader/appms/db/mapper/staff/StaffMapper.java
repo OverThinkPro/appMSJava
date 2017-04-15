@@ -27,16 +27,16 @@ public interface StaffMapper {
 	public Staff selectByPrimaryKey(String staffId) throws SQLException;
 	
 	/** 
-	 * @description 组合条件分页查询员工信息(员工编号，员工名称，工种编号，部门编号， 起始记录数，每页的记录数)
-	 * @param pageCondition(staffId,staffName,unitId,jobId,pageSize,pageBegin)
+	 * @description 组合条件分页查询员工信息(员工编号，员工名称，员工简称，工种编号，部门编号， 起始记录数，每页的记录数)
+	 * @param pageCondition(staffId,staffName,staffAbbr,unitId,jobId,pageSize,pageBegin)
 	 * @return
 	 * @throws SQLException 
 	 */
 	public List<Staff> getStaffByPageCondition(Map<Object,Object> pageCondition) throws SQLException;
 	
 	/** 
-	 * @description 统计符合条件的员工数量(员工编号，员工名称，工种编号，部门编号)
-	 * @param pageCondition(staffId,staffName,unitId,jobId)
+	 * @description 统计符合条件的员工数量(员工编号，员工名称，员工简称，工种编号，部门编号)
+	 * @param pageCondition(staffId,staffName,staffAbbr,unitId,jobId)
 	 * @return
 	 * @throws SQLException 
 	 */

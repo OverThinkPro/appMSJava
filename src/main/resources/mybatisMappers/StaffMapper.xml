@@ -43,6 +43,9 @@
 			<if test="staffName != null  &amp;&amp; staffName !='' ">
 				AND staff_name = #{staffName}
 			</if>
+			<if test="staffAbbr != null  &amp;&amp; staffAbbr !='' ">
+				AND staff_abbr = #{staffAbbr}
+			</if>
 			<if test="unitId!= null  &amp;&amp; unitId !='' ">
 				AND unit_id = #{unitId}
 			</if>
@@ -54,7 +57,7 @@
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 	</select>
 
-	<!-- 统计符合条件的员工数量(员工编号，员工名称，工种编号，部门编号) -->
+	<!-- 统计符合条件的员工数量(员工编号，员工名称，员工简称，工种编号，部门编号) -->
 	<select id="getCountByConditon" parameterType="Map" resultType="int">
 		SELECT COUNT(*)
 		FROM t_base_staff_info
@@ -64,6 +67,9 @@
 			</if>
 			<if test="staffName != null  &amp;&amp; staffName !='' ">
 				AND staff_name = #{staffName}
+			</if>
+			<if test="staffAbbr != null  &amp;&amp; staffAbbr !='' ">
+				AND staff_abbr = #{staffAbbr}
 			</if>
 			<if test="unitId!= null  &amp;&amp; unitId !='' ">
 				AND unit_id = #{unitId}
