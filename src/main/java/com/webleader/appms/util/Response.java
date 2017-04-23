@@ -3,12 +3,17 @@ package com.webleader.appms.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("prototype")
 public class Response {
 	private static final String OK = "ok";
 	private static final String Error = "error";
 	private Meta meta;
 	private Object data;
-
+	
 	/**
 	 * 存在复杂组合数据对象或者没有数据对象的成功响应
 	 * 

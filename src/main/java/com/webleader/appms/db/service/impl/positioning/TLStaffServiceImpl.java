@@ -1,11 +1,9 @@
 package com.webleader.appms.db.service.impl.positioning;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,10 +35,7 @@ public class TLStaffServiceImpl implements TLStaffService{
 		if (Objects.isNull(condition)) {
 			return null;
 		}
-		List<Map<Object,Object>> realStaffByUnit = new Stack<Map<Object,Object>>();
-		
-		realStaffByUnit = tlStaffMapper.countRealStaffByUnit(condition);
-		return realStaffByUnit;
+		return tlStaffMapper.countRealStaffByUnit(condition);
 	}
 	
 	/** 
@@ -53,10 +48,17 @@ public class TLStaffServiceImpl implements TLStaffService{
 		if (Objects.isNull(condition)) {
 			return null;
 		}
-		List<Map<Object,Object>> RealStaffByRegion = new Stack<Map<Object,Object>>();
-		
-		RealStaffByRegion = tlStaffMapper.countRealStaffByRegion(condition);
-		return RealStaffByRegion;
+		return tlStaffMapper.countRealStaffByRegion(condition);
+	}
+	
+	/** 
+	 * @description 查询出当前的所有区域总数
+	 * @return int
+	 * @throws SQLException
+	 * @author ding 
+	 */
+	public int countAllRegion(Map<Object,Object> condition) throws SQLException{
+		return tlStaffMapper.countAllRegion(condition);
 	}
 	
 	/** 
@@ -69,10 +71,7 @@ public class TLStaffServiceImpl implements TLStaffService{
 		if (Objects.isNull(condition)){
 			return null;
 		}
-		List<TLStaff> listRealStaff = new ArrayList<TLStaff>();
-		
-		listRealStaff = tlStaffMapper.listRealStaffByPageCondition(condition);
-		return listRealStaff;
+		return tlStaffMapper.listRealStaffByPageCondition(condition);
 	}
 	
 	/** 

@@ -77,7 +77,7 @@
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 	</select>
 
-	<!-- 统计满足条件的撤离呼叫详情记录(总撤退编号，区域编号，开始时间，结束时间) -->
+	<!-- 统计满足条件的撤离呼叫详情记录(总撤退编号，区域编号，开始时间，结束时间，呼叫状态) -->
 	<select id="countEvacuateDetailByCondition" parameterType="Map"	resultType="int">
 		SELECT COUNT(*)
 		FROM t_base_evacuate_info evacute, t_evacuate_detail e_detail
@@ -93,6 +93,9 @@
 			</if>
 			<if test="evacuateId!=null &amp;&amp; evacuateId!=''">
 				AND e_detail.evacuate_id = #{evacuateId}
+			</if>
+			<if test="call_status!=null &amp;&amp; call_status!=''">
+				AND call_status = #{call_status}
 			</if>
 	</select>
 	<!-- 查询语句结束 -->

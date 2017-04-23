@@ -66,11 +66,56 @@
 			</if>
 		</where>
 	</select>
+	
+	<!-- ding -->
+	<!-- 通过userId,regionId 查询得到所有符合需求的员工基本信息，为了插入到撤离表中 -->
+	<select id="getInsertEvacuation" parameterType="Map" resultType="Map">
+	SELECT region_id, region_name, staff_id, staff_name, job_name, unit_name, min(daq_time) entering_date,
+		(SELECT user_name FROM t_base_user_info WHERE user_id = #{userId}) user_name, #{userId} user_id
+	FROM t_ls_staff_info
+	WHERE region_id = #{regionId}
+		AND daq_time <![CDATA[>= ]]>  #{startTime}
+		AND daq_time <![CDATA[<= ]]>  #{endTime}
+	GROUP BY region_id, region_name, staff_id, staff_name, job_name, unit_name
+	ORDER BY staff_id asc
+	</select>
 	<!-- 查询语句结束 -->
 	<!-- 插入语句开始 -->
-	<insert id="insert" parameterType="Evacuation">
-		INSERT INTO t_base_evacuate_info (<include refid="Evacuation_Column_List" />)
-		VALUES (#{evacuateId}, #{userId},#{callTime},#{regionId}, #{regionName}, #{userName})
+	<insert id="insert" parameterType="java.util.List">
+		<!-- INSERT INTO t_base_evacuate_info (evacuate_id, user_id, call_time, region_id, region_name, user_name)
+		VALUES
+		
+		<foreach collection="list" item="item" index="index" separator=",">
+            (#{item.evacuate_id}, #{item.user_id}, #{item.call_time}, #{item.region_id}, #{item.region_name}, #{item.user_name})
+        </foreach> -->
+        
+        <foreach collection="list" item="item" open="begin" separator=";" close=";end;">
+	        INSERT INTO t_base_evacuate_info (evacuate_id, user_id, call_time, region_id, region_name, user_name)
+			VALUES 
+	        (#{item.evacuate_id}, #{item.user_id}, #{item.call_time}, #{item.region_id}, #{item.region_name}, #{item.user_name})
+       </foreach>
+	</insert>
+	<!-- <insert id="insert" parameterType="java.util.List">
+		INSERT INTO t_base_evacuate_info (evacuate_id, user_id, call_time, region_id, region_name, user_name)
+		VALUES
+		<foreach collection="list" item="map" index="index" separator=",">
+			<foreach collection="map" item="result" index="key" open="(" separator="," close=")">
+            	#{result}
+        	</foreach>
+        </foreach>
+	</insert> -->
+	
+	<!-- 将数据插入到撤离总表中 -->
+	<insert id="insertEvacuation" parameterType="Map">
+		INSERT INTO t_base_evacuate_info (evacuate_id, user_id, call_time, region_id, region_name, user_name)
+		SELECT  <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+		    select replace(uuid(),'-','') from dual
+		    </selectKey>, #{userId}, #{callTime}, region_id, region_name, (SELECT user_name FROM t_base_user_info WHERE user_id=#{userId})
+		FROM t_ls_staff_info
+		WHERE region_id=#{regionId}
+		AND daq_time <![CDATA[>= ]]> #{startTime}
+		AND daq_time <![CDATA[<= ]]> #{endTime}
+		GROUP BY staff_id , staff_name, region_id, region_name
 	</insert>
 	<!-- 插入语句结束 -->
 	<!-- END BY HaoShaSha -->

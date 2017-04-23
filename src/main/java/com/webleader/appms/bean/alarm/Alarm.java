@@ -2,6 +2,8 @@ package com.webleader.appms.bean.alarm;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @className Alarm
  * @description 报警简要信息表
@@ -19,8 +21,10 @@ import java.util.Date;
 public class Alarm {
 	private String alarmId;//报警ID
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date alarmStartTime;//报警开始时间
 	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date alarmEndTime;//报警开始时间
 
 	private String alarmInhandle;//是否处理 0:未处理；1：已处理

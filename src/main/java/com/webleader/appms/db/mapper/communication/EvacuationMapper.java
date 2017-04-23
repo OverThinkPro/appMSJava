@@ -42,6 +42,15 @@ public interface EvacuationMapper {
 	 * @throws SQLException 
 	 */
 	public int countEvacuationByCondition(Map<Object,Object> condition) throws SQLException;
+	
+	/** 
+	 * @description 通过userId,regionId,startTime,endTime 查询得到所有符合需求的员工基本信息，为了插入到撤离表中
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 * @author ding
+	 */
+	public List<Map<Object, Object>> getInsertEvacuation(Map<Object, Object> condition) throws SQLException;
     
 	/*****************查询接口结束*******************/
 	/*****************插入接口开始*******************/
@@ -52,7 +61,16 @@ public interface EvacuationMapper {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public int insert(Evacuation evacuation) throws SQLException;
+	public int insert(List<Map<Object, Object>> evacuation) throws SQLException;
+	
+	/** 
+	 * @description 通过userID，regionID，开始时间，结束事件，将实时表中相应字段插入到撤离总表中
+	 * @param Map 
+	 * @return int
+	 * @throws SQLException 
+	 * @author ding
+	 */
+	public int insertEvacuation(Map<Object, Object> evacuation) throws SQLException;
 	/*****************插入接口结束*******************/
    	/*****************END BY HaoShaSha***********/
 

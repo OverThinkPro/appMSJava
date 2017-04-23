@@ -43,6 +43,14 @@ public interface TLStaffMapper {
 	public List<Map<Object,Object>> countRealStaffByRegion(Map<Object,Object> condition)throws SQLException;
 	
 	/** 
+	 * @description 查询出当前的所有区域总数
+	 * @return int
+	 * @throws SQLException
+	 * @author ding 
+	 */
+	public int countAllRegion(Map<Object,Object> condition) throws SQLException;
+	
+	/** 
 	 * @description 根据区域编号实时统计井下某一个区域的员工数量
 	 * @param condition(regionId,startTime,endTime)
 	 * @return(total,regionId,regionName)

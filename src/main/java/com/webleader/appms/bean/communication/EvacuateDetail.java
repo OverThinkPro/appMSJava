@@ -2,6 +2,8 @@ package com.webleader.appms.bean.communication;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @className EvacuateDetail
  * @description 撤离信息明细表
@@ -20,6 +22,7 @@ public class EvacuateDetail extends Evacuation{
 
 	private String staffName;// 员工姓名
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date enteringTime;// 进入煤矿时间
 
 	private String jobName;// 工种

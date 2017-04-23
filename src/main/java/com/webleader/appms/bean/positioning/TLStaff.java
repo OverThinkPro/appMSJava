@@ -2,6 +2,8 @@ package com.webleader.appms.bean.positioning;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @className TLStaff
  * @description 人员位置实时原始信息 分站每次采集回来的数据保存到该表中，采集回来的原始数据包括：
@@ -39,6 +41,7 @@ public class TLStaff {
 
 	private String regionType;// 区域类型
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date daqTime;// 采集时间
 
 	private Object geoPoint;// 卡在地图坐标
@@ -51,6 +54,10 @@ public class TLStaff {
 	private String antId;// 天线编号
 
 	private String flag;// 标志位
+	
+	/*新增的一个字段，ding*/
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	private Date enteringDate; //入井时间
 
 	public String getId() {
 		return id;
@@ -212,17 +219,23 @@ public class TLStaff {
 		this.jobName = jobName;
 	}
 
+	public Date getEnteringDate() {
+		return enteringDate;
+	}
+
+	public void setEnteringDate(Date enteringDate) {
+		this.enteringDate = enteringDate;
+	}
+
 	@Override
 	public String toString() {
-		return "TLStaff [id=" + id + ", staffId=" + staffId + ", cardId="
-				+ cardId + ", staffName=" + staffName + ", unitId=" + unitId
-				+ ", unitName=" + unitName + ", jobId=" + jobId + ", jobName="
-				+ jobName + ", staffPost=" + staffPost + ", readerId="
-				+ readerId + ", readerName=" + readerName + ", regionId="
-				+ regionId + ", regionName=" + regionName + ", regionType="
-				+ regionType + ", daqTime=" + daqTime + ", geoPoint="
-				+ geoPoint + ", distance=" + distance + ", daqTimeType="
-				+ daqTimeType + ", antId=" + antId + ", flag=" + flag + "]";
+		return "TLStaff [id=" + id + ", staffId=" + staffId + ", cardId=" + cardId + ", staffName=" + staffName
+				+ ", unitId=" + unitId + ", unitName=" + unitName + ", jobId=" + jobId + ", jobName=" + jobName
+				+ ", staffPost=" + staffPost + ", readerId=" + readerId + ", readerName=" + readerName + ", regionId="
+				+ regionId + ", regionName=" + regionName + ", regionType=" + regionType + ", daqTime=" + daqTime
+				+ ", geoPoint=" + geoPoint + ", distance=" + distance + ", daqTimeType=" + daqTimeType + ", antId="
+				+ antId + ", flag=" + flag + ", enteringDate=" + enteringDate + "]";
 	}
+
 	
 }

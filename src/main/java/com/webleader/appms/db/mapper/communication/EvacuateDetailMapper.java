@@ -43,7 +43,7 @@ public interface EvacuateDetailMapper {
 	
 
 	/** 
-	 * @description 统计满足条件的撤离呼叫详情记录(总撤退编号，区域编号，开始时间，结束时间)
+	 * @description 统计满足条件的撤离呼叫详情记录(总撤退编号，区域编号，开始时间，结束时间，呼叫状态)
 	 * @param condition(regionId,evacuateId,startTime,endTime)
 	 * @return
 	 * @throws SQLException 

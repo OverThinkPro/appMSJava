@@ -32,6 +32,13 @@ public interface TLStaffService {
 	public List<Map<Object,Object>> countRealStaffByRegion(Map<Object,Object> condition)throws SQLException;
 	
 	/** 
+	 * @description 查询出当前的所有区域总数
+	 * @return int
+	 * @throws SQLException
+	 */
+	public int countAllRegion(Map<Object,Object> condition) throws SQLException;
+	
+	/** 
 	 * @description 组合条件分页查询实时员工位置信息(部门编号，区域编号，分站编号，员工编号，员工姓名，定位卡号，开始时间，结束时间， 起始记录数，每页的记录数)
 	 * @param condition(unitId,regionId,readerId,staffId,staffName,cardId,startTime,endTime,pageSize,pageBegin)
 	 * @return List<TLStaff>
