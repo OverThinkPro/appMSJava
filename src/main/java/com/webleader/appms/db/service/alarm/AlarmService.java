@@ -4,6 +4,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.webleader.appms.bean.alarm.OvermanAlarm;
+import com.webleader.appms.bean.alarm.OvertimeAlarm;
+import com.webleader.appms.bean.alarm.SpecialRegionAlarm;
 import com.webleader.appms.bean.alarm.StaffAlarm;
 
 /**
@@ -21,6 +24,54 @@ public interface AlarmService {
 	 * @throws SQLException 
 	 */
 	public List<Map<Object,Object>> countRealAlarmType() throws SQLException;
+	
+	/** 
+	 * @description 组合条件分页查询超时报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数)
+	 * @param pageCondition(alarmInhandle,regionName,alarmStartTime,alarmEndTime,pageSize,pageBegin)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<OvertimeAlarm> listOvertimeByPageCondition(Map<Object,Object> pageCondition) throws SQLException;
+	
+	/** 
+	 * @description 统计符合条件的超时报警信息数量(警报处理状态，区域名称，警报开始时间，警报结束时间)
+	 * @param condition(alarmInhandle,regionName,alarmStartTime,alarmEndTime)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int countOvertimeByConditon(Map<Object,Object> condition) throws SQLException;
+	
+	/** 
+	 * @description 组合条件分页查询超员报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数)
+	 * @param pageCondition(alarmInhandle,regionName,alarmStartTime,alarmEndTime,pageSize,pageBegin)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<OvermanAlarm> listOvermanByPageCondition(Map<Object,Object> pageCondition) throws SQLException;
+	
+	/** 
+	 * @description 统计符合条件的超员报警信息数量(警报处理状态，区域名称，警报开始时间，警报结束时间)
+	 * @param condition(alarmInhandle,regionName,alarmStartTime,alarmEndTime)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int countOvermanByConditon(Map<Object,Object> condition) throws SQLException;
+	
+	/** 
+	 * @description 组合条件分页查询限制区域报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数)
+	 * @param pageCondition(alarmInhandle,regionName,alarmStartTime,alarmEndTime,pageSize,pageBegin)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<SpecialRegionAlarm> listRegionAlarmByPageCondition(Map<Object,Object> pageCondition) throws SQLException;
+
+	/** 
+	 * @description 统计符合条件的限制区域报警信息数量(警报处理状态，区域名称，警报开始时间，警报结束时间)
+	 * @param condition(alarmInhandle,regionName,alarmStartTime,alarmEndTime)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int countSpecialRegionAlarmByConditon(Map<Object,Object> condition) throws SQLException;
 	
 	/** 
 	 * @description 组合条件分页查询呼叫报警信息(警报处理状态，警报开始时间，警报结束时间， 起始记录数，每页的记录数)
