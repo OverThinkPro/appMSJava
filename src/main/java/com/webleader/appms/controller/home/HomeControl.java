@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webleader.appms.bean.alarm.StaffAlarm;
+import com.webleader.appms.bean.communication.CallStaff;
 import com.webleader.appms.bean.communication.EvacuateDetail;
 import com.webleader.appms.bean.positioning.TLStaff;
 import com.webleader.appms.common.ModalPageConstants;
 import com.webleader.appms.db.service.alarm.AlarmService;
+import com.webleader.appms.db.service.communication.CallBackService;
 import com.webleader.appms.db.service.communication.EvacuationService;
 import com.webleader.appms.db.service.positioning.TLStaffService;
 import com.webleader.appms.db.service.setting.CoalmineService;
@@ -49,6 +52,8 @@ public class HomeControl {
 	private CoalmineService coalmineService;
 	@Autowired
 	private EvacuationService evacuationService;
+	@Autowired
+	private CallBackService callBackService;
 	@Autowired
 	private ModalPageConstants modalPageConstants;
 	@Autowired
@@ -342,14 +347,15 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/base/evacuate/region/u/{userId}", method = RequestMethod.POST)
-	public Map<Object, Object> evacuationCall(@RequestParam("regionIdArr[]") String[] regionIdArr, @PathVariable String userId) {
+	public Map<Object, Object> evacuationCall(@RequestParam("regionIdArr[]") String[] regionIdArr,
+			@PathVariable String userId) {
 		if (Objects.isNull(userId) || Objects.isNull(regionIdArr)) {
 			return response.failure("撤离呼叫失败请重试").toSimpleResult();
 		}
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		int insertEvacuate = 0;
 		int insertEvacuateDetail = 0;
-//		String[] regionIdList = regionIdArr.split(",");
+		// String[] regionIdList = regionIdArr.split(",");
 
 		try {
 
@@ -386,16 +392,17 @@ public class HomeControl {
 				.put("insertEvacuateDetail", insertEvacuateDetail).toCombineResult();
 	}
 
-	/** 
+	/**
 	 * @description 回电呼叫，条件查询所有员工信息
 	 * @param currentPage
 	 * @param unitId
 	 * @param staffName
-	 * @return 
+	 * @return
 	 */
 	@RequestMapping(value = "/base/staff/count/p/{currentPage}", method = RequestMethod.GET)
-	public Map<Object, Object> getStaffByCondition(@PathVariable int currentPage, @RequestParam("unitId") String unitId,
-			@RequestParam("staffName") String staffName) {
+	public Map<Object, Object> getStaffByCondition(@PathVariable int currentPage,
+			@RequestParam(value = "unitId", required = false) String unitId,
+			@RequestParam(value = "staffName", required = false) String staffName) {
 		if (Objects.isNull(currentPage)) {
 			return response.failure("查询失败请重试").toSimpleResult();
 		}
@@ -410,10 +417,10 @@ public class HomeControl {
 		condition.put("endTime", Timestamp.from(Instant.now()));
 		condition.put("pageBegin", modalPageConstants.getRecordNums(currentPage));
 		condition.put("pageSize", modalPageConstants.getPageSize());
-		if (Objects.nonNull(unitId) || !unitId.equals("")) {
+		if (Objects.nonNull(unitId) && !unitId.equals("")) {
 			condition.put("unitId", unitId);
 		}
-		if (Objects.nonNull(staffName) || !staffName.equals("")) {
+		if (Objects.nonNull(staffName) && !staffName.equals("")) {
 			condition.put("staffName", staffName);
 		}
 
@@ -428,5 +435,37 @@ public class HomeControl {
 		}
 		return response.success().put("realStaffByCondition", tlStaffList).put("countTotalPages", countTotalPages)
 				.toCombineResult();
+	}
+
+	@RequestMapping(value = "/base/callback/staff/u/{userId}", method = RequestMethod.POST)
+	public Map<Object, Object> callStaffBack(@PathVariable String userId,
+			@RequestParam(value = "staffIdArr[]", required = false) String[] staffIdArr) {
+		if (Objects.isNull(staffIdArr)) {
+			return response.failure("回电呼叫失败，请重试").toSimpleResult();
+		}
+		Date callTime = Timestamp.from(Instant.now());
+		List<CallStaff> callStaffList = new ArrayList<CallStaff>();
+		int callBackNum = 0;
+
+		for (String staffId : staffIdArr) {
+			CallStaff callStaffBean = new CallStaff();
+
+			callStaffBean.setCallStaffId(uuidUtil.getUUID());
+			callStaffBean.setCallTime(callTime);
+			callStaffBean.setStaffId(staffId);
+			callStaffBean.setUserId(userId);
+			callStaffBean.setCallType("撤退");
+			callStaffList.add(callStaffBean);
+
+		}
+		try {
+			callBackNum = callBackService.insert(callStaffList);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (callBackNum == 0) {
+			return response.failure("回电呼叫失败，请重试").toSimpleResult();
+		}
+		return response.success().put("callBackNum", callBackNum).toCombineResult();
 	}
 }

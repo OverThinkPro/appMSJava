@@ -2,6 +2,8 @@ package com.webleader.appms.bean.communication;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @className CallStaff
  * @description 井上回电呼叫井下人员信息
@@ -12,6 +14,7 @@ import java.util.Date;
 public class CallStaff {
 	private String callStaffId;// 井上呼叫员工ID
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date callTime;// 呼叫时间
 
 	private String callType;// 呼叫类型

@@ -46,9 +46,15 @@
 	</select>
 	<!-- 查询语句结束 -->
 	<!-- 插入语句开始 -->
-	<insert id="insert" parameterType="CallStaff">
-		INSERT INTO t_ls_call_staff (<include refid="CallStaff_Column_List" />)
-		VALUES (#{callStaffId}, #{callTime}, #{callType}, #{userId}, #{staffId})
+	<insert id="insert" parameterType="List">
+		<!-- INSERT INTO t_ls_call_staff (<include refid="CallStaff_Column_List" />)
+		VALUES (#{callStaffId}, #{callTime}, #{callType}, #{userId}, #{staffId}) -->
+		<foreach item="item" index="index" collection="list" separator=";">
+	        INSERT INTO t_ls_call_staff (<include refid="CallStaff_Column_List" />)
+			VALUES
+	        ( #{item.callStaffId,jdbcType=VARCHAR}, #{item.callTime,jdbcType=TIMESTAMP}, 
+	        #{item.callType,jdbcType=VARCHAR}, #{item.userId,jdbcType=VARCHAR}, #{item.staffId,jdbcType=VARCHAR} )
+       </foreach>
 	</insert>
 	<!-- 插入语句结束 -->
 	<!-- END BY HaoShaSha -->

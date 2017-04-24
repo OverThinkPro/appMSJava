@@ -43,7 +43,7 @@ public interface CallStaffMapper {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public int insert(CallStaff callStaff) throws SQLException;
+	public int insert(List<CallStaff> callStaffList) throws SQLException;
 	/*****************插入接口结束*******************/
    	/*****************END BY HaoShaSha***********/
 
