@@ -13,9 +13,9 @@ import java.util.Stack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webleader.appms.bean.alarm.StaffAlarm;
@@ -341,22 +341,19 @@ public class HomeControl {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value = "/realtime/staff/region/u/{userId}", method = RequestMethod.POST)
-	public Map<Object, Object> evacuationCall(@RequestBody String regionIdListString, @PathVariable String userId) {
-//		List<String> regionIdList = new ArrayList<String>();
-//		regionIdList.add("a");
-//		regionIdList.add("c");
-		if (Objects.isNull(userId) || Objects.isNull(regionIdListString)) {
+	@RequestMapping(value = "/base/evacuate/region/u/{userId}", method = RequestMethod.POST)
+	public Map<Object, Object> evacuationCall(@RequestParam("regionIdArr[]") String[] regionIdArr, @PathVariable String userId) {
+		if (Objects.isNull(userId) || Objects.isNull(regionIdArr)) {
 			return response.failure("撤离呼叫失败请重试").toSimpleResult();
 		}
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		int insertEvacuate = 0;
 		int insertEvacuateDetail = 0;
-		String[] regionIdList= regionIdListString.split(",");
+//		String[] regionIdList = regionIdArr.split(",");
 
 		try {
 
-			for (String regionId : regionIdList) {
+			for (String regionId : regionIdArr) {
 				condition.put("userId", userId);
 				condition.put("callTime", Timestamp.from(Instant.now()));
 				condition.put("regionId", regionId);
@@ -387,5 +384,49 @@ public class HomeControl {
 
 		return response.success().put("insertEvacuate", insertEvacuate)
 				.put("insertEvacuateDetail", insertEvacuateDetail).toCombineResult();
+	}
+
+	/** 
+	 * @description 回电呼叫，条件查询所有员工信息
+	 * @param currentPage
+	 * @param unitId
+	 * @param staffName
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/staff/count/p/{currentPage}", method = RequestMethod.GET)
+	public Map<Object, Object> getStaffByCondition(@PathVariable int currentPage, @RequestParam("unitId") String unitId,
+			@RequestParam("staffName") String staffName) {
+		if (Objects.isNull(currentPage)) {
+			return response.failure("查询失败请重试").toSimpleResult();
+		}
+		Map<Object, Object> condition = new HashMap<Object, Object>();
+		List<TLStaff> tlStaffList = new ArrayList<TLStaff>();
+		int countTotalPages = 0;
+
+		/* 测试用 */
+		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+		// condition.put("startTime",
+		// Timestamp.from(Instant.now().plusSeconds(-50)));
+		condition.put("endTime", Timestamp.from(Instant.now()));
+		condition.put("pageBegin", modalPageConstants.getRecordNums(currentPage));
+		condition.put("pageSize", modalPageConstants.getPageSize());
+		if (Objects.nonNull(unitId) || !unitId.equals("")) {
+			condition.put("unitId", unitId);
+		}
+		if (Objects.nonNull(staffName) || !staffName.equals("")) {
+			condition.put("staffName", staffName);
+		}
+
+		try {
+			tlStaffList = tlStaffService.listRealStaffByPageCondition(condition);
+			countTotalPages = tlStaffService.countTotalStaffByConditon(condition);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (Objects.isNull(tlStaffList)) {
+			return response.failure("查询失败请重试").toSimpleResult();
+		}
+		return response.success().put("realStaffByCondition", tlStaffList).put("countTotalPages", countTotalPages)
+				.toCombineResult();
 	}
 }
