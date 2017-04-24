@@ -54,5 +54,5 @@ public interface EvacuationService {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public int insertEvacuateDetail(EvacuateDetail evacuateDetail) throws SQLException;
+	public int insertEvacuateDetail(List<Map<Object, Object>> evacuateDetail) throws SQLException;
 }

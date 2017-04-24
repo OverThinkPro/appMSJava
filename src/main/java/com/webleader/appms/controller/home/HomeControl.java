@@ -13,6 +13,7 @@ import java.util.Stack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -145,7 +146,7 @@ public class HomeControl {
 		condition.put("unitId", unitId);
 		try {
 			tlStaffList = tlStaffService.listRealStaffByPageCondition(condition);
-			countTotalPages = modalPageConstants.getPages(tlStaffService.countTotalStaffByConditon(condition));
+			countTotalPages = tlStaffService.countTotalStaffByConditon(condition);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -181,7 +182,7 @@ public class HomeControl {
 		condition.put("regionId", regionId);
 		try {
 			tlStaffList = tlStaffService.listRealStaffByPageCondition(condition);
-			countTotalPages = modalPageConstants.getPages(tlStaffService.countTotalStaffByConditon(condition));
+			countTotalPages = tlStaffService.countTotalStaffByConditon(condition);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -226,7 +227,7 @@ public class HomeControl {
 		try {
 			evacuationDetails = evacuationService.listEvacuateDetailByPageCondition(condition);
 			callCount = evacuationService.countEvacuateDetailByCondition(condition);
-			countTotalPages = modalPageConstants.getPages(callCount);
+			countTotalPages = callCount;
 
 			condition.put("call_status", "1");
 			called = evacuationService.countEvacuateDetailByCondition(condition);
@@ -267,7 +268,7 @@ public class HomeControl {
 
 		try {
 			staffAlarmList = alarmService.listStaffAlarmByPageCondition(condition);
-			countTotalPages = modalPageConstants.getPages(alarmService.countStaffAlarmByConditon(condition));
+			countTotalPages = alarmService.countStaffAlarmByConditon(condition);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -297,8 +298,8 @@ public class HomeControl {
 	public Map<Object, Object> getRegionInfoByRegionId(@PathVariable String regionId) {
 		return realStaffByCondition(regionId, null);
 	}
-	
-	private Map<Object, Object> realStaffByCondition(String regionId, Integer currentPage){
+
+	private Map<Object, Object> realStaffByCondition(String regionId, Integer currentPage) {
 		List<Map<Object, Object>> realStaffByRegion = new Stack<Map<Object, Object>>();
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		Integer countTotalPages = 0;
@@ -307,17 +308,17 @@ public class HomeControl {
 		condition.put("startTime", Timestamp.valueOf("2017-03-02 02:20:57"));
 		condition.put("endTime", Timestamp.from(Instant.now()));
 		condition.put("regionId", regionId);
-		
+
 		try {
 			if (Objects.nonNull(currentPage)) {
 				countTotalPages = tlStaffService.countAllRegion(condition);
 				condition.put("pageBegin", modalPageConstants.getRecordNums(currentPage));
 				condition.put("pageSize", modalPageConstants.getPageSize());
-				
-//				response = response.success().put("countTotalPages", countTotalPages);
+
+				// response = response.success().put("countTotalPages",
+				// countTotalPages);
 			}
 
-		
 			realStaffByRegion = tlStaffService.countRealStaffByRegion(condition);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -327,47 +328,64 @@ public class HomeControl {
 			return response.failure("查询失败，请重试").toSimpleResult();
 		} else {
 			response = response.success().put("realStaffByRegion", realStaffByRegion);
-			if (Objects.nonNull(currentPage)){
-				return response.put("countTotalPages", modalPageConstants.getPages(countTotalPages)).toCombineResult();
+			if (Objects.nonNull(currentPage)) {
+				return response.put("countTotalPages", countTotalPages).toCombineResult();
 			}
 			return response.toCombineResult();
 		}
 	}
-	
-	/** 
+
+	/**
 	 * @description 记录一条或多条撤离呼叫
 	 * @param regionId
 	 * @param userId
-	 * @return 
+	 * @return
 	 */
-	@RequestMapping(value = "/realtime/staff/region/{regionId}/u/{userId}", method = RequestMethod.POST)
-	public Map<Object, Object> evacuationCall(@PathVariable String regionId, @PathVariable String userId) {
-		if (Objects.isNull(userId) || Objects.isNull(regionId)) {
+	@RequestMapping(value = "/realtime/staff/region/u/{userId}", method = RequestMethod.POST)
+	public Map<Object, Object> evacuationCall(@RequestBody String regionIdListString, @PathVariable String userId) {
+//		List<String> regionIdList = new ArrayList<String>();
+//		regionIdList.add("a");
+//		regionIdList.add("c");
+		if (Objects.isNull(userId) || Objects.isNull(regionIdListString)) {
 			return response.failure("撤离呼叫失败请重试").toSimpleResult();
 		}
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		int insertEvacuate = 0;
 		int insertEvacuateDetail = 0;
-		
-		condition.put("userId", userId);
-		condition.put("callTime", Timestamp.from(Instant.now()));
-		condition.put("regionId", regionId);
-		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
-		condition.put("endTime", Timestamp.from(Instant.now()));
+		String[] regionIdList= regionIdListString.split(",");
+
 		try {
-			List<Map<Object, Object>>  InsertEvacuationList = evacuationService.getInsertEvacuation(condition);
-			
-			InsertEvacuationList.forEach(item->{
-				item.put("evacuate_id", uuidUtil.getUUID());
-				item.put("detail_id", uuidUtil.getUUID());
-				item.put("item_status", "0");
-			});
-			insertEvacuate = evacuationService.insertEvacuation(InsertEvacuationList);
-			
+
+			for (String regionId : regionIdList) {
+				condition.put("userId", userId);
+				condition.put("callTime", Timestamp.from(Instant.now()));
+				condition.put("regionId", regionId);
+				condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+				condition.put("endTime", Timestamp.from(Instant.now()));
+
+				List<Map<Object, Object>> InsertEvacuationList = evacuationService.getInsertEvacuation(condition);
+
+				InsertEvacuationList.forEach(item -> {
+					item.put("evacuate_id", uuidUtil.getUUID());
+					item.put("detail_id", uuidUtil.getUUID());
+					item.put("call_status", "0");
+					item.put("call_time", Timestamp.from(Instant.now()));
+					item.put("entering_time", Timestamp.valueOf(item.get("entering_date").toString()));
+				});
+				insertEvacuate = evacuationService.insertEvacuation(InsertEvacuationList);
+				insertEvacuateDetail = evacuationService.insertEvacuateDetail(InsertEvacuationList);
+
+			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return null;
+
+		if (insertEvacuate == 0 || insertEvacuateDetail == 0) {
+			return response.failure("添加撤离呼叫失败").toSimpleResult();
+		}
+
+		return response.success().put("insertEvacuate", insertEvacuate)
+				.put("insertEvacuateDetail", insertEvacuateDetail).toCombineResult();
 	}
 }
