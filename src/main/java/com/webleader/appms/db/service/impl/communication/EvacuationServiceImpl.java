@@ -88,7 +88,7 @@ public class EvacuationServiceImpl implements EvacuationService {
 	 * @return int
 	 * @throws SQLException 
 	 */
-	public int insertEvacuateDetail(EvacuateDetail evacuateDetail) throws SQLException{
+	public int insertEvacuateDetail(List<Map<Object, Object>> evacuateDetail) throws SQLException{
 		if (Objects.isNull(evacuateDetail)) {
 			return 0;
 		}

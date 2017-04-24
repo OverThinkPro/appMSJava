@@ -59,7 +59,7 @@ public interface EvacuateDetailMapper {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public int insert(EvacuateDetail evacuateDetail) throws SQLException;
+	public int insert(List<Map<Object, Object>> evacuateDetail) throws SQLException;
 	/*****************插入接口结束*******************/
 	/*****************更新接口开始*******************/
 	/** 

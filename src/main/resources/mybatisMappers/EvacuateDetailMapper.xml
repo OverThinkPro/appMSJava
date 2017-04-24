@@ -100,9 +100,17 @@
 	</select>
 	<!-- 查询语句结束 -->
 	<!-- 插入语句开始 -->
-	<insert id="insert" parameterType="EvacuateDetail">
-		INSERT INTO t_evacuate_detail (<include refid="EvacuateDetail_Column_List"/>) 
-		VALUES (#{detailId}, #{evacuateId}, #{callStatus},#{staffId}, #{staffName}, #{enteringTime}, #{jobName}, #{unitName})
+	<insert id="insert" parameterType="List">
+		<!-- INSERT INTO t_evacuate_detail (detail_id, evacuate_id, call_status, staff_id, staff_name, entering_time, job_name,	unit_name) 
+		VALUES (#{detailId}, #{evacuateId}, #{callStatus},#{staffId}, #{staffName}, #{enteringTime}, #{jobName}, #{unitName}) -->
+		
+		<foreach item="item" index="index" collection="list" separator=";">
+	        INSERT INTO t_evacuate_detail (detail_id, evacuate_id, call_status, 
+	        	staff_id, staff_name, entering_time, job_name,	unit_name) 
+			VALUES
+	        (#{item.detail_id}, #{item.evacuate_id}, #{item.call_status},
+	        	#{item.staff_id}, #{item.staff_name}, #{item.entering_time}, #{item.job_name}, #{item.unit_name} )
+       </foreach>
 	</insert>
 	<!-- 插入语句结束 -->
 	<!-- 更新语句开始 -->

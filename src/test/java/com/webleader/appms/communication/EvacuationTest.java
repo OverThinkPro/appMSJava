@@ -2,6 +2,7 @@ package com.webleader.appms.communication;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.webleader.appms.bean.communication.Evacuation;
+import com.webleader.appms.db.mapper.communication.EvacuateDetailMapper;
 import com.webleader.appms.db.mapper.communication.EvacuationMapper;
+import com.webleader.appms.util.UUIDUtil;
 
 /**
  * @className EvacuationTest
@@ -28,6 +31,8 @@ public class EvacuationTest {
 	
 	@Autowired
 	private EvacuationMapper evacuationMapper;
+	@Autowired
+	private EvacuateDetailMapper evacuateDetailMapper;
 	
 	
 	/*****************START BY HaoShaSha*********/
@@ -107,21 +112,44 @@ public class EvacuationTest {
 	 */
 	@Test
 	public void insert(){
-		Timestamp callTime = Timestamp.valueOf("2017-05-09 11:49:45"); 
-		Evacuation evacuation = new Evacuation();
-		evacuation.setEvacuateId("18");
-		evacuation.setCallTime(callTime);
-		evacuation.setRegionId("a");
-		evacuation.setRegionName("A工作区");
-		evacuation.setUserId("1");
-		evacuation.setUserName("hss");
+		Map<Object, Object> condition = new HashMap<Object, Object>();
+		int insertEvacuate = 0;
+		int insertEvacuateDetail = 0;
+//		
+		condition.put("userId", "a");
+		condition.put("callTime", Timestamp.from(Instant.now()));
+		condition.put("regionId", "c");
+		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+		condition.put("endTime", Timestamp.from(Instant.now()));
 		try {
-			int result = evacuationMapper.insert(evacuation);
-			System.out.println(result);
+			List<Map<Object, Object>>  InsertEvacuationList = evacuationMapper.getInsertEvacuation(condition);
+			
+			InsertEvacuationList.forEach(item->{
+				item.put("evacuate_id", new UUIDUtil().getUUID());
+				item.put("detail_id", new UUIDUtil().getUUID());
+				item.put("call_status", "0");
+				item.put("call_time", Timestamp.from(Instant.now()));
+				item.put("entering_time", Timestamp.valueOf(item.get("entering_date").toString()));
+			});
+			
+			insertEvacuate = evacuationMapper.insert(InsertEvacuationList);
+			insertEvacuateDetail = evacuateDetailMapper.insert(InsertEvacuationList);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-	}
+	}}
 	/*****************插入接口结束*******************/
 	/*****************END BY HaoShaSha***********/
+	
+	@Test
+	public void insertEvacuation() throws SQLException{
+		Map<Object, Object> condition = new HashMap<Object, Object>();
+		condition.put("userId", "d");
+		condition.put("callTime", Timestamp.from(Instant.now()));
+		condition.put("regionId", "a");
+		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+		condition.put("endTime", Timestamp.from(Instant.now()));
+		List<Map<Object, Object>>  aa = evacuationMapper.getInsertEvacuation(condition);
+		System.out.println(aa.size());
+	}
 }

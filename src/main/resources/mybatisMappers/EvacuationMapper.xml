@@ -81,29 +81,14 @@
 	</select>
 	<!-- 查询语句结束 -->
 	<!-- 插入语句开始 -->
-	<insert id="insert" parameterType="java.util.List">
-		<!-- INSERT INTO t_base_evacuate_info (evacuate_id, user_id, call_time, region_id, region_name, user_name)
-		VALUES
-		
-		<foreach collection="list" item="item" index="index" separator=",">
-            (#{item.evacuate_id}, #{item.user_id}, #{item.call_time}, #{item.region_id}, #{item.region_name}, #{item.user_name})
-        </foreach> -->
-        
-        <foreach collection="list" item="item" open="begin" separator=";" close=";end;">
+	<insert id="insert" parameterType="List">
+       <foreach item="item" index="index" collection="list" separator=";">
 	        INSERT INTO t_base_evacuate_info (evacuate_id, user_id, call_time, region_id, region_name, user_name)
 			VALUES 
-	        (#{item.evacuate_id}, #{item.user_id}, #{item.call_time}, #{item.region_id}, #{item.region_name}, #{item.user_name})
+	        ( #{item.evacuate_id,jdbcType=VARCHAR}, #{item.user_id,jdbcType=VARCHAR}, #{item.call_time,jdbcType=TIMESTAMP}, 
+	        #{item.region_id,jdbcType=VARCHAR}, #{item.region_name,jdbcType=VARCHAR}, #{item.user_name,jdbcType=VARCHAR} )
        </foreach>
 	</insert>
-	<!-- <insert id="insert" parameterType="java.util.List">
-		INSERT INTO t_base_evacuate_info (evacuate_id, user_id, call_time, region_id, region_name, user_name)
-		VALUES
-		<foreach collection="list" item="map" index="index" separator=",">
-			<foreach collection="map" item="result" index="key" open="(" separator="," close=")">
-            	#{result}
-        	</foreach>
-        </foreach>
-	</insert> -->
 	
 	<!-- 将数据插入到撤离总表中 -->
 	<insert id="insertEvacuation" parameterType="Map">
