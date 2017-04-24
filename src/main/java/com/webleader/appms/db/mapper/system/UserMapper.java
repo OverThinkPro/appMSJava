@@ -52,11 +52,11 @@ public interface UserMapper {
 	
 	/** 
 	 * @description 统计符合条件的用户数量
-	 * @param pageCondition(userId,userName,inUse)
+	 * @param condition(userId,userName,inUse)
 	 * @return
 	 * @throws SQLException 
 	 */
-	public int getCountByConditon(Map<Object,Object> pageCondition) throws SQLException;
+	public int getCountByConditon(Map<Object,Object> condition) throws SQLException;
 	
 	
 	/*****************查询接口结束*******************/
