@@ -86,4 +86,17 @@ public class TLStaffServiceImpl implements TLStaffService{
 		}
 		return tlStaffMapper.countTotalStaffByConditon(condition);
 	}
+	
+	/** 
+	 * @description 组合条件分页查询实时员工坐标点(pointx ,pointy,point ,staff_info_id, staff_id, staff_name)
+	 * @param condition(unitId,regionId,readerId,staffId,staffName,cardId,startTime,endTime)
+	 * @return List<TLStaff>
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> listStaffPointByConditon(Map<Object, Object> condition) throws SQLException{
+		if (Objects.isNull(condition)){
+			return null;
+		}
+		return tlStaffMapper.listStaffPointByConditon(condition);
+	}
 }

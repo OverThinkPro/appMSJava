@@ -73,6 +73,14 @@ public interface TLStaffMapper {
 	 * @throws SQLException 
 	 */
 	public int countTotalStaffByConditon(Map<Object,Object> condition) throws SQLException;
+	
+	/** 
+	 * @description 组合条件分页查询实时员工坐标点(pointx ,pointy,point ,staff_info_id, staff_id, staff_name)
+	 * @param condition(unitId,regionId,readerId,staffId,staffName,cardId,startTime,endTime)
+	 * @return List<TLStaff>
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> listStaffPointByConditon(Map<Object, Object> condition) throws SQLException;
     
 	/*****************查询接口结束*******************/
    	/*****************END BY HaoShaSha***********/

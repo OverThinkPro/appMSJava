@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,7 +39,6 @@ import com.webleader.appms.util.UUIDUtil;
  * @version 1.0.0
  */
 @RestController
-@Scope("prototype")
 @RequestMapping("/api/v1/main")
 public class HomeControl {
 
@@ -57,8 +55,6 @@ public class HomeControl {
 	@Autowired
 	private ModalPageConstants modalPageConstants;
 	@Autowired
-	private Response response;
-	@Autowired
 	private UUIDUtil uuidUtil;
 
 	/**
@@ -70,6 +66,7 @@ public class HomeControl {
 	public Map<Object, Object> getCoalmineInfo() {
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		Map<Object, Object> coalmineInfo = new HashMap<Object, Object>();
+		Response response = new Response();
 
 		/* 测试用 */
 		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
@@ -96,6 +93,7 @@ public class HomeControl {
 	 */
 	@RequestMapping(value = "/realtime/count", method = RequestMethod.GET)
 	public Map<Object, Object> getRealTimeInfo() {
+		Response response = new Response();
 		/* 查询条件 */
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		/* 查询当班人数统计 */
@@ -134,6 +132,8 @@ public class HomeControl {
 	@RequestMapping(value = "/realtime/staff/unit/{unitId}/p/{currentPage}", method = RequestMethod.GET)
 	public Map<Object, Object> getStaffListsByUnitId(@PathVariable String unitId,
 			@PathVariable("currentPage") int currentPage) {
+		Response response = new Response();
+		
 		if (Objects.isNull(unitId)) {
 			return response.failure("查询失败，请重试").toSimpleResult();
 		}
@@ -170,6 +170,8 @@ public class HomeControl {
 	 */
 	@RequestMapping(value = "/realtime/staff/region/{regionId}/p/{currentPage}", method = RequestMethod.GET)
 	public Map<Object, Object> getStaffListsByRegionId(@PathVariable String regionId, @PathVariable int currentPage) {
+		Response response = new Response();
+		
 		if (Objects.isNull(regionId) || Objects.isNull(currentPage)) {
 			return response.failure("查询失败，请重试").toSimpleResult();
 		}
@@ -208,6 +210,8 @@ public class HomeControl {
 	@RequestMapping(value = "/realtime/evacuate/region/{regionId}/p/{currentPage}", method = RequestMethod.GET)
 	public Map<Object, Object> getEvacuateDetailByRegionId(@PathVariable String regionId,
 			@PathVariable int currentPage) {
+		Response response = new Response();
+		
 		if (Objects.isNull(regionId) || Objects.isNull(currentPage)) {
 			return response.failure("查询失败，请重试").toSimpleResult();
 		}
@@ -256,6 +260,8 @@ public class HomeControl {
 	 */
 	@RequestMapping(value = "/realtime/alarm/{alarmId}/p/{currentPage}", method = RequestMethod.GET)
 	public Map<Object, Object> getCurrentAlarmInfoByType(@PathVariable String alarmId, @PathVariable int currentPage) {
+		Response response = new Response();
+		
 		if (Objects.isNull(alarmId) || Objects.isNull(currentPage)) {
 			return response.failure("查询失败，请重试").toSimpleResult();
 		}
@@ -308,6 +314,7 @@ public class HomeControl {
 		List<Map<Object, Object>> realStaffByRegion = new Stack<Map<Object, Object>>();
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		Integer countTotalPages = 0;
+		Response response = new Response();
 
 		/* 测试用 */
 		condition.put("startTime", Timestamp.valueOf("2017-03-02 02:20:57"));
@@ -349,6 +356,8 @@ public class HomeControl {
 	@RequestMapping(value = "/base/evacuate/region/u/{userId}", method = RequestMethod.POST)
 	public Map<Object, Object> evacuationCall(@RequestParam("regionIdArr[]") String[] regionIdArr,
 			@PathVariable String userId) {
+		Response response = new Response();
+		
 		if (Objects.isNull(userId) || Objects.isNull(regionIdArr)) {
 			return response.failure("撤离呼叫失败请重试").toSimpleResult();
 		}
@@ -403,6 +412,8 @@ public class HomeControl {
 	public Map<Object, Object> getStaffByCondition(@PathVariable int currentPage,
 			@RequestParam(value = "unitId", required = false) String unitId,
 			@RequestParam(value = "staffName", required = false) String staffName) {
+		Response response = new Response();
+		
 		if (Objects.isNull(currentPage)) {
 			return response.failure("查询失败请重试").toSimpleResult();
 		}
@@ -440,6 +451,8 @@ public class HomeControl {
 	@RequestMapping(value = "/base/callback/staff/u/{userId}", method = RequestMethod.POST)
 	public Map<Object, Object> callStaffBack(@PathVariable String userId,
 			@RequestParam(value = "staffIdArr[]", required = false) String[] staffIdArr) {
+		Response response = new Response();
+		
 		if (Objects.isNull(staffIdArr)) {
 			return response.failure("回电呼叫失败，请重试").toSimpleResult();
 		}

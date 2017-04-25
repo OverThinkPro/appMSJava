@@ -14,6 +14,7 @@
 		<result column="staff_id" jdbcType="VARCHAR" property="staffId" />
 		<result column="staff_name" jdbcType="VARCHAR" property="staffName" />
 		<result column="unit_id" jdbcType="VARCHAR" property="unitId" />
+		<result column="reader_name" jdbcType="VARCHAR" property="readerName" />
 	</resultMap>
 	<!-- 列名 -->
 	<sql id="PastDoc_Column_List">
@@ -22,9 +23,11 @@
 	<!-- 查询语句开始 -->
 	<!-- 组合条件分页查询历史轨迹信息(部门编号，员工姓名，定位卡号，开始时间，结束时间， 起始记录数，每页的记录数) -->
 	<select id="listPastDocByPageCondition" parameterType="Map"	resultMap="PastDocMap">
-		SELECT <include refid="PastDoc_Column_List"/>
-		FROM t_ls_staff_info_his
+		SELECT staff_info_his_id, reader_id, reader_dir, reader_dis, card_id, 
+		daq_date,st_astext(geo_point) geo_point, staff_id, staff_name, unit_id, name reader_name
+		FROM t_ls_staff_info_his, reader
 		<where>
+			reader.id=t_ls_staff_info_his.reader_id
 			<if test="unitId!=null &amp;&amp; unitId!=''">
 				AND unit_id = #{unitId}
 			</if>
@@ -41,7 +44,7 @@
 				AND daq_date &lt; #{endTime}
 			</if>
 		</where>
-		ORDER BY staff_info_his_id ASC
+		ORDER BY daq_date DESC
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 
 	</select>
@@ -70,5 +73,29 @@
 		</where>
 	</select>
 	<!-- 查询语句结束 -->
+	
+	<select id="listMapPoint" parameterType="Map" resultType="Map">
+		SELECT st_x(geo_point) pointx, st_y(geo_point) pointy, st_asgeojson(geo_point) point, 
+			staff_name, unit_id, staff_info_his_id, staff_id
+		FROM t_ls_staff_info_his
+		<where>
+			<if test="unitId!=null &amp;&amp; unitId!=''">
+				AND unit_id = #{unitId}
+			</if>
+			<if test="cardId==null &amp;&amp; cardId==''">
+				AND card_id = #{cardId}
+			</if>
+			<if test="staffName!=null &amp;&amp; staffName!=''">
+				AND staff_name = #{staffName}
+			</if>
+			<if test="startTime!=null &amp;&amp; startTime!=''">
+				AND daq_date &gt; #{startTime}
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+				AND daq_date &lt; #{endTime}
+			</if>
+		</where>
+		ORDER BY daq_date ASC
+	</select>
 	<!-- END BY HaoShaSha -->
 </mapper>

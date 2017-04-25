@@ -2,6 +2,8 @@ package com.webleader.appms.bean.positioning;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @className PastDoc
  * @description 员工历史轨迹信息
@@ -20,6 +22,7 @@ public class PastDoc {
 
 	private String cardId;// 分站ID
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date daqDate;//
 
 	private Object geoPoint;// 员工坐标
@@ -29,6 +32,8 @@ public class PastDoc {
 	private String staffName;// 员工姓名
 
 	private String unitId;// 不萌ID
+	
+	private String readerName; //读卡器名
 
 	public String getStaffInfoHisId() {
 		return staffInfoHisId;
@@ -110,11 +115,20 @@ public class PastDoc {
 		this.unitId = unitId == null ? null : unitId.trim();
 	}
 
+	public String getReaderName() {
+		return readerName;
+	}
+
+	public void setReaderName(String readerName) {
+		this.readerName = readerName;
+	}
+
 	@Override
 	public String toString() {
 		return "PastDoc [staffInfoHisId=" + staffInfoHisId + ", readerId=" + readerId + ", readerDir=" + readerDir
 				+ ", readerDis=" + readerDis + ", cardId=" + cardId + ", daqDate=" + daqDate + ", geoPoint=" + geoPoint
-				+ ", staffId=" + staffId + ", staffName=" + staffName + ", unitId=" + unitId + "]";
+				+ ", staffId=" + staffId + ", staffName=" + staffName + ", unitId=" + unitId + ", readerName="
+				+ readerName + "]";
 	}
 
 }
