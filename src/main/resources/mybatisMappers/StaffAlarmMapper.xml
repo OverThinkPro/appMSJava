@@ -22,6 +22,7 @@
 		<result column="staff_name" jdbcType="VARCHAR" property="staffName" />
 		<result column="unit_id" jdbcType="VARCHAR" property="unitId" />
 		<result column="unit_name" jdbcType="VARCHAR" property="unitName" />
+		<result column="reader_name" jdbcType="VARCHAR" property="readerName" />
 	</resultMap>
 	<!-- 列名 -->
 	<sql id="StaffAlarm_Column_List">
@@ -33,13 +34,19 @@
 	<!-- 查询语句开始 -->
 	<!-- 组合条件分页查询呼叫报警信息(警报处理状态，警报开始时间，警报结束时间， 起始记录数，每页的记录数) -->
 	<select id="listStaffAlarmByPageCondition" parameterType="Map"	resultMap="StaffAlarmMap">
-		SELECT reader_id, card_id, reader_dis, reader_ant_id, staff_name, unit_id, unit_name,
+		<!-- SELECT reader_id, card_id, reader_dis, reader_ant_id, staff_name, unit_id, unit_name,
 			   alarm.alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time,
 			   alarm.alarm_type_id,alarm_name
 		FROM t_ls_staff_alarm staff_alarm,
 			 t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
-		WHERE
-			staff_alarm.alarm_id=alarm.alarm_id
+		WHERE -->
+		SELECT reader_id, card_id, reader_dis, reader_ant_id, staff_name, unit_id, unit_name,
+			   alarm.alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time,
+			   alarm.alarm_type_id,alarm_name,reader.name reader_name
+		FROM t_ls_staff_alarm staff_alarm,
+			 t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound, reader
+		WHERE reader.id=staff_alarm.reader_id
+			AND staff_alarm.alarm_id=alarm.alarm_id
 			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
 		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
 			AND alarm_inhandle = #{alarmInhandle}

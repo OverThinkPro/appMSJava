@@ -34,6 +34,8 @@ public class StaffAlarm extends Alarm{
 	//private String alarmId;// 报警ID
 
 	private String cardId;// 定位卡ID
+	
+	private String readerName;
 
 	public String getReaderId() {
 		return readerId;
@@ -91,16 +93,19 @@ public class StaffAlarm extends Alarm{
 		this.unitName = unitName == null ? null : unitName.trim();
 	}
 
-	@Override
-	public String toString() {
-		return "StaffAlarm [readerDis=" + readerDis + ", readerAntId="
-				+ readerAntId + ", staffName=" + staffName + ", unitId="
-				+ unitId + ", unitName=" + unitName + ", readerId=" + readerId
-				+ ", cardId=" + cardId + ", alarmId=" + getAlarmId() + ", alarmStartTime="+ getAlarmStartTime() + ", alarmEndTime=" + getAlarmEndTime()
-				+ ", alarmInhandle=" + getAlarmInhandle() + ", alarmTypeId="
-				+ getAlarmTypeId() + ", alarmTypeName=" + getAlarmTypeName()+ "]";
+	public String getReaderName() {
+		return readerName;
 	}
 
-	
+	public void setReaderName(String readerName) {
+		this.readerName = readerName;
+	}
+
+	@Override
+	public String toString() {
+		return "StaffAlarm [readerDis=" + readerDis + ", readerAntId=" + readerAntId + ", staffName=" + staffName
+				+ ", unitId=" + unitId + ", unitName=" + unitName + ", readerId=" + readerId + ", cardId=" + cardId
+				+ ", readerName=" + readerName + "]";
+	}
 
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PageConstants {
-	private int MASSAGE_PAGE_SIZE = 8;//每页条数
+	private int MASSAGE_PAGE_SIZE = 10;//每页条数
 	
 	/* 得到总页数 */
 	public int getPages(int nums) {
