@@ -3,15 +3,12 @@ package com.webleader.appms.controller.common;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +31,6 @@ import com.webleader.appms.util.Response;
  */
 
 @RestController
-@Scope("prototype")
 @RequestMapping("/api/v1/main")
 public class CommonControl {
 	
@@ -46,17 +42,16 @@ public class CommonControl {
 	private UnitService unitService;
 	@Autowired
 	private ReaderService readerService;
-	@Autowired
-	private Response response;
 	
 	/** 
 	 * @description 查询得到实时的区域信息列表
 	 * @return 
 	 */
 	public Map<Object, Object> getRealTimeRegion(){
-		List<Map<Object, Object>> realStaffByRegion = new Stack<Map<Object, Object>>();
+		List<Map<Object, Object>> realStaffByRegion = null;
 		Map<Object, Object> condition = new HashMap<Object, Object>();
-
+		Response response = new Response();
+		
 		/* 测试用 */
 		condition.put("startTime", Timestamp.valueOf("2017-03-02 02:20:57"));
 		condition.put("endTime", Timestamp.from(Instant.now()));
@@ -80,7 +75,8 @@ public class CommonControl {
 	@RequestMapping(value = "/base/region", method = RequestMethod.GET)
 	public Map<Object, Object> getAllRegion(){
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
-		List<Region> regionList = new ArrayList<Region>();
+		List<Region> regionList = null;
+		Response response = new Response();
 		
 		try {
 			regionList = regionService.getRegionByPageCondition(pageCondition);
@@ -100,7 +96,8 @@ public class CommonControl {
 	@RequestMapping(value = "/base/unit", method = RequestMethod.GET)
 	public Map<Object, Object> getAllUnit(){
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
-		List<Unit> unitList = new ArrayList<Unit>();
+		List<Unit> unitList = null;
+		Response response = new Response();
 		
 		try {
 			unitList = unitService.getUnitByPageCondition(pageCondition);
@@ -120,7 +117,8 @@ public class CommonControl {
 	@RequestMapping(value = "/base/reader", method = RequestMethod.GET)
 	public Map<Object, Object> getAllReader() {
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
-		List<Reader> readerList = new ArrayList<Reader>();
+		List<Reader> readerList = null;
+		Response response = new Response();
 		
 		try {
 			readerList = readerService.getReaderByPageCondition(pageCondition);
@@ -132,6 +130,28 @@ public class CommonControl {
 			return response.failure("查询失败请重试").toSimpleResult();
 		}
 			return response.success().put("readerList", readerList).toCombineResult();
+	}
+	
+	/** 
+	 * @description 查询得到部门树
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/unit/tree", method = RequestMethod.GET)
+	public Map<Object, Object> getUnitTree() {
+		Map<Object, Object> condition = new HashMap<Object, Object>();
+		List<Unit> unitList = null;
+		Response response = new Response();
+		
+		try {
+			unitList = unitService.getUnitByPageCondition(condition);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (Objects.isNull(unitList)) {
+			return response.failure("查询部门失败，请重试").toSimpleResult();
+		}
+		return response.success().put("unitList", unitList).toCombineResult();
 	}
 	
 }

@@ -51,29 +51,34 @@
 	<!-- 组合条件分页查询部门信息(部门编号，部门名称，上级部门编号， 起始记录数，每页的记录数) -->
 	<select id="getUnitByPageCondition" parameterType="Map"
 		resultMap="UnitMap">
-		SELECT <include refid="Unit_Column_List" />
-		FROM t_base_unit_info
+		<!-- SELECT <include refid="Unit_Column_List" />
+		FROM t_base_unit_info -->
+		SELECT unit1.unit_id, unit1.up_unit_id, unit1.unit_name, unit1.telephone, unit1.contact_person, 
+			   unit1.header, unit1.create_date, unit1.description, unit1.remark, 
+			   unit2.unit_name up_unit_name
+		FROM t_base_unit_info unit1, t_base_unit_info unit2
 		<where>
+			unit1.up_unit_id = unit2.unit_id
 			<if test="unitId!=null &amp;&amp; unitId !='' ">
-				unit_id=#{unitId}
+				AND unit1.unit_id=#{unitId}
 			</if>
 			<if test="unitName!=null &amp;&amp; unitName!=''">
-				AND unit_name LIKE CONCAT(CONCAT('%',#{unitName}),'%')
+				AND unit1.unit_name LIKE CONCAT(CONCAT('%',#{unitName}),'%')
 			</if>
 			<if test="upUnitId!=null &amp;&amp; upUnitId!=''">
-				AND up_unit_id=#{upUnitId}
+				AND unit1.up_unit_id=#{upUnitId}
 			</if>
 		</where>
-		ORDER BY unit_id ASC
+		ORDER BY unit1.unit_id ASC
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 	</select>
 
 	<!-- 统计符合条件的部门数量(部门编号，部门名称 或者上级部门编号) -->
 	<select id="getCountByConditon" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM t_base_unit_info
-		<where>
+		WHERE unit_id!='1'		
 			<if test="unitId!=null &amp;&amp; unitId !='' ">
-				unit_id=#{unitId}
+				AND unit_id=#{unitId}
 			</if>
 			<if test="unitName!=null &amp;&amp; unitName!=''">
 				AND unit_name LIKE CONCAT(CONCAT('%',#{unitName}),'%')
@@ -81,7 +86,7 @@
 			<if test="upUnitId!=null &amp;&amp; upUnitId!=''">
 				AND up_unit_id=#{upUnitId}
 			</if>
-		</where>
+			
 	</select>
 
 	<!-- 根据上级部门id查询下一个要插入的子部门的编号 -->
