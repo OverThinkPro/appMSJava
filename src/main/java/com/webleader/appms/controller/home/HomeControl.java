@@ -481,4 +481,32 @@ public class HomeControl {
 		}
 		return response.success().put("callBackNum", callBackNum).toCombineResult();
 	}
+	
+	/** 
+	 * @description 首页实时查询实时员工位置坐标
+	 * @param condition
+	 * @return 
+	 */
+	@RequestMapping(value = "/map/realtime/staff", method = RequestMethod.GET)
+	public Map<Object, Object> getRealtimeStaffMap(@RequestParam(value = "unitId", required = false) String unitId) {
+		Map<Object, Object> condition = new HashMap<Object, Object>();
+		List<Map<Object, Object>> staffPointList = null;
+		Response response = new Response();
+		
+		if (Objects.nonNull(unitId) && !unitId.equals("")){
+			condition.put("unitId", unitId);
+		}
+		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+		condition.put("endTime", Timestamp.from(Instant.now()));
+		
+		try {
+			staffPointList = tlStaffService.listStaffPointByConditon(condition);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (Objects.isNull(staffPointList)){
+			return response.failure("实时查询员工信息失败，请重试").toSimpleResult();
+		}
+		return response.success().put("staffPointList", staffPointList).toCombineResult();
+	}
 }

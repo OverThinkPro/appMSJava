@@ -74,6 +74,7 @@
 	</select>
 	<!-- 查询语句结束 -->
 	
+	<!-- 分页查询历史轨迹坐标点 -->
 	<select id="listMapPoint" parameterType="Map" resultType="Map">
 		SELECT st_x(geo_point) pointx, st_y(geo_point) pointy, st_asgeojson(geo_point) point, 
 			staff_name, unit_id, staff_info_his_id, staff_id
