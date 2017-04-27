@@ -60,6 +60,14 @@
 		<if test="alarmEndTime!=null &amp;&amp; alarmEndTime!=''">
 			AND alarm_end_time &lt; #{alarmEndTime}
 		</if>
+		
+		<if test="staffNanme != null and staffNanme != ''">
+			AND staff_name  LIKE CONCAT(CONCAT('%',#{staffNanme}),'%')
+		</if>
+		<if test="unitId != null and unitId != ''">
+			AND unit_id=#{unitId}
+		</if>
+		
 		ORDER BY reader_id, alarm_id
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 
@@ -86,6 +94,14 @@
 		<if test="alarmEndTime!=null &amp;&amp; alarmEndTime!=''">
 			AND alarm_end_time &lt; #{alarmEndTime}
 		</if>
+		
+		<if test="staffNanme != null and staffNanme != ''">
+			AND staff_name  LIKE CONCAT(CONCAT('%',#{staffNanme}),'%')
+		</if>
+		<if test="unitId != null and unitId != ''">
+			AND unit_id=#{unitId}
+		</if>
+		
 	</select>
 	<!-- END BY HaoShaSha -->
 

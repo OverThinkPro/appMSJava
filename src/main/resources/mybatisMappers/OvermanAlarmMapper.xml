@@ -41,6 +41,9 @@
 		<if test="alarmInhandle==null &amp;&amp; alarmInhandle==''">
 			AND alarm_inhandle='0'
 		</if>
+		<if test="regionId != null and regionId != ''">
+			AND overman.region_id = #{regionId}
+		</if>
 		<if test="regionName!=null &amp;&amp; regionName!=''">
 			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
 		</if>
@@ -67,6 +70,9 @@
 		</if>
 		<if test="alarmInhandle==null &amp;&amp; alarmInhandle==''">
 			AND alarm_inhandle='0'
+		</if>
+		<if test="regionId != null and regionId != ''">
+			AND overman.region_id = #{regionId}
 		</if>
 		<if test="regionName!=null &amp;&amp; regionName!=''">
 			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')

@@ -55,6 +55,17 @@
 		<if test="regionName!=null &amp;&amp; regionName!=''">
 			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
 		</if>
+		
+		<if test="staffNanme != null and staffNanme != ''">
+			AND staff_name  LIKE CONCAT(CONCAT('%',#{staffNanme}),'%')
+		</if>
+		<if test="unitId != null and unitId != ''">
+			AND unit_id=#{unitId}
+		</if>
+		<if test="regionId != null and regionId != ''">
+			AND region_id=#{regionId}
+		</if>
+		
 		<if test="alarmStartTime!=null &amp;&amp; alarmStartTime!=''">
 			AND alarm_start_time &gt; #{alarmStartTime}
 		</if>
@@ -88,6 +99,16 @@
 		</if>
 		<if test="alarmEndTime!=null &amp;&amp; alarmEndTime!=''">
 			AND alarm_end_time &lt; #{alarmEndTime}
+		</if>
+		
+		<if test="staffNanme != null and staffNanme != ''">
+			AND staff_name  LIKE CONCAT(CONCAT('%',#{staffNanme}),'%')
+		</if>
+		<if test="unitId != null and unitId != ''">
+			AND unit_id=#{unitId}
+		</if>
+		<if test="regionId != null and regionId != ''">
+			AND region_id=#{regionId}
 		</if>
 	</select>
 	<!-- 查询语句结束 -->
