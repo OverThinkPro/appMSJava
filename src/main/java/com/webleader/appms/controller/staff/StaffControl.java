@@ -170,7 +170,7 @@ public class StaffControl {
 			e.printStackTrace();
 		}
 		if (result <= 0) {
-			return response.failure("添加员工失败，请重试").toSimpleResult();
+			return response.failure("修改员工失败，请重试").toSimpleResult();
 		}
 		return response.success().put("result", result).toCombineResult();
 	}

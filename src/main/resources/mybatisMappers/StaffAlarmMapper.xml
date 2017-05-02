@@ -40,12 +40,12 @@
 		FROM t_ls_staff_alarm staff_alarm,
 			 t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
 		WHERE -->
-		SELECT reader_id, card_id, reader_dis, reader_ant_id, staff_name, unit_id, unit_name,
+		SELECT staff_alarm.reader_id, card_id, reader_dis, reader_ant_id, staff_name, unit_id, unit_name,
 			   alarm.alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time,
-			   alarm.alarm_type_id,alarm_name,reader.name reader_name
+			   alarm.alarm_type_id,alarm_name,reader.reader_name reader_name
 		FROM t_ls_staff_alarm staff_alarm,
-			 t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound, reader
-		WHERE reader.id=staff_alarm.reader_id
+			 t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound, t_ls_card_reader reader
+		WHERE reader.reader_id=staff_alarm.reader_id
 			AND staff_alarm.alarm_id=alarm.alarm_id
 			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
 		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
@@ -67,6 +67,9 @@
 		<if test="unitId != null and unitId != ''">
 			AND unit_id=#{unitId}
 		</if>
+		<if test="regionId != null and regionId != ''">
+			AND reader.region_id=#{regionId}
+		</if>
 		
 		ORDER BY reader_id, alarm_id
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
@@ -77,10 +80,10 @@
 	<!-- 统计符合条件的呼叫报警信息数量(警报处理状态，警报开始时间，警报结束时间) -->
 	<select id="countStaffAlarmByConditon" parameterType="Map"	resultType="int">
 		SELECT COUNT(*)
-		FROM t_ls_staff_alarm staff_alarm,
-			 t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
-		WHERE
-			staff_alarm.alarm_id=alarm.alarm_id
+		FROM t_ls_staff_alarm staff_alarm, t_base_alarm_info alarm, 
+			t_base_alarm_sound_setting alarm_sound, t_ls_card_reader reader
+		WHERE reader.reader_id=staff_alarm.reader_id
+			AND staff_alarm.alarm_id=alarm.alarm_id
 			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
 		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
 			AND alarm_inhandle = #{alarmInhandle}
@@ -100,6 +103,9 @@
 		</if>
 		<if test="unitId != null and unitId != ''">
 			AND unit_id=#{unitId}
+		</if>
+		<if test="regionId != null and regionId != ''">
+			AND reader.region_id=#{regionId}
 		</if>
 		
 	</select>
