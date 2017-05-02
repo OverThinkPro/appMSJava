@@ -70,6 +70,15 @@ public class UnitServiceImpl implements UnitService {
 	}
 	
 	/** 
+	 * @description 查询部门树
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Unit> getUnitTree() throws SQLException{
+		return unitMapper.getUnitTree();
+	}
+	
+	/** 
 	 * @description 添加部门
 	 * @param unit
 	 * @return

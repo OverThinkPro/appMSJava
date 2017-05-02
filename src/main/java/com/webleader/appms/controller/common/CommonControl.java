@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webleader.appms.bean.positioning.Reader;
 import com.webleader.appms.bean.positioning.Region;
+import com.webleader.appms.bean.staff.JobType;
 import com.webleader.appms.bean.staff.Unit;
 import com.webleader.appms.db.service.positioning.ReaderService;
 import com.webleader.appms.db.service.positioning.RegionService;
 import com.webleader.appms.db.service.positioning.TLStaffService;
+import com.webleader.appms.db.service.staff.JobTypeService;
 import com.webleader.appms.db.service.staff.UnitService;
 import com.webleader.appms.util.Response;
 
@@ -42,6 +44,8 @@ public class CommonControl {
 	private UnitService unitService;
 	@Autowired
 	private ReaderService readerService;
+	@Autowired
+	private JobTypeService jobTypeService;
 	
 	/** 
 	 * @description 查询得到实时的区域信息列表
@@ -133,25 +137,24 @@ public class CommonControl {
 	}
 	
 	/** 
-	 * @description 查询得到部门树
+	 * @description 默认查询得到工种下拉列表
 	 * @return 
 	 */
-	@RequestMapping(value = "/base/unit/tree", method = RequestMethod.GET)
-	public Map<Object, Object> getUnitTree() {
-		Map<Object, Object> condition = new HashMap<Object, Object>();
-		List<Unit> unitList = null;
+	@RequestMapping(value = "/base/jobtype", method = RequestMethod.GET)
+	public Map<Object, Object> getAllJobType () {
 		Response response = new Response();
+		List<JobType> jobTypeList = null;
+		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
 		
 		try {
-			unitList = unitService.getUnitByPageCondition(condition);
+			jobTypeList = jobTypeService.getJobTypeByPageCondition(pageCondition);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		if (Objects.isNull(unitList)) {
-			return response.failure("查询部门失败，请重试").toSimpleResult();
+		if (Objects.isNull(jobTypeList)) {
+			return response.failure("查询失败请重试").toSimpleResult();
 		}
-		return response.success().put("unitList", unitList).toCombineResult();
+		return response.success().put("jobTypeList", jobTypeList).toCombineResult();
 	}
 	
 }

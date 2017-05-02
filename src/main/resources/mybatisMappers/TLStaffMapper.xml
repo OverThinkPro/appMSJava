@@ -136,10 +136,10 @@
 			<if test="regionId!=null &amp;&amp; regionId!=''">
 				AND region_id = #{regionId}
 			</if>
-			<if test="cardId==null &amp;&amp; cardId==''">
+			<if test="cardId!=null &amp;&amp; cardId!=''">
 				AND card_id = #{cardId}
 			</if>
-			<if test="readerId==null &amp;&amp; readerId==''">
+			<if test="readerId!=null &amp;&amp; readerId!=''">
 				AND reader_id = #{readerId}
 			</if>
 			<if test="staffId!=null &amp;&amp; staffId !='' ">
@@ -171,10 +171,10 @@
 			<if test="regionId!=null &amp;&amp; regionId!=''">
 				AND region_id = #{regionId}
 			</if>
-			<if test="cardId==null &amp;&amp; cardId==''">
+			<if test="cardId!=null &amp;&amp; cardId!=''">
 				AND card_id = #{cardId}
 			</if>
-			<if test="readerId==null &amp;&amp; readerId==''">
+			<if test="readerId!=null &amp;&amp; readerId!=''">
 				AND reader_id = #{readerId}
 			</if>
 			<if test="staffId!=null &amp;&amp; staffId !='' ">
@@ -197,10 +197,10 @@
 			<if test="regionId!=null &amp;&amp; regionId!=''">
 				AND region_id = #{regionId}
 			</if>
-			<if test="cardId==null &amp;&amp; cardId==''">
+			<if test="cardId!=null &amp;&amp; cardId!=''">
 				AND card_id = #{cardId}
 			</if>
-			<if test="readerId==null &amp;&amp; readerId==''">
+			<if test="readerId!=null &amp;&amp; readerId!=''">
 				AND reader_id = #{readerId}
 			</if>
 			<if test="staffId!=null &amp;&amp; staffId !='' ">

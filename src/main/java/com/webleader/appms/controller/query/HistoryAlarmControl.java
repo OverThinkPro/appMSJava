@@ -1,12 +1,12 @@
 package com.webleader.appms.controller.query;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,20 +30,18 @@ import com.webleader.appms.util.Response;
  */
 
 @RestController
-@Scope("prototype")
 @RequestMapping("/api/v1/main")
 public class HistoryAlarmControl {
 
 	@Autowired
 	private AlarmService alarmService;
 	@Autowired
-	private Response response;
-	@Autowired
 	private PageConstants pageConstants;
 
 	@RequestMapping(value = "/history/alarm/type/{alarmType}/p/{currentPage}", method = RequestMethod.POST)
 	public Map<Object, Object> getAlarmHistoryByCondition(@RequestBody Map<Object, Object> alarmCondition,
 			@PathVariable int alarmType, @PathVariable int currentPage) {
+		Response response = new Response();
 		
 //		Map<Object, Object> pageCondition = new HashMap<Object, Object>();
 //		pageCondition.put("alarmInhandle", "0");
@@ -55,6 +53,13 @@ public class HistoryAlarmControl {
 		
 		alarmCondition.put("pageBegin", pageConstants.getRecordNums(currentPage));
 		alarmCondition.put("pageSize", pageConstants.getPageSize());
+		
+		if (Objects.nonNull(alarmCondition.get("startTime"))) {
+			alarmCondition.put("alarmStartTime", Timestamp.valueOf(alarmCondition.get("startTime").toString()));
+		}
+		if (Objects.nonNull(alarmCondition.get("endTime"))) {
+			alarmCondition.put("alarmEndTime", Timestamp.valueOf(alarmCondition.get("endTime").toString()));
+		}
 		
 		try {
 			/* 超时报警 */

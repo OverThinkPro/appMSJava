@@ -74,6 +74,78 @@ public class UnitControl {
 	}
 	
 	/** 
+	 * @description 通过点击部门树，查询下级部门
+	 * @param upUnitId
+	 * @param currentPage
+	 * @return 
+	 */
+	@RequestMapping(value= "/base/unit/up/{upUnitId}/p/{currentPage}", method = RequestMethod.GET)
+	public Map<Object, Object> getUnitByUpUnitId (@PathVariable String upUnitId, @PathVariable int currentPage) {
+		Response response = new Response();
+		Map<Object,Object> condition = new HashMap<Object, Object>();
+		List<Unit> unitList = null;
+		int totalPage = 0;
+		
+		condition.put("upUnitId", upUnitId);
+		condition.put("pageBegin", pageConstants.getRecordNums(currentPage));
+		condition.put("pageSize", pageConstants.getPageSize());
+		
+		try {
+			unitList = unitService.getUnitByPageCondition(condition);
+			totalPage = unitService.getCountByConditon(condition);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (Objects.isNull(unitList)) {
+			return response.failure("查询部门失败，请重试").toSimpleResult();
+		}
+		return response.success().put("total", totalPage).put("unitList", unitList).toCombineResult();
+	}
+	
+	/** 
+	 * @description 点击添加时，查询得到下级部门编号
+	 * @param upUnitId
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/unit/up/{upUnitId}", method = RequestMethod.GET)
+	public Map<Object, Object> getNextId(@PathVariable String upUnitId){
+		Response response = new Response();
+		String currentUnitId = null;;
+		
+		try {
+			currentUnitId = unitService.getMaxUnitId(upUnitId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (Objects.isNull(currentUnitId)) {
+			return response.failure("不能得到下级部门Id").toSimpleResult();
+		}
+		return response.success().put("currentUnitId", currentUnitId).toCombineResult();
+	}
+	
+	/** 
+	 * @description 查询部门数
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/unit/unittree", method = RequestMethod.GET)
+	public Map<Object, Object> getUnitTree () {
+		Response response = new Response();
+		List<Unit> unitList = null;
+		
+		try {
+			unitList = unitService.getUnitTree();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (Objects.isNull(unitList)) {
+			return response.failure("查询部门树失败，请重试").toSimpleResult();
+		}
+		return response.success().put("unitList", unitList).toCombineResult();
+	}
+	
+	/** 
 	 * @description 添加部门
 	 * @param unit
 	 * @return 

@@ -32,6 +32,8 @@ public class Unit {
 	private String remark;// 备注
 
 	private List<Unit> unitList;
+	
+	private List<Unit> children;
 
 	public String getUnitId() {
 		return unitId;
@@ -122,14 +124,20 @@ public class Unit {
 		this.upUnitName = upUnitName;
 	}
 
+	public List<Unit> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<Unit> children) {
+		this.children = children;
+	}
+
 	@Override
 	public String toString() {
-		return "Unit [unitId=" + unitId + ", upUnitId=" + upUnitId
-				+ ", upUnitName=" + upUnitName + ", unitName=" + unitName
-				+ ", telephone=" + telephone + ", contactPerson="
-				+ contactPerson + ", header=" + header + ", createDate="
-				+ createDate + ", description=" + description + ", remark="
-				+ remark + ", unitList=" + unitList + "]";
+		return "Unit [unitId=" + unitId + ", upUnitId=" + upUnitId + ", upUnitName=" + upUnitName + ", unitName="
+				+ unitName + ", telephone=" + telephone + ", contactPerson=" + contactPerson + ", header=" + header
+				+ ", createDate=" + createDate + ", description=" + description + ", remark=" + remark + ", unitList="
+				+ unitList + ", children=" + children + "]";
 	}
-	
+
 }

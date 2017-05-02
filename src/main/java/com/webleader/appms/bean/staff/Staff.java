@@ -33,6 +33,8 @@ public class Staff {
 	private String unitId;// 部门ID
 
 	private String jobId;// 工种ID
+	
+	private String title;
 
 	public String getStaffId() {
 		return staffId;
@@ -130,12 +132,21 @@ public class Staff {
 		this.jobId = jobId == null ? null : jobId.trim();
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	@Override
 	public String toString() {
 		return "Staff [staffId=" + staffId + ", staffName=" + staffName + ", staffAbbr=" + staffAbbr
 				+ ", staffBirthday=" + staffBirthday + ", staffGender=" + staffGender + ", staffPicPath=" + staffPicPath
 				+ ", staffIdCard=" + staffIdCard + ", staffNativePlace=" + staffNativePlace + ", staffTelephone="
-				+ staffTelephone + ", staffWorkDate=" + staffWorkDate + ", unitId=" + unitId + ", jobId=" + jobId + "]";
+				+ staffTelephone + ", staffWorkDate=" + staffWorkDate + ", unitId=" + unitId + ", jobId=" + jobId
+				+ ", title=" + title + "]";
 	}
 
 }

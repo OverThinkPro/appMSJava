@@ -16,6 +16,20 @@
 		<result column="remark" jdbcType="VARCHAR" property="remark" />
 		<collection property="unitList" ofType="Unit" column="unit_id" select="getUnitByUpUnitId"></collection>
 	</resultMap>
+	
+	<resultMap id="UnitMap2" type="Unit">
+		<id column="unit_id" jdbcType="VARCHAR" property="unitId" />
+		<result column="up_unit_id" jdbcType="VARCHAR" property="upUnitId" />
+		<result column="up_unit_name" jdbcType="VARCHAR" property="upUnitName" />
+		<result column="unit_name" jdbcType="VARCHAR" property="unitName" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="contact_person" jdbcType="VARCHAR" property="contactPerson" />
+		<result column="header" jdbcType="VARCHAR" property="header" />
+		<result column="create_date" jdbcType="DATE" property="createDate" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<collection property="children" ofType="Unit" column="unit_id" select="getUnitByUpUnitId2"></collection>
+	</resultMap>
 	<!-- 列名 -->
 	<sql id="Unit_Column_List">
 		unit_id, up_unit_id, unit_name, telephone, contact_person, header, create_date, description, remark
@@ -31,20 +45,26 @@
 		WHERE unit1.up_unit_id = unit2.unit_id
 		AND unit1.unit_id = #{unitId}
 	</select>
-
-	<!-- 根据上级部门编号查询子部门 upUnitId -->
-	<select id="getUnitByUpUnitId" parameterType="String"	resultMap="UnitMap">
+	
+	<sql id="selectUnit">
 		SELECT <include refid="Unit_Column_List" />
 		FROM t_base_unit_info
 		WHERE up_unit_id=#{upUnitId}
 		ORDER BY unit_id ASC
+	</sql>
+	<!-- 根据上级部门编号查询子部门 upUnitId -->
+	<select id="getUnitByUpUnitId" parameterType="String"	resultMap="UnitMap">
+		<include refid="selectUnit"/>
+	</select>
+	<select id="getUnitByUpUnitId2" parameterType="String" resultMap="UnitMap2">
+		<include refid="selectUnit"/>
 	</select>
 
 	<!-- 查询一级部门 -->
-	<select id="getUnitTree" resultMap="UnitMap">
+	<select id="getUnitTree" resultMap="UnitMap2">
 		SELECT <include refid="Unit_Column_List" />
 		FROM t_base_unit_info
-		<!-- WHERE up_unit_id='1' -->
+		WHERE unit_id='1'
 		ORDER BY unit_id ASC
 	</select>
 

@@ -40,6 +40,13 @@ public interface UnitService {
 	public String getMaxUnitId(String upUnitId) throws SQLException;
 	
 	/** 
+	 * @description 查询部门树
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Unit> getUnitTree() throws SQLException;
+	
+	/** 
 	 * @description 添加部门
 	 * @param unit
 	 * @return

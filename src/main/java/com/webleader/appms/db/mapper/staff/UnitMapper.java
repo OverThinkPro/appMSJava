@@ -36,7 +36,7 @@ public interface UnitMapper {
 	public List<Unit> getUnitByUpUnitId(String upUnitId) throws SQLException;
 	
 	/** 
-	 * @description 查询一级部门
+	 * @description 查询部门树
 	 * @return
 	 * @throws SQLException 
 	 */
