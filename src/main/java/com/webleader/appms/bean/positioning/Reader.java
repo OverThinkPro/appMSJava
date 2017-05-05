@@ -2,6 +2,8 @@ package com.webleader.appms.bean.positioning;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @className Reader
  * @description 分站基本信息，在地图标注分站时需要维护该表
@@ -20,6 +22,7 @@ public class Reader {
 
 	private String readerStatus;// 分站状态
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date installDate;// 安装时间
 
 	private String powerSupplyMode;// 供电方式，0：电源 1:电池

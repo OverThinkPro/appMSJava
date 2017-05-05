@@ -38,23 +38,54 @@
 
 	<!-- 组合条件分页查询分站信息(区域类型，分站名称，分站IP，分站状态，区域编号， 起始记录数，每页的记录数) -->
 	<select id="getReaderByPageCondition" parameterType="Map" resultMap="ReaderMap">
-		SELECT	<include refid="Reader_Column_List" />
-		FROM t_ls_card_reader
+		SELECT	reader.reader_id, reader_name, region_name, st_astext(geo_point), region_type, 
+			reader_status, power_supply_mode, reader_ip, battery_capacity, install_date
+		FROM t_ls_card_reader reader, t_base_region_info region
 		<where>
-			<if test="readerId != null  &amp;&amp; readerId !='' ">
-				reader_id = #{readerId}
+			reader.region_id = region.region_id
+			<if test="regionType != null and regionType != ''">
+				AND region_type = #{regionType}
 			</if>
-			<if test="readerName != null  &amp;&amp; readerName !='' ">
+			<if test="readerName != null and readerName != ''">
 				AND reader_name = #{readerName}
 			</if>
-			<if test="readerIp != null &amp;&amp; readerIp !='' ">
+			<if test="readerIp != null and readerIp != ''">
 				AND reader_ip = #{readerIp}
 			</if>
-			<if test="readerStatus != null &amp;&amp; readerStatus !='' ">
+			<if test="readerStatus != null and readerStatus != ''">
 				AND reader_status = #{readerStatus}
 			</if>
-			<if test="regionId != null &amp;&amp; regionId !='' ">
-				AND region_id = #{regionId}
+			<if test="regionId != nulll and regionId != ''">
+				AND reader.region_id = #{regionId}
+			</if>
+		</where>
+		ORDER BY reader_id ASC
+		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
+	</select>
+	
+	<!-- 分页条件查询分站信息，返回list<Map> -->
+	<select id="getReaderByPageCondition2" parameterType="Map" resultType="Map">
+		SELECT reader.reader_id "readerId", reader_name "readerName", region_name "regionName", 
+			st_astext(geo_point) "geoPoint", region_type "regionType", reader_status "readerStatus", 
+			power_supply_mode "powerSupplyMode", reader_ip "readerIp", battery_capacity "batteryCapacity", 
+			to_char(install_date, 'yyyy-MM-dd hh24:MI:ss') "installDate", reader_type "readerType"
+		FROM t_ls_card_reader reader, t_base_region_info region
+		<where>
+			reader.region_id = region.region_id
+			<if test="regionType != null and regionType != ''">
+				AND region_type = #{regionType}
+			</if>
+			<if test="readerName != null and readerName != ''">
+				AND reader_name = #{readerName}
+			</if>
+			<if test="readerIp != null and readerIp != ''">
+				AND reader_ip = #{readerIp}
+			</if>
+			<if test="readerStatus != null and readerStatus != ''">
+				AND reader_status = #{readerStatus}
+			</if>
+			<if test="regionId != nulll and regionId != ''">
+				AND reader.region_id = #{regionId}
 			</if>
 		</where>
 		ORDER BY reader_id ASC
@@ -63,34 +94,53 @@
 
 	<!-- 统计符合条件的分站数量(区域类型，分站名称，分站IP，分站状态，区域编号) -->
 	<select id="getCountByConditon" parameterType="Map" resultType="int">
-		SELECT COUNT(*)
-		FROM t_ls_card_reader
+		SELECT	count(*)
+		FROM t_ls_card_reader reader, t_base_region_info region
 		<where>
-			<if test="readerId != null  &amp;&amp; readerId !='' ">
-				reader_id = #{readerId}
+			reader.region_id = region.region_id
+			<if test="regionType != null and regionType != ''">
+				AND region_type = #{regionType}
 			</if>
-			<if test="readerName != null  &amp;&amp; readerName !='' ">
+			<if test="readerName != null and readerName != ''">
 				AND reader_name = #{readerName}
 			</if>
-			<if test="readerIp != null &amp;&amp; readerIp !='' ">
+			<if test="readerIp != null and readerIp != ''">
 				AND reader_ip = #{readerIp}
 			</if>
-			<if test="readerStatus != null &amp;&amp; readerStatus !='' ">
+			<if test="readerStatus != null and readerStatus != ''">
 				AND reader_status = #{readerStatus}
 			</if>
-			<if test="regionId != null &amp;&amp; regionId !='' ">
-				AND region_id = #{regionId}
+			<if test="regionId != nulll and regionId != ''">
+				AND reader.region_id = #{regionId}
 			</if>
 		</where>
 	</select>
+	
+	<!-- 判断点是否在区域内 -->
+	<select id="getIsInRegion" parameterType="String" resultType="Map">
+		SELECT st_within(ST_GeomFromText(#{geoPoint},2008), region.geo_polygon) "inRegion", region.region_id "regionId"
+		FROM  t_base_region_info region
+	</select>
+	
+	<!-- 查询所有的分站，地图坐标信息 -->
+	<select id="getReaderMapList" parameterType="Map" resultType="Map">
+		SELECT st_asgeojson(geo_point) "geoPoint", reader_id "readerId", region_id "regionId"
+		FROM t_ls_card_reader
+		<where>
+			<if test="readerStatus != null and readerStatus != ''">
+				reader_status=#{readerStatus}
+			</if>
+		</where>
+	</select>
+	
 	<!-- 查询语句结束 -->
 	<!-- 添加语句开始 -->
 	<!-- 添加分站 -->
 	<insert id="insert" parameterType="Reader">
 		INSERT INTO t_ls_card_reader(<include refid="Reader_Column_List" />)
 		VALUES(#{readerId}, #{readerName},	#{readerType},#{regionId}, #{readerStatus}, #{installDate},
-			   #{powerSupplyMode}, #{batteryCapacity},	#{readerIp},#{rfNumber}, #{geoPoint}, #{geoPointRef},
-			   #{refSin}, #{refCos},#{deviceId})
+			   #{powerSupplyMode}, #{batteryCapacity},	#{readerIp},#{rfNumber}, ST_GeomFromText(#{geoPoint},2008), 
+			   ST_GeomFromText(#{geoPointRef},2008), #{refSin}, #{refCos},#{deviceId})
 	</insert>
 
 	<!-- 添加语句结束 -->
@@ -135,7 +185,7 @@
 				rf_number = #{rfNumber},
 			</if>
 			<if test="geoPoint != null">
-				geo_point = #{geoPoint},
+				geo_point = ST_GeomFromText(#{geoPoint}, 2008),
 			</if>
 			<if test="geoPointRef != null">
 				geo_point_ref = #{geoPointRef},
