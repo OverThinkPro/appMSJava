@@ -2,6 +2,8 @@ package com.webleader.appms.bean.positioning;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @className Card
  * @description 人员佩戴卡信息
@@ -23,6 +25,7 @@ public class Card {
 
 	private String opName;// 发卡人员
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date opTime;// 发卡时间
 
 	private Double batteryV;// 定位卡电量
@@ -30,6 +33,8 @@ public class Card {
 	private String staffName;// 员工姓名
 
 	private String staffId;// 员工ID
+	
+	private String unitName; //部门名称
 
 	public String getCardId() {
 		return cardId;
@@ -87,9 +92,19 @@ public class Card {
 		this.staffId = staffId == null ? null : staffId.trim();
 	}
 
+	public String getUnitName() {
+		return unitName;
+	}
+
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
+	}
+
 	@Override
 	public String toString() {
 		return "Card [cardId=" + cardId + ", cardStatus=" + cardStatus + ", opName=" + opName + ", opTime=" + opTime
-				+ ", batteryV=" + batteryV + ", staffName=" + staffName + ", staffId=" + staffId + "]";
+				+ ", batteryV=" + batteryV + ", staffName=" + staffName + ", staffId=" + staffId + ", unitName="
+				+ unitName + "]";
 	}
+
 }

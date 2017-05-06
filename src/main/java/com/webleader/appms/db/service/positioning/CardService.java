@@ -1,4 +1,4 @@
-package com.webleader.appms.db.mapper.positioning;
+package com.webleader.appms.db.service.positioning;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -7,16 +7,13 @@ import java.util.Map;
 import com.webleader.appms.bean.positioning.Card;
 
 /**
- * @className CardMapper
- * @description 数据库关于Card的接口
- * @author HaoShaSha
- * @date 2017年4月15日 下午10:31:32
+ * @className CardService
+ * @description 定位卡管理
+ * @author ding
+ * @date 2017年5月3日 上午9:54:09
  * @version 1.0.0
  */
-public interface CardMapper {
-	
-	/*****************START BY HaoShaSha*********/
-	/*****************查询接口开始*******************/
+public interface CardService {
 	
 	/** 
 	 * @description 根据定位卡编号查询定位卡信息
@@ -68,6 +65,7 @@ public interface CardMapper {
 	 * @author ding
 	 */
 	public int getStaffCardCount(Map<Object, Object> condition) throws SQLException;
+	
 	/** 
 	 * @description 组合条件分页查询 未使用的 定位卡信息记录数(定位卡状态，定位卡号)
 	 * @param pageCondition(cardStatus, cardId)
@@ -75,9 +73,6 @@ public interface CardMapper {
 	 * @throws SQLException 
 	 */
 	public int getUnuseCountByCondition(Map<Object,Object> condition) throws SQLException;
-	
-	/*****************查询接口结束*******************/
-	/*****************插入接口开始*******************/
 	
 	/** 
 	 * @description 添加定位卡
@@ -87,9 +82,6 @@ public interface CardMapper {
 	 */
 	public int insert(Card card) throws SQLException;
 	
-	/*****************插入接口结束*******************/
-	/*****************删除接口开始*******************/
-	
 	/** 
 	 * @description 根据定位卡编号删除定位卡
 	 * @param cardId
@@ -98,10 +90,6 @@ public interface CardMapper {
 	 */
 	public int deleteByPrimaryKey(String cardId) throws SQLException;
 	
-
-	/*****************删除接口结束*******************/
-	/*****************更新接口开始*******************/
-	
 	/** 
 	 * @description 更新定位卡信息
 	 * @param card
@@ -109,8 +97,5 @@ public interface CardMapper {
 	 * @throws SQLException 
 	 */
 	public int updateByPrimaryKeySelective(Card card) throws SQLException;
-	
-	/*****************更新接口结束*******************/
-	/*****************END BY HaoShaSha***********/
 
 }

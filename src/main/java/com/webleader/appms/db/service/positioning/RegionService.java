@@ -16,10 +16,58 @@ import com.webleader.appms.bean.positioning.Region;
 public interface RegionService {
 	
 	/** 
+	 * @description 主键查询区域信息
+	 * @param regionId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Region selectByPrimaryKey(String regionId) throws SQLException;
+
+	/** 
 	 * @description 组合条件分页查询区域信息(区域名称，区域类型， 起始记录数，每页的记录数)
 	 * @param pageCondition(regionName,regionType,pageSize,pageBegin)
 	 * @return
 	 * @throws SQLException 
 	 */
 	public List<Region> getRegionByPageCondition(Map<Object,Object> pageCondition) throws SQLException;
+	
+	/** 
+	 * @description 统计符合条件的区域数量(区域名称，区域类型)
+	 * @param condition(regionName,regionType)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int getCountByConditon(Map<Object,Object> condition) throws SQLException;
+	
+	/** 
+	 * @description 查询所有的区域地图坐标信息
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getRegionMapList() throws SQLException;
+	
+	/** 
+	 * @description 添加区域
+	 * @param region
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insert(Region region) throws SQLException;
+	
+	/** 
+	 * @description 根据主键删除区域
+	 * @param regionId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int deleteByPrimaryKey(String regionId) throws SQLException;
+	
+	/** 
+	 * @description 主键选择性修改区域 
+	 * @param region
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateByPrimaryKeySelective(Region region) throws SQLException;
+	
 }

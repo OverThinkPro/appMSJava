@@ -105,7 +105,7 @@ public class HistoryAlarmControl {
 			e.printStackTrace();
 		}
 
-		return null;
+		return response.failure("查询失败，请重试").toSimpleResult();
 	}
 
 	// @RequestMapping(value = "/test/p/{currentPage}")

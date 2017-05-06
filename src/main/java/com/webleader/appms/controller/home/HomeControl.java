@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.bean.alarm.OvermanAlarm;
+import com.webleader.appms.bean.alarm.OvertimeAlarm;
+import com.webleader.appms.bean.alarm.SpecialRegionAlarm;
 import com.webleader.appms.bean.alarm.StaffAlarm;
 import com.webleader.appms.bean.communication.CallStaff;
 import com.webleader.appms.bean.communication.EvacuateDetail;
@@ -258,16 +261,12 @@ public class HomeControl {
 	 * @param alarmId
 	 * @return
 	 */
-	@RequestMapping(value = "/realtime/alarm/{alarmId}/p/{currentPage}", method = RequestMethod.GET)
-	public Map<Object, Object> getCurrentAlarmInfoByType(@PathVariable String alarmId, @PathVariable int currentPage) {
+	@RequestMapping(value = "/realtime/alarm/{alarmType}/p/{currentPage}", method = RequestMethod.GET)
+	public Map<Object, Object> getCurrentAlarmInfoByType(@PathVariable int alarmType, @PathVariable int currentPage) {
 		Response response = new Response();
-		
-		if (Objects.isNull(alarmId) || Objects.isNull(currentPage)) {
-			return response.failure("查询失败，请重试").toSimpleResult();
-		}
 		Map<Object, Object> condition = new HashMap<Object, Object>();
-		List<StaffAlarm> staffAlarmList = new ArrayList<StaffAlarm>();
-		int countTotalPages = 0;
+//		List<StaffAlarm> staffAlarmList = new ArrayList<StaffAlarm>();
+//		int countTotalPages = 0;
 
 		/* 测试用 */
 		condition.put("startTime", Timestamp.valueOf("2017-03-02 02:20:57"));
@@ -277,7 +276,7 @@ public class HomeControl {
 		condition.put("pageBegin", modalPageConstants.getRecordNums(currentPage));
 		condition.put("pageSize", modalPageConstants.getPageSize());
 
-		try {
+		/*try {
 			staffAlarmList = alarmService.listStaffAlarmByPageCondition(condition);
 			countTotalPages = alarmService.countStaffAlarmByConditon(condition);
 		} catch (SQLException e) {
@@ -288,6 +287,54 @@ public class HomeControl {
 		}
 		return response.success().put("staffAlarmList", staffAlarmList).put("countTotalPages", countTotalPages)
 				.toCombineResult();
+		*/
+		
+		
+		try {
+			/* 超时报警 */
+			if (alarmType == 1) {
+				List<OvertimeAlarm> overtimeAlarmList = alarmService.listOvertimeByPageCondition(condition);
+				int overtimeAlarmNum = alarmService.countOvertimeByConditon(condition);
+				if (Objects.isNull(overtimeAlarmList)) {
+					return response.failure("查询失败，请重试").toSimpleResult();
+				}
+				return response.success().put("alarmResult", overtimeAlarmList).put("total", overtimeAlarmNum).toCombineResult();
+			}
+			
+			/* 超员报警 */
+			else if (alarmType == 2) {
+				List<OvermanAlarm> overAlarmList = alarmService.listOvermanByPageCondition(condition);
+				int overAlarmNum = alarmService.countOvermanByConditon(condition);
+				if (Objects.isNull(overAlarmList)) {
+					return response.failure("查询失败，请重试").toSimpleResult();
+				}
+				return response.success().put("alarmResult", overAlarmList).put("total", overAlarmNum).toCombineResult();
+			}
+			
+			/* 限制区域报警 */
+			else if (alarmType == 3) {
+				List<SpecialRegionAlarm> specialRegionAlarmList = alarmService.listRegionAlarmByPageCondition(condition);
+				int specialRegionAlarmNum = alarmService.countSpecialRegionAlarmByConditon(condition);
+				if (Objects.isNull(specialRegionAlarmList)) {
+					return response.failure("查询失败，请重试").toSimpleResult();
+				}
+				return response.success().put("alarmResult", specialRegionAlarmList).put("total", specialRegionAlarmNum).toCombineResult();
+			}
+			
+			/* 员工呼叫报警 */
+			else if (alarmType == 4) {
+				List<StaffAlarm> staffAlarmList = alarmService.listStaffAlarmByPageCondition(condition);
+				int staffAlarmNum = alarmService.countStaffAlarmByConditon(condition);
+				if (Objects.isNull(staffAlarmList)) {
+					return response.failure("查询失败，请重试").toSimpleResult();
+				}
+				return response.success().put("alarmResult", staffAlarmList).put("total", staffAlarmNum).toCombineResult();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return response.failure("查询失败，请重试").toSimpleResult();
+		
 	}
 
 	/**

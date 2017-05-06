@@ -41,6 +41,13 @@ public interface RegionMapper {
 	 */
 	public int getCountByConditon(Map<Object,Object> condition) throws SQLException;
 	
+	/** 
+	 * @description 查询所有的区域地图坐标信息
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getRegionMapList() throws SQLException;
+	
 	/*****************查询接口结束*******************/
 	/*****************插入接口开始*******************/
 	

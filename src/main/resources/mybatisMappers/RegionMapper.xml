@@ -54,12 +54,21 @@
 			</if>
 		</where>
 	</select>
+	
+	<!-- 查询所有区域的坐标列表 -->
+	<select id="getRegionMapList" resultType="Map">
+		SELECT region_id "regionId", region_name "regionName", region_max_people "regionMaxPeople", 
+			st_asgeojson(geo_polygon) "geoPolygon"
+		FROM t_base_region_info
+	</select>
 								<!-- 查询语句结束 -->
 								<!-- 添加语句开始 -->
 	<!-- 添加区域 -->
 	<insert id="insert" parameterType="Region">
-		INSERT INTO t_base_region_info(<include refid="Region_Column_List" />)
-		VALUES(#{regionId}, #{regionName}, #{regionType}, #{regionMaxPeople}, #{description}, #{geoPolygon}, #{remark})
+		INSERT INTO t_base_region_info(region_id, region_name, region_type, region_max_people, 
+			description, remark)
+		VALUES(#{regionId}, #{regionName}, #{regionType}, #{regionMaxPeople}, #{description}, 
+			#{remark})
 	</insert>
 	
 								<!-- 添加语句结束 -->
