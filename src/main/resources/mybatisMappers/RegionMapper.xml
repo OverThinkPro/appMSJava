@@ -14,7 +14,7 @@
 	</resultMap>
 	<!-- 列名 -->
 	<sql id="Region_Column_List">
-		region_id, region_name, region_type, region_max_people, description, geo_polygon, remark
+		region_id, region_name, region_type, region_max_people, description, st_asgeojson(geo_polygon) as geo_polygon, remark
 	</sql>
 
 	<!-- 查询语句开始 -->
@@ -61,6 +61,21 @@
 			st_asgeojson(geo_polygon) "geoPolygon"
 		FROM t_base_region_info
 	</select>
+	
+	<!-- 条件查询区域坐标列表 -->
+	<select id="getRegionMapByCondition" parameterType="Map" resultType="Map">
+		SELECT region_id "regionId", region_name "regionName", region_max_people "regionMaxPeople", 
+			st_asgeojson(geo_polygon) "geoPolygon"
+		FROM t_base_region_info
+		<where>
+			<if test="regionType!=null &amp;&amp; regionType !='' ">
+				region_type=#{regionType}
+			</if>
+			<if test="regionName!=null &amp;&amp; regionName!=''">
+				AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
+			</if>
+		</where>
+	</select>
 								<!-- 查询语句结束 -->
 								<!-- 添加语句开始 -->
 	<!-- 添加区域 -->
@@ -98,7 +113,7 @@
 				description = #{description},
 			</if>
 			<if test="geoPolygon != null">
-				geo_polygon = #{geoPolygon},
+				geo_polygon = ST_GeomFromText(#{geoPolygon},2008),
 			</if>
 			<if test="remark != null">
 				remark = #{remark},

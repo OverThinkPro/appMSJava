@@ -74,6 +74,18 @@ public class RegionServiceImpl implements RegionService{
 	}
 	
 	/** 
+	 * @description 条件查询区域地图坐标信息
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getRegionMapByCondition(Map<Object, Object> condition) throws SQLException {
+		if (Objects.isNull(condition)) {
+			return null;
+		}
+		return regionMapper.getRegionMapByCondition(condition);
+	}
+	
+	/** 
 	 * @description 添加区域
 	 * @param region
 	 * @return

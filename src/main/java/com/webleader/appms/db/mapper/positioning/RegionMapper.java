@@ -48,6 +48,13 @@ public interface RegionMapper {
 	 */
 	public List<Map<Object, Object>> getRegionMapList() throws SQLException;
 	
+	/** 
+	 * @description 条件查询区域地图坐标信息
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getRegionMapByCondition(Map<Object, Object> condition) throws SQLException;
+	
 	/*****************查询接口结束*******************/
 	/*****************插入接口开始*******************/
 	

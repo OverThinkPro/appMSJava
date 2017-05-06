@@ -16,6 +16,7 @@ import com.webleader.appms.bean.positioning.Region;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.positioning.RegionService;
 import com.webleader.appms.util.Response;
+import com.webleader.appms.util.UUIDUtil;
 
 /**
  * @className RegionControl
@@ -33,6 +34,8 @@ public class RegionControl {
 	private RegionService regionService;
 	@Autowired
 	private PageConstants pageConstants;
+	@Autowired
+	private UUIDUtil uuidUtil;
 	
 	/** 
 	 * @description 条件查询区域分页信息
@@ -63,6 +66,28 @@ public class RegionControl {
 	}
 	
 	/** 
+	 * @description 条件查询区域坐标列表
+	 * @param condition
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/map/region", method = RequestMethod.POST)
+	public Map<Object, Object> getRegionMapByCondition(@RequestBody Map<Object, Object> condition) {
+		Response response = new Response();
+		List<Map<Object, Object>> regionList = null;
+		
+		try {
+			regionList = regionService.getRegionMapByCondition(condition);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (Objects.isNull(regionList)) {
+			return response.failure("条件查询区域信息失败，请重试").toSimpleResult();
+		}
+		return response.success().put("regionList", regionList).toCombineResult();
+	}
+	
+	/** 
 	 * @description 添加一个区域信息
 	 * @param region
 	 * @return 
@@ -71,6 +96,7 @@ public class RegionControl {
 	public Map<Object, Object> insertRegion(@RequestBody Region region) {
 		Response response = new Response();
 		int result = 0;
+		region.setRegionId(uuidUtil.getUUID());
 		
 		try {
 			result = regionService.insert(region);
