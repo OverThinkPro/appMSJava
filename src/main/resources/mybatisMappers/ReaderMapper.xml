@@ -188,7 +188,7 @@
 				geo_point = ST_GeomFromText(#{geoPoint}, 2008),
 			</if>
 			<if test="geoPointRef != null">
-				geo_point_ref = #{geoPointRef},
+				geo_point_ref = ST_GeomFromText(#{geoPointRef}, 2008),
 			</if>
 			<if test="refSin != null">
 				ref_sin = #{refSin},
