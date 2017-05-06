@@ -66,7 +66,7 @@ public class TBUrlTest {
 	@Test
 	public void getUrlTree(){
 		try {
-			List<TBUrl> urlTree = tbUrlMapper.getUrlTree();
+			List<TBUrl> urlTree = tbUrlMapper.getUrlTree(null);
 			System.out.println(urlTree);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -80,7 +80,7 @@ public class TBUrlTest {
 	public void getUrlByPageCondition(){
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
 		pageCondition.put("upModuleId", "1");
-		pageCondition.put("pageBegin", 0);	//必须是bigint
+		pageCondition.put("pageBegin", 1);	//必须是bigint
 		pageCondition.put("pageSize", 3);	//必须是bigint
 		try {
 			List<TBUrl> tbUrls = tbUrlMapper.getUrlByPageCondition(pageCondition);

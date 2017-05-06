@@ -1,6 +1,5 @@
 package com.webleader.appms.bean.system;
 
-import java.util.List;
 
 /**
  * @className Dictionary
@@ -17,16 +16,18 @@ public class Dictionary {
 	private String description;// 描述
 
 	private String upDictionaryId;// 上级字典ID
+	
+	private String upDictionaryName;// 上级字典名称
 
 	private String inUse;// 是否使用
 
-	private String englistName;// 英文名称
+	private String englishName;// 英文名称
 
 	private String dataType;// 数据类型
 
 	private String remark;// 备注
 
-	private List<Dictionary> subDics;
+	//private List<Dictionary> subDics;
 
 	public String getDictionaryId() {
 		return dictionaryId;
@@ -68,14 +69,6 @@ public class Dictionary {
 		this.inUse = inUse == null ? null : inUse.trim();
 	}
 
-	public String getEnglistName() {
-		return englistName;
-	}
-
-	public void setEnglistName(String englistName) {
-		this.englistName = englistName == null ? null : englistName.trim();
-	}
-
 	public String getDataType() {
 		return dataType;
 	}
@@ -92,19 +85,32 @@ public class Dictionary {
 		this.remark = remark == null ? null : remark.trim();
 	}
 
-	public List<Dictionary> getDictionaryList() {
-		return subDics;
+	public String getUpDictionaryName() {
+		return upDictionaryName;
 	}
 
-	public void setDictionaryList(List<Dictionary> subDics) {
-		this.subDics = subDics;
+	public void setUpDictionaryName(String upDictionaryName) {
+		this.upDictionaryName = upDictionaryName;
 	}
 
 	@Override
 	public String toString() {
-		return "Dictionary [dictionaryId=" + dictionaryId + ", dictionaryName=" + dictionaryName + ", description="
-				+ description + ", upDictionaryId=" + upDictionaryId + ", inUse=" + inUse + ", englistName="
-				+ englistName + ", dataType=" + dataType + ", remark=" + remark + ", subDics=" + subDics
+		return "Dictionary [dictionaryId=" + dictionaryId + ", dictionaryName="
+				+ dictionaryName + ", description=" + description
+				+ ", upDictionaryId=" + upDictionaryId + ", upDictionaryName="
+				+ upDictionaryName + ", inUse=" + inUse + ", englishName="
+				+ englishName + ", dataType=" + dataType + ", remark=" + remark
 				+ "]";
 	}
+
+	public String getEnglishName() {
+		return englishName;
+	}
+
+	public void setEnglishName(String englishName) {
+		this.englishName = englishName;
+	}
+	
+	
+	
 }

@@ -33,7 +33,7 @@
 		        role_id = #{roleId}
 		    </if>
 		    <if test="roleName != null  &amp;&amp; roleName !='' ">
-		        AND role_name = #{roleName}
+		        AND role_name LIKE CONCAT(CONCAT('%',#{roleName}),'%')
 		    </if>
 		    <if test="inUse != null  &amp;&amp; inUse !='' ">
 		        AND in_use = #{inUse}
@@ -52,10 +52,10 @@
 		        role_id = #{roleId}
 		    </if>
 		    <if test="roleName != null  &amp;&amp; roleName !='' ">
-		        role_name = #{roleName}
+		        AND role_name LIKE CONCAT(CONCAT('%',#{roleName}),'%')
 		    </if>
 		    <if test="inUse != null  &amp;&amp; inUse !='' ">
-		        in_use = #{inUse}
+		        AND in_use = #{inUse}
 		    </if>
 		</where>
 	</select>
@@ -102,6 +102,15 @@
 	<sql id="Role_Module_Column_List">
 	    role_id, module_id
 	</sql>
+
+						<!-- 查询语句开始 -->
+	<!-- 根据角色编号查询该角色拥有的权限 -->
+	<select id="selectModulesByRoleId" parameterType="String" resultType="Map">
+	    SELECT <include refid="Role_Module_Column_List" />
+	    FROM t_base_role_module
+	    WHERE role_id = #{roleId}
+	</select>
+						<!-- 查询语句结束 -->	 
 						<!-- 插入语句开始 -->
 	<!-- 给角色分配权限 -->
 	<insert id="addUrlToRole" parameterType="Map">

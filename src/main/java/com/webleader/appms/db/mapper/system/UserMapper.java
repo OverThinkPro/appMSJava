@@ -114,6 +114,17 @@ public interface UserMapper {
 	
 	
 	/*********关联表t_base_user_role操作开始**********/
+	
+	/*****************查询接口开始*******************/
+	/** 
+	 * @description 根据用户编号查询该用户拥有的角色
+	 * @param userId
+	 * @return list(userId,roleId)
+	 * @throws SQLException 
+	 */
+	public List<Map<Object,Object>> selectRolesByUserId(String userId) throws SQLException;
+	
+	/*****************查询接口结束*******************/
 	/*****************插入接口开始*******************/
 	
 	/** 

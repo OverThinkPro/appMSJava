@@ -135,12 +135,12 @@ public class EvacuateDetailTest {
 		evacuateDetail.setJobName("掘进工");
 		evacuateDetail.setUnitName("掘进队");
 		evacuateDetail.setEnteringTime(enteringTime);
-		try {
-			int result = evacuateDetailMapper.insert(evacuateDetail);
-			System.out.println(result);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			int result = evacuateDetailMapper.insert(evacuateDetail);
+//			System.out.println(result);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 	}
 	/** 
 	 * @description 更新撤离呼叫详情记录

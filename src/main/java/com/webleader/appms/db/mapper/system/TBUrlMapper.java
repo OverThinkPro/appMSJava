@@ -37,14 +37,14 @@ public interface TBUrlMapper {
 	
 	/** 
 	 * @description 查询一级菜单
-	 * @return
+	 * @return upModuleId
 	 * @throws SQLException 
 	 */
-	public List<TBUrl> getUrlTree() throws SQLException;
+	public List<TBUrl> getUrlTree(String upModuleId) throws SQLException;
 	
 	/** 
 	 * @description 组合条件分页查询菜单信息
-	 * @param pageCondition(moduleId,moduleName,upModuleId,pageSize,pageBegin)
+	 * @param pageCondition(moduleId,moduleName,upModuleId,inUse,pageSize,pageBegin)
 	 * @return
 	 * @throws SQLException 
 	 */
@@ -52,7 +52,7 @@ public interface TBUrlMapper {
 	
 	/** 
 	 * @description 统计符合条件的菜单数量
-	 * @param pageCondition(moduleId,moduleName,upModuleId)
+	 * @param pageCondition(moduleId,moduleName,upModuleId,inUse)
 	 * @return
 	 * @throws SQLException 
 	 */

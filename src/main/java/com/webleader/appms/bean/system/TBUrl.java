@@ -2,6 +2,8 @@ package com.webleader.appms.bean.system;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @className TBUrl
  * @description 模块菜单表
@@ -14,7 +16,9 @@ public class TBUrl {
 
 	private String moduleName;// 模块名称
 
-	private String upModuleId;// 上级模块名称
+	private String upModuleId;// 上级模块编号
+	
+	private String upModuleName; //上级模块名称
 
 	private String inUse;// 是否被启用
 
@@ -22,7 +26,7 @@ public class TBUrl {
 
 	private String moduleUrl;// 模块url
 	
-	private List<TBUrl> subUrls;
+	private List<TBUrl> children;
 
 	public String getModuleId() {
 		return moduleId;
@@ -71,22 +75,30 @@ public class TBUrl {
 	public void setModuleUrl(String moduleUrl) {
 		this.moduleUrl = moduleUrl == null ? null : moduleUrl.trim();
 	}
-
-	public List<TBUrl> getSubUrls() {
-		return subUrls;
+	@JsonIgnore
+	public List<TBUrl> getChildren() {
+		return children;
 	}
 
-	public void setSubUrls(List<TBUrl> subUrls) {
-		this.subUrls = subUrls;
+	public void setChildren(List<TBUrl> children) {
+		this.children = children;
+	}
+
+	public String getUpModuleName() {
+		return upModuleName;
+	}
+
+	public void setUpModuleName(String upModuleName) {
+		this.upModuleName = upModuleName;
 	}
 
 	@Override
 	public String toString() {
 		return "TBUrl [moduleId=" + moduleId + ", moduleName=" + moduleName
-				+ ", upModuleId=" + upModuleId + ", inUse=" + inUse
-				+ ", description=" + description + ", moduleUrl=" + moduleUrl
-				+ ", subUrls=" + subUrls + "]";
+				+ ", upModuleId=" + upModuleId + ", upModuleName="
+				+ upModuleName + ", inUse=" + inUse + ", description="
+				+ description + ", moduleUrl=" + moduleUrl + "]";
 	}
-	
 
+	
 }

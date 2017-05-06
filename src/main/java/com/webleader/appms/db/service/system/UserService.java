@@ -14,7 +14,15 @@ import com.webleader.appms.bean.system.User;
  * @version 1.0.0
  */
 public interface UserService {
-
+	
+	/** 
+	 * @description 根据用户编号查询用户信息
+	 * @param userId 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public User selectByPrimaryKey(String userId) throws SQLException;
+	
 	/** 
 	 * @description 查询出用户的信息(用户编号,用户名,密码,是否启用,创建时间,最近登录时间,备注,员工编号)
 	 * @param map pageCondition(userId,userName,inUse,pageSize,pageBegin)
@@ -31,5 +39,59 @@ public interface UserService {
 	 */
 	public int getCountByConditon(Map<Object,Object> condition) throws SQLException;
 	
+	/** 
+	 * @description 添加用户
+	 * @param user
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insert(User user) throws SQLException;
+
+	/** 
+	 * @description 根据用户编号删除用户
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int deleteByPrimaryKey(String userId) throws SQLException;
+	
+	/** 
+	 * @description 更新用户信息
+	 * @param user
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateByPrimaryKeySelective(User user) throws SQLException;
+
+	
+	/*********关联表t_base_user_role操作开始**********/
+	
+	/** 
+	 * @description 根据用户编号查询该用户拥有的角色
+	 * @param userId
+	 * @return list(userId,roleId)
+	 * @throws SQLException 
+	 */
+	public List<Map<Object,Object>> selectRolesByUserId(String userId) throws SQLException;
+	
+	/** 
+	 * @description 给用户分配角色
+	 * @param data(userId, roleId)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int addRoleToUser(Map<Object, Object> data) throws SQLException;
+	
+	
+	/** 
+	 * @description 撤销分配给用户的角色(全部或者单个角色)
+	 * @param condition(userId, roleId)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int deleteRoleFromUser(Map<Object, Object> condition)throws SQLException;
+	
+	
+	/*******关联表t_base_user_role操作结束***********/
 	
 }

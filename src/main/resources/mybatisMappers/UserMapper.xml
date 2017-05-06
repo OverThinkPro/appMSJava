@@ -13,6 +13,9 @@
 	    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
 	    <result column="remark" jdbcType="VARCHAR" property="remark" />
 	    <result column="staff_id" jdbcType="VARCHAR" property="staffId" />
+		<result column="role_id" jdbcType="VARCHAR" property="roleId" />
+	    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+	
 	</resultMap>
 	
 	<!-- 列名 -->
@@ -30,7 +33,6 @@
 		<if test="password!=null">
 			and password=#{password}
 		</if>
-		
 	</select>
 	
 	<!-- 验证用户是否存在(用于修改密码) -->
@@ -54,20 +56,27 @@
 	 
 	<!-- 组合条件分页查询用户信息(用户编号，用户名称，是否启用， 起始记录数，每页的记录数) -->
 	<select id="getUserByPageCondition" parameterType="Map" resultMap="UserMap">
-		SELECT <include refid="User_Column_List" />
+		<!-- SELECT <include refid="User_Column_List" />
+		FROM t_base_user_info -->
+		SELECT  t_base_user_info.user_id, user_name, password, t_base_user_info.in_use, create_time, last_login_time, remark, staff_id,
+		array_to_string(ARRAY(SELECT unnest(array_agg(DISTINCT role_name))),',')role_name, 
+		array_to_string(ARRAY(SELECT unnest(array_agg(DISTINCT t_base_role_info.role_id))),',')role_id
 		FROM t_base_user_info
+		LEFT JOIN t_base_user_role ON t_base_user_info.user_id=t_base_user_role.user_id 
+		LEFT JOIN t_base_role_info ON t_base_user_role.role_id=t_base_role_info.role_id
 		<where>
 			<if test="userId!=null &amp;&amp; userId !='' ">
-				user_id=#{userId}
+				t_base_user_info.user_id=#{userId}
 			</if>
 			<if test="userName!=null &amp;&amp; userName!=''">
 				AND user_name LIKE CONCAT(CONCAT('%',#{userName}),'%')
 			</if>
 			<if test="inUse!=null &amp;&amp; inUse!=''">
-				AND in_use=#{inUse}
+				AND t_base_user_info.in_use=#{inUse}
 			</if>
 		</where>
-		ORDER BY user_id ASC
+		GROUP BY t_base_user_info.user_id
+		ORDER BY create_time DESC
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 	</select>
 	
@@ -213,6 +222,14 @@
 	<sql id="User_Role_Column_List">
 	    user_id, role_id
 	</sql>
+						<!-- 查询语句开始 -->
+	<!-- 根据用户编号查询该用户拥有的角色 -->
+	<select id="selectRolesByUserId" parameterType="String" resultType="Map">
+	    SELECT <include refid="User_Role_Column_List" />
+	    FROM t_base_user_role
+	    WHERE user_id = #{userId}
+	</select>
+						<!-- 查询语句结束 -->
 						<!-- 插入语句开始 -->
 	<!-- 给用户分配角色 -->
 	<insert id="addRoleToUser" parameterType="Map">

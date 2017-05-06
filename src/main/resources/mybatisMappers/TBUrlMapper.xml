@@ -8,10 +8,11 @@
 		<id column="module_id" jdbcType="VARCHAR" property="moduleId" />
 		<result column="module_name" jdbcType="VARCHAR" property="moduleName" />
 		<result column="up_module_id" jdbcType="VARCHAR" property="upModuleId" />
+		<result column="up_module_name" jdbcType="VARCHAR" property="upModuleName" />
 		<result column="in_use" jdbcType="CHAR" property="inUse" />
 		<result column="description" jdbcType="VARCHAR" property="description" />
 		<result column="module_url" jdbcType="VARCHAR" property="moduleUrl" />
-		<collection property="subUrls" ofType="TBUrl" column="module_id" select="getUrlByUpModuleId"></collection>
+		<collection property="children" ofType="TBUrl" column="module_id" select="getUrlByUpModuleId"></collection>
 	</resultMap>
 	
 	<!-- 列名 -->
@@ -23,52 +24,71 @@
 	
 	<!-- 主键查询菜单信息moduleId -->
 	<select id="selectByPrimaryKey" parameterType="String" resultMap="TBUrlMap">
-		SELECT <include refid="TBUrl_Column_List" />
+		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
+			   url1.description, url1.module_url, url2.module_name up_module_name
+		FROM t_base_defined_url url1
+		LEFT JOIN t_base_defined_url url2
+		ON url1.up_module_id = url2.module_id
 		FROM t_base_defined_url
-		WHERE module_id = #{moduleId}
+		WHERE url1.module_id = #{moduleId}
 	</select>
 	
 	<!-- 根据上级菜单编号查询子菜单 upModuleId-->
 	<select id="getUrlByUpModuleId" parameterType="String" resultMap="TBUrlMap">
-		SELECT <include refid="TBUrl_Column_List" />
-		FROM t_base_defined_url
-		WHERE up_module_id=#{upModuleId}
-		ORDER BY module_id ASC
+		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
+			   url1.description, url1.module_url, url2.module_name up_module_name
+		FROM t_base_defined_url url1
+		LEFT JOIN t_base_defined_url url2
+		ON url1.up_module_id = url2.module_id
+		WHERE url1.up_module_id=#{upModuleId}
+		ORDER BY url1.module_id ASC
 	</select>
 	
-	<!-- 查询一级菜单 -->
-	<select id="getUrlTree" resultMap="TBUrlMap">
-		SELECT <include refid="TBUrl_Column_List" />
-		FROM t_base_defined_url
-		WHERE up_module_id='1'
-		ORDER BY module_id ASC
-	</select>
-	
-	<!-- 组合条件分页查询菜单信息(菜单编号，菜单名称，上级菜单编号， 起始记录数，每页的记录数) -->
-	<select id="getUrlByPageCondition" parameterType="Map" resultMap="TBUrlMap">
-		SELECT <include refid="TBUrl_Column_List" />
-		FROM t_base_defined_url
+	<!-- 查询菜单树 -->
+	<select id="getUrlTree" parameterType="String" resultMap="TBUrlMap">
+		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
+			   url1.description, url1.module_url, url2.module_name up_module_name
+		FROM t_base_defined_url url1
+		LEFT JOIN t_base_defined_url url2
+		ON url1.up_module_id = url2.module_id
 		<where>
-			<if test="moduleId!=null &amp;&amp; moduleId !='' ">
-				module_id=#{moduleId}
-			</if>
-			<if test="moduleName!=null &amp;&amp; moduleName!=''">
-				AND module_name LIKE CONCAT(CONCAT('%',#{moduleName}),'%')
-			</if>
 			<if test="upModuleId!=null &amp;&amp; upModuleId!=''">
-				AND up_module_id=#{upModuleId}
+				AND url1.up_module_id=#{upModuleId}
 			</if>
 		</where>
-		ORDER BY module_id ASC
+		ORDER BY url1.module_id ASC
+	</select>
+	
+	<!-- 组合条件分页查询菜单信息(菜单编号，菜单名称，上级菜单编号，是否启用， 起始记录数，每页的记录数) -->
+	<select id="getUrlByPageCondition" parameterType="Map" resultMap="TBUrlMap">
+		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
+			   url1.description, url1.module_url, url2.module_name up_module_name
+		FROM t_base_defined_url url1
+		LEFT JOIN t_base_defined_url url2
+		ON url1.up_module_id = url2.module_id
+		WHERE url1.module_id != '1'
+			<if test="moduleId!=null &amp;&amp; moduleId !='' ">
+				AND url1.module_id=#{moduleId}
+			</if>
+			<if test="moduleName!=null &amp;&amp; moduleName!=''">
+				AND url1.module_name LIKE CONCAT(CONCAT('%',#{moduleName}),'%')
+			</if>
+			<if test="upModuleId!=null &amp;&amp; upModuleId!=''">
+				AND url1.up_module_id=#{upModuleId}
+			</if>
+			<if test="inUse!=null &amp;&amp; inUse!=''">
+				AND url1.in_use=#{inUse}
+			</if>
+		ORDER BY url1.module_id ASC
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 	</select>
 	
-	<!-- 统计符合条件的菜单数量(菜单编号，菜单名称 或者上级菜单编号) -->
+	<!-- 统计符合条件的菜单数量(菜单编号，菜单名称，上级菜单编号，是否启用) -->
 	<select id="getCountByConditon" parameterType="Map" resultType="int">
 		SELECT COUNT(*) FROM t_base_defined_url 
-		<where>
+		WHERE module_id != '1'
 			<if test="moduleId!=null &amp;&amp; moduleId !='' ">
-				module_id=#{moduleId}
+				AND module_id=#{moduleId}
 			</if>
 			<if test="moduleName!=null &amp;&amp; moduleName!=''">
 				AND module_name LIKE CONCAT(CONCAT('%',#{moduleName}),'%')
@@ -76,7 +96,9 @@
 			<if test="upModuleId!=null &amp;&amp; upModuleId!=''">
 				AND up_module_id=#{upModuleId}
 			</if>
-		</where>
+			<if test="inUse!=null &amp;&amp; inUse!=''">
+				AND in_use=#{inUse}
+			</if>
 	</select>
 	
 	<!-- 根据上级菜单id查询下一个要插入的子菜单的编号 -->

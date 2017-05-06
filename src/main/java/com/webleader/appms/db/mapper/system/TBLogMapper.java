@@ -28,16 +28,16 @@ public interface TBLogMapper {
 	public TBLog selectByPrimaryKey(String logId) throws SQLException;
 	
 	/** 
-	 * @description 组合条件分页查询日志信息
-	 * @param pageCondition(userId,userName,opType,opDate,pageSize,pageBegin)
+	 * @description 组合条件分页查询日志信息(用户编号，用户姓名，操作类型，开始时间，结束时间， 起始记录数，每页的记录数)
+	 * @param pageCondition(userId,userName,opType,beginTime,endTime,pageSize,pageBegin)
 	 * @return
 	 * @throws SQLException 
 	 */
 	public List<TBLog> getLogByPageCondition(Map<Object,Object> pageCondition) throws SQLException;
 	
 	/** 
-	 * @description 统计符合条件的日志数量
-	 * @param pageCondition(userId,userName,opType,opDate)
+	 * @description 统计符合条件的日志数量(用户编号，用户姓名，操作类型，开始时间，结束时间)
+	 * @param pageCondition(userId,userName,opType,beginTime,endTime)
 	 * @return
 	 * @throws SQLException 
 	 */

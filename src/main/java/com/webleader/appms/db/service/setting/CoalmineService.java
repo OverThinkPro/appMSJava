@@ -3,6 +3,8 @@ package com.webleader.appms.db.service.setting;
 import java.sql.SQLException;
 import java.util.Map;
 
+import com.webleader.appms.bean.setting.Coalmine;
+
 /**
  * @className CoalmineService
  * @description 煤矿基本信息
@@ -19,4 +21,22 @@ public interface CoalmineService {
 	 * @throws SQLException 
 	 */
 	public Map<Object, Object> getCoalmineInfo(Map<Object,Object> condition) throws SQLException;
+	
+	/** 
+	 * @description 查询出该煤矿所有信息
+	 * @param coalmineId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Coalmine getCoalmineBaseInfo(String coalmineId) throws SQLException;
+	
+	/** 
+	 * @description 更新煤矿信息
+	 * @param coalmine
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateByPrimaryKeySelective(Coalmine coalmine) throws SQLException;
+
+
 }

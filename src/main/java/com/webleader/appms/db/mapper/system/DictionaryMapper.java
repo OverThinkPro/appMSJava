@@ -53,14 +53,14 @@ public interface DictionaryMapper {
 	
 	/** 
 	 * @description 查询一级数字字典
-	 * @return
+	 * @return upDictionaryId
 	 * @throws SQLException 
 	 */
-	public List<Dictionary> getDicTree() throws SQLException;
+	public List<Dictionary> getDicTree(String upDictionaryId) throws SQLException;
 	
 	/** 
 	 * @description 组合条件分页查询数字字典信息
-	 * @param pageCondition(dictionaryId,dictionaryName,upDictionaryId,pageSize,pageBegin)
+	 * @param pageCondition(dictionaryId,dictionaryName,upDictionaryId,inUse,pageSize,pageBegin)
 	 * @return
 	 * @throws SQLException 
 	 */
@@ -68,7 +68,7 @@ public interface DictionaryMapper {
 	
 	/** 
 	 * @description 统计符合条件的数字字典数量
-	 * @param pageCondition(dictionaryId,dictionaryName,upDictionaryId,pageSize,pageBegin)
+	 * @param pageCondition(dictionaryId,dictionaryName,upDictionaryId,inUse)
 	 * @return
 	 * @throws SQLException 
 	 */

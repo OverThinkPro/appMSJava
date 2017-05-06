@@ -32,17 +32,20 @@
 		SELECT <include refid="TBLog_Column_List" />
 		FROM t_base_log
 		<where>
-			<if test="user_id!=null &amp;&amp; user_id !='' ">
+			<if test="userId!=null &amp;&amp; userId !='' ">
 				user_id=#{userId}
 			</if>
-			<if test="user_name!=null &amp;&amp; user_name!=''">
+			<if test="userName!=null &amp;&amp; userName!=''">
 				AND user_name LIKE CONCAT(CONCAT('%',#{userName}),'%')
 			</if>
-			<if test="op_type!=null &amp;&amp; op_type!=''">
-				AND op_type=#{opType}
+			<if test="opType!=null &amp;&amp; opType!=''">
+				AND op_type LIKE CONCAT(CONCAT('%',#{opType}),'%')
 			</if>
-			<if test="op_date!=null &amp;&amp;op_date!=''">
-				AND op_date=#{opDate}
+			<if test="beginTime!=null &amp;&amp; beginTime!=''">
+				AND op_date <![CDATA[>= ]]>  TO_TIMESTAMP(#{beginTime}, 'YYYY-MM-DD HH24:MI:SS')
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+			 	AND op_date <![CDATA[<= ]]>  TO_TIMESTAMP(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
 			</if>
 		</where>
 		ORDER BY op_date ASC
@@ -54,17 +57,20 @@
 		SELECT COUNT(*)
 		FROM t_base_log
 		<where>
-			<if test="user_id!=null &amp;&amp; user_id !='' ">
+			<if test="userId!=null &amp;&amp; userId !='' ">
 				user_id=#{userId}
 			</if>
-			<if test="user_name!=null &amp;&amp; user_name!=''">
+			<if test="userName!=null &amp;&amp; userName!=''">
 				AND user_name LIKE CONCAT(CONCAT('%',#{userName}),'%')
 			</if>
-			<if test="op_type!=null &amp;&amp; op_type!=''">
-				AND op_type=#{opType}
+			<if test="opType!=null &amp;&amp; opType!=''">
+				AND op_type LIKE CONCAT(CONCAT('%',#{opType}),'%')
 			</if>
-			<if test="op_date!=null &amp;&amp;op_date!=''">
-				AND op_date=#{opDate}
+			<if test="beginTime!=null &amp;&amp; beginTime!=''">
+				AND op_date <![CDATA[>= ]]>  TO_TIMESTAMP(#{beginTime}, 'YYYY-MM-DD HH24:MI:SS')
+			</if>
+			<if test="endTime!=null &amp;&amp; endTime!=''">
+			 	AND op_date <![CDATA[<= ]]>  TO_TIMESTAMP(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
 			</if>
 		</where>
 	</select>

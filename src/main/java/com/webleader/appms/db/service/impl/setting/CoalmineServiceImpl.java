@@ -54,5 +54,34 @@ public class CoalmineServiceImpl implements CoalmineService{
 		
 		return coalmineInfo;
 	}
-
+	
+	
+	/** 
+	 * @description 查询出该煤矿所有信息
+	 * @param coalmineId
+	 * @return
+	 * @throws SQLException 
+	 */
+	@Override
+	public Coalmine getCoalmineBaseInfo(String coalmineId) throws SQLException {
+		if(Objects.isNull(coalmineId)){
+			return null;
+		}
+		return coalmineMapper.selectByPrimaryKey(coalmineId);
+		
+	}
+	
+	
+	/** 
+	 * @description 更新煤矿信息
+	 * @param coalmine
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateByPrimaryKeySelective(Coalmine coalmine) throws SQLException{
+		if (Objects.isNull(coalmine)) {
+			return 0;
+		}
+		return coalmineMapper.updateByPrimaryKeySelective(coalmine);
+	}
 }

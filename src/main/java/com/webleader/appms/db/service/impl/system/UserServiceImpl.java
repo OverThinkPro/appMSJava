@@ -53,4 +53,99 @@ public class UserServiceImpl implements UserService{
 			throws SQLException {
 		return userMapper.getCountByConditon(condition);
 	}
+	
+	/** 
+	 * @description 根据用户编号查询用户信息
+	 * @param userId 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public User selectByPrimaryKey(String userId) throws SQLException{
+		if (Objects.isNull(userId)) {
+			return null;
+		}
+		return userMapper.selectByPrimaryKey(userId);
+	}
+	
+	/** 
+	 * @description 添加用户
+	 * @param user
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insert(User user) throws SQLException{
+		if (Objects.isNull(user)) {
+			return 0;
+		}
+		return userMapper.insert(user);
+	}
+
+	/** 
+	 * @description 根据用户编号删除用户
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int deleteByPrimaryKey(String userId) throws SQLException{
+		if (Objects.isNull(userId)) {
+			return 0;
+		}
+		return userMapper.deleteByPrimaryKey(userId);
+	}
+	
+	/** 
+	 * @description 更新用户信息
+	 * @param user
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateByPrimaryKeySelective(User user) throws SQLException{
+		if (Objects.isNull(user)) {
+			return 0;
+		}
+		return userMapper.updateByPrimaryKeySelective(user);
+	}
+	
+	/*********关联表t_base_user_role操作开始**********/
+	/** 
+	 * @description 根据用户编号查询该用户拥有的角色
+	 * @param userId
+	 * @return list(userId,roleId)
+	 * @throws SQLException 
+	 */
+	public List<Map<Object,Object>> selectRolesByUserId(String userId) throws SQLException {
+
+		if (Objects.isNull(userId)) {
+			return null;
+		}
+		return userMapper.selectRolesByUserId(userId);
+	}
+	/** 
+	 * @description 给用户分配角色
+	 * @param data(userId, roleId)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int addRoleToUser(Map<Object, Object> data) throws SQLException {
+		if (Objects.isNull(data)) {
+			return 0;
+		}
+		return userMapper.addRoleToUser(data);
+	}
+	
+	/** 
+	 * @description 撤销分配给用户的角色(全部或者单个角色)
+	 * @param condition(userId, roleId)
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int deleteRoleFromUser(Map<Object, Object> condition)throws SQLException {
+		if (Objects.isNull(condition)) {
+			return 0;
+		}
+		return userMapper.deleteRoleFromUser(condition);
+	}
+	
+	/*****************删除接口结束*******************/
+	/*******关联表t_base_user_role操作结束***********/
 }

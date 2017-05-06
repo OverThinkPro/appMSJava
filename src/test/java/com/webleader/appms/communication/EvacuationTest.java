@@ -121,7 +121,7 @@ public class EvacuationTest {
 		condition.put("regionId", "c");
 		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
 		condition.put("endTime", Timestamp.from(Instant.now()));
-		try {
+		/*try {
 			List<Map<Object, Object>>  InsertEvacuationList = evacuationMapper.getInsertEvacuation(condition);
 			
 			InsertEvacuationList.forEach(item->{
@@ -137,7 +137,8 @@ public class EvacuationTest {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-	}}
+	}*/
+		}
 	/*****************插入接口结束*******************/
 	/*****************END BY HaoShaSha***********/
 	

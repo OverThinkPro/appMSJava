@@ -1,6 +1,8 @@
 package com.webleader.appms.bean.system;
 
-import java.util.Date;
+import java.sql.Timestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @className TBLog
@@ -17,8 +19,9 @@ public class TBLog {
 	private String opType;		//操作类型
 
 	private String opContent;	//操作内容
-
-	private Date opDate;		//操作日期
+	
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	private Timestamp opDate;		//操作日期
 
 	private String userId;		// 用户ID
 
@@ -54,11 +57,11 @@ public class TBLog {
 		this.opContent = opContent == null ? null : opContent.trim();
 	}
 
-	public Date getOpDate() {
+	public Timestamp getOpDate() {
 		return opDate;
 	}
 
-	public void setOpDate(Date opDate) {
+	public void setOpDate(Timestamp opDate) {
 		this.opDate = opDate;
 	}
 

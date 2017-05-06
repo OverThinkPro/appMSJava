@@ -93,12 +93,12 @@ public class CallStaffTest {
 		callStaff.setStaffId("1");
 		callStaff.setUserId("1");
 		callStaff.setCallTime(callTime);
-		try {
+		/*try {
 			int result = callStaffMapper.insert(callStaff);
 			System.out.println(result);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 	/*****************插入接口结束*******************/
 	/*****************END BY HaoShaSha***********/

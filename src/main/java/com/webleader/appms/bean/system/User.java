@@ -1,6 +1,9 @@
 package com.webleader.appms.bean.system;
 
+import java.sql.Timestamp;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * @className User
@@ -18,13 +21,19 @@ public class User {
 
 	private String inUse;// 是否启用
 
-	private Date createTime;// 创建时间
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+	private Timestamp createTime;// 创建时间
 
-	private Date lastLoginTime;// 最后一次登陆时间
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8") 
+	private Timestamp lastLoginTime;// 最后一次登陆时间
 
 	private String remark;// 备注
 
 	private String staffId;// 员工ID
+	
+	private String roleId;	//角色编号
+	
+	private String roleName; //角色名称
 
 	public String getUserId() {
 		return userId;
@@ -62,7 +71,7 @@ public class User {
 		return createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
 
@@ -70,7 +79,7 @@ public class User {
 		return lastLoginTime;
 	}
 
-	public void setLastLoginTime(Date lastLoginTime) {
+	public void setLastLoginTime(Timestamp lastLoginTime) {
 		this.lastLoginTime = lastLoginTime;
 	}
 
@@ -90,11 +99,30 @@ public class User {
 		this.staffId = staffId == null ? null : staffId.trim();
 	}
 
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", inUse=" + inUse
-				+ ", createTime=" + createTime + ", lastLoginTime=" + lastLoginTime + ", remark=" + remark
-				+ ", staffId=" + staffId + "]";
+	public String getRoleId() {
+		return roleId;
 	}
 
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", userName=" + userName
+				+ ", password=" + password + ", inUse=" + inUse
+				+ ", createTime=" + createTime + ", lastLoginTime="
+				+ lastLoginTime + ", remark=" + remark + ", staffId=" + staffId
+				+ ", roleId=" + roleId + ", roleName=" + roleName + "]";
+	}
+	
+	
 }
