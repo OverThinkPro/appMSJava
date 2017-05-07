@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.webleader.appms.bean.positioning.Reader;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.positioning.ReaderService;
+import com.webleader.appms.util.PointSinCos;
 import com.webleader.appms.util.Response;
 
 /**
@@ -35,6 +36,8 @@ public class ReaderControl {
 	private ReaderService readerService;
 	@Autowired
 	private PageConstants pageConstants;
+	@Autowired
+	private PointSinCos pointSincos;
 	
 	/** 
 	 * @description 组合条件分页查询，分站信息（区域类型，分站名称，分站IP，分站状态，区域编号， 起始记录数，每页的记录数）
@@ -74,6 +77,10 @@ public class ReaderControl {
 	public Map<Object, Object> insertReader(@RequestBody Reader reader) {
 		Response response = new Response();
 		int result = 0;
+		Map<String, Double> sinCos = null;
+		sinCos = pointSincos.getSinCos(reader.getGeoPoint().toString(), reader.getGeoPointRef().toString());
+		reader.setRefSin(sinCos.get("sin"));
+		reader.setRefCos(sinCos.get("cos"));
 		
 		try {
 			result = readerService.insert(reader);
@@ -95,6 +102,13 @@ public class ReaderControl {
 	public Map<Object, Object> updateReader(@RequestBody Reader reader) {
 		Response response = new Response();
 		int result = 0;
+		
+		if (Objects.nonNull(reader.getGeoPoint()) && Objects.nonNull(reader.getGeoPointRef())) {
+			Map<String, Double> sinCos = null;
+			sinCos = pointSincos.getSinCos(reader.getGeoPoint().toString(), reader.getGeoPointRef().toString());
+			reader.setRefSin(sinCos.get("sin"));
+			reader.setRefCos(sinCos.get("cos"));
+		}
 		
 		try {
 			result = readerService.updateByPrimaryKeySelective(reader);
