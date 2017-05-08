@@ -23,35 +23,35 @@
 	HomeControl.java
 		- a) 方法注释：描述，参数，返回值，异常不规范。
 		- b)List,Stack,Queue.
-			``` bash
+
 			List<Map<Object, Object>> realStaffByUnit = new Stack<Map<Object, Object>>();
-			```
+
 		- c) 撤离呼叫：使用 for 循环替代 for-in 循环形式。
-			``` bash
+
 			for (String regionId : regionIdArr) {}
-			```
+
 		- d) 修改注释。
-			``` bash
+
 			/**
 			 * @modifyDescription
 			 * @date
 			 * @
 			 */
-			```
+
 		- e) @Deprecated.
 			evacuationCall();
 			callStaffBack();
 
 	ReaderControl.java
 		- a) updateReader()，当reader为null可能会有空指针异常。
-			``` bash
+
 			if (Objects.nonNull(reader.getGeoPoint()) && Objects.nonNull(reader.getGeoPointRef())) {
 				Map<String, Double> sinCos = null;
 				sinCos = pointSincos.getSinCos(reader.getGeoPoint().toString(), reader.getGeoPointRef().toString());
 				reader.setRefSin(sinCos.get("sin"));
 				reader.setRefCos(sinCos.get("cos"));
 			}
-			```
+
 	RegionControl.java
 
 	HistoryAlarmControl
