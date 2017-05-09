@@ -81,9 +81,9 @@
 	<!-- 添加区域 -->
 	<insert id="insert" parameterType="Region">
 		INSERT INTO t_base_region_info(region_id, region_name, region_type, region_max_people, 
-			description, remark)
+			description, geo_polygon, remark)
 		VALUES(#{regionId}, #{regionName}, #{regionType}, #{regionMaxPeople}, #{description}, 
-			#{remark})
+			ST_GeomFromText(#{geoPolygon},2008), #{remark})
 	</insert>
 	
 								<!-- 添加语句结束 -->
@@ -120,6 +120,15 @@
 			</if>
 		</set>
 		WHERE region_id = #{regionId}
+	</update>
+	
+	<!-- 批量修改区域坐标 -->
+	<update id="updateRegionList" parameterType="List">
+       <foreach item="item" index="index" collection="list" separator=";">
+	        UPDATE t_base_region_info
+			set geo_polygon=ST_GeomFromText(#{item.geoPolygon},2008)
+			WHERE region_id=#{item.regionId}
+       </foreach>
 	</update>
 								<!-- 修改语句结束 -->
 							  <!-- END BY HaoShaSha -->

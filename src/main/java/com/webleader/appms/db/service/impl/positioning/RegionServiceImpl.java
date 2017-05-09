@@ -124,5 +124,17 @@ public class RegionServiceImpl implements RegionService{
 		return regionMapper.updateByPrimaryKeySelective(region);
 	}
 	
+	/** 
+	 * @description 批量更新区域坐标点
+	 * @param RegionList
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateRegionList(List<Map<Object, Object>> RegionList) throws SQLException {
+		if (Objects.isNull(RegionList)) {
+			return 0;
+		}
+		return regionMapper.updateRegionList(RegionList);
+	}
 
 }

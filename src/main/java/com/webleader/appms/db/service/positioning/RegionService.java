@@ -77,4 +77,12 @@ public interface RegionService {
 	 */
 	public int updateByPrimaryKeySelective(Region region) throws SQLException;
 	
+	/** 
+	 * @description 批量更新区域坐标点
+	 * @param RegionList
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateRegionList(List<Map<Object, Object>> RegionList) throws SQLException;
+	
 }

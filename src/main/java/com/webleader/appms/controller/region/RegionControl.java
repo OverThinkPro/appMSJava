@@ -110,7 +110,7 @@ public class RegionControl {
 	}
 	
 	/** 
-	 * @description 修改区域信息
+	 * @description 修改区域普通信息
 	 * @param region
 	 * @return 
 	 */
@@ -124,6 +124,28 @@ public class RegionControl {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		if (result <= 0) {
+			return response.failure("修改区域失败，请重试").toSimpleResult();
+		}
+		return response.success().put("result", result).toCombineResult();
+	}
+	
+	/** 
+	 * @description 修改区域地图信息
+	 * @param region
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/map/region", method = RequestMethod.PUT)
+	public Map<Object, Object> updateMapReader(@RequestBody List<Map<Object, Object>> mapInfo) {
+		Response response = new Response();
+		int result = 0;
+		
+		try {
+			result = regionService.updateRegionList(mapInfo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		if (result <= 0) {
 			return response.failure("修改区域失败，请重试").toSimpleResult();
 		}
