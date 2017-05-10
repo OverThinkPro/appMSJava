@@ -92,16 +92,16 @@
 	<update id="updateByPrimaryKeySelective" parameterType="AlarmSetting">
 		UPDATE t_base_alarm_sound_setting
 		<set>
-			<if test="alarmName != null">
+			<if test="alarmName != null &amp;&amp; alarmName!=''">
 				alarm_name = #{alarmName},
 			</if>
-			<if test="alarmInUse != null">
+			<if test="alarmInUse != null &amp;&amp; alarmInUse!=''">
 				alarm_in_use = #{alarmInUse},
 			</if>
-			<if test="alarmFile != null">
+			<if test="alarmFile != null &amp;&amp; alarmFile!=''">
 				alarm_file = #{alarmFile},
 			</if>
-			<if test="remark != null">
+			<if test="remark != null &amp;&amp; remark!=''">
 				remark = #{remark},
 			</if>
 		</set>

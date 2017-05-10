@@ -177,25 +177,25 @@
 	<update id="updateByPrimaryKeySelective" parameterType="User">
 		UPDATE t_base_user_info
 		<set>
-	      <if test="userName != null">
+	      <if test="userName != null  &amp;&amp; userName!=''">
 	        user_name = #{userName},
 	      </if>
-	      <if test="password != null">
+	      <if test="password != null  &amp;&amp; password!=''">
 	        password = #{password},
 	      </if>
-	      <if test="inUse != null">
+	      <if test="inUse != null  &amp;&amp; inUse!=''">
 	        in_use = #{inUse},
 	      </if>
-	      <if test="createTime != null">
+	      <if test="createTime != null  &amp;&amp; createTime!=''">
 	        create_time = #{createTime},
 	      </if>
-	      <if test="lastLoginTime != null">
+	      <if test="lastLoginTime != null  &amp;&amp; lastLoginTime!=''">
 	        last_login_time = #{lastLoginTime},
 	      </if>
-	      <if test="remark != null">
+	      <if test="remark != null  &amp;&amp; remark!=''">
 	        remark = #{remark},
 	      </if>
-	      <if test="staffId != null">
+	      <if test="staffId != null  &amp;&amp; staffId!=''">
 	        staff_id = #{staffId},
 	      </if>
 	    </set>

@@ -35,25 +35,25 @@
 	<update id="updateByPrimaryKeySelective" parameterType="Coalmine">
 		UPDATE t_base_coalmine_info
 		<set>
-			<if test="coalmineName != null">
+			<if test="coalmineName != null &amp;&amp; coalmineName!=''">
 				coalmine_name = #{coalmineName},
 			</if>
-			<if test="coalmineAbbr != null">
+			<if test="coalmineAbbr != null &amp;&amp; coalmineAbbr!=''">
 				coalmine_abbr = #{coalmineAbbr},
 			</if>
-			<if test="coalmineOutput != null">
+			<if test="coalmineOutput != null &amp;&amp; coalmineOutput!=''">
 				coalmine_output = #{coalmineOutput},
 			</if>
-			<if test="coalmineNum != null">
+			<if test="coalmineNum != null &amp;&amp;coalmineNum!=''">
 				coalmine_num = #{coalmineNum},
 			</if>
-			<if test="coalmineType != null">
+			<if test="coalmineType != null &amp;&amp; coalmineType!=''">
 				coalmine_type = #{coalmineType},
 			</if>
-			<if test="gasGrade != null">
+			<if test="gasGrade != null &amp;&amp; gasGrade!=''">
 				gas_grade = #{gasGrade},
 			</if>
-			<if test="remark != null">
+			<if test="remark != null &amp;&amp; remark!=''">
 				remark = #{remark},
 			</if>
 		</set>
