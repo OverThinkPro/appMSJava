@@ -68,6 +68,19 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	/** 
+	 * @description 通过用户名，查询用户是否存在
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public User getUserByUserName(String userName) throws SQLException {
+		if (Objects.isNull(userName)) {
+			return null;
+		}
+		return userMapper.getUserByUserName(userName);
+	}
+	
+	/** 
 	 * @description 添加用户
 	 * @param user
 	 * @return

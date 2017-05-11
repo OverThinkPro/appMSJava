@@ -27,6 +27,14 @@ public interface UserMapper {
 	public User getUserForLogin(Map<Object,Object> condition) throws SQLException;
 	
 	/** 
+	 * @description 通过用户名，查询用户是否存在
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public User getUserByUserName(String userName) throws SQLException;
+	
+	/** 
 	 * @description 验证用户是否存在(用于修改密码)
 	 * @param condition(userId, password)
 	 * @return

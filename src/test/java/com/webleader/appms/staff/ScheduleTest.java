@@ -1,7 +1,7 @@
 package com.webleader.appms.staff;
 
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,14 +52,14 @@ public class ScheduleTest {
 	@Test
 	public void getScheduleByPageCondition(){
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
-		pageCondition.put("dutyId", "1");
-		pageCondition.put("dutyName", "早班");
-		pageCondition.put("pageBegin", 0);	//必须是bigint
-		pageCondition.put("pageSize", 3);	//必须是bigint
+//		pageCondition.put("dutyId", "1");
+//		pageCondition.put("dutyName", "早班");
+//		pageCondition.put("pageBegin", 0);	//必须是bigint
+//		pageCondition.put("pageSize", 3);	//必须是bigint
 		try {
 			List<Schedule> schedules = scheduleMapper.getScheduleByPageCondition(pageCondition);
 			for (int i = 0; i < schedules.size(); i++) {
-				System.out.println(schedules.get(i));
+				System.out.println("-----------------------" + schedules.get(i));
 			}
 			System.out.println(schedules.size());
 		} catch (SQLException e) {
@@ -83,6 +83,31 @@ public class ScheduleTest {
 			e.printStackTrace();
 		}
 	}
+	
+	/** 
+	 * @description 查询部门树 
+	 */
+	@Test
+	public void getScheduleTree() throws SQLException{
+		List<Schedule> scheduleList = scheduleMapper.getScheduleTree();
+		for (int i = 0; i < scheduleList.size(); i++) {
+			System.out.println(scheduleList.get(i).toString());
+		}
+	}
+	
+	@Test
+	public void selectSchedule() throws SQLException {
+		List<Schedule> scheduleList = scheduleMapper.selectSchedule("0");
+		for (int i = 0; i < scheduleList.size(); i++) {
+			System.out.println(scheduleList.get(i).toString());
+		}
+	}
+	
+	@Test
+	public void getMaxDutyId() throws SQLException {
+		String a = scheduleMapper.getMaxDutyId("1");
+		System.out.println(a);
+	}
 
 	/*****************查询接口结束*******************/
 	/*****************插入接口开始*******************/
@@ -91,14 +116,20 @@ public class ScheduleTest {
 	 */
 	@Test
 	public void insert(){
-		//注意此处的格式必须是 yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
-		Timestamp startTime = Timestamp.valueOf("2017-04-12 22:25:16");
-		Timestamp endTime = Timestamp.valueOf("2017-04-12 23:25:16");
+		//注意此处的格式必须是 hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
+		Time startTime = Time.valueOf("22:25:16");
+		Time endTime = Time.valueOf("23:25:16");
 		Schedule schedule = new Schedule();
-		schedule.setDutyId("scheduleId");
+		schedule.setDutyId("123456798");
 		schedule.setDutyName("添加班次");
 		schedule.setStartTime(startTime);
 		schedule.setEndTime(endTime);
+		schedule.setUpDutyId("1");
+		schedule.setIsUse("1");
+		schedule.setShiftCircle("一天");
+		schedule.setShiftOrder("正班倒");
+		schedule.setOvertimeValue(Time.valueOf("12:12:12"));
+		schedule.setMostTimeValue(Time.valueOf("23:23:23"));
 		try {
 			int count = scheduleMapper.insert(schedule);
 			System.out.println(count);
@@ -131,9 +162,9 @@ public class ScheduleTest {
 	 */
 	@Test
 	public void updateByPrimaryKeySelective(){
-		//注意此处的格式必须是 yyyy-mm-dd hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
-		Timestamp startTime = Timestamp.valueOf("2017-04-12 22:25:16");
-		Timestamp endTime = Timestamp.valueOf("2017-04-12 23:25:16");
+		//注意此处的格式必须是 hh:mm:ss[.f...] 这样的格式，中括号表示可选，否则报错
+		Time startTime = Time.valueOf("22:25:16");
+		Time endTime = Time.valueOf("23:25:16");
 		Schedule schedule = new Schedule();
 		schedule.setDutyId("scheduleId");
 		schedule.setDutyName("修改班次");

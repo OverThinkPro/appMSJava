@@ -2,6 +2,8 @@ package com.webleader.appms.bean.alarm;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @className OvertimeAlarm
  * @description 超时报警表
@@ -12,6 +14,7 @@ import java.util.Date;
 public class OvertimeAlarm extends Alarm{
 	private String overtimeId;// 超时ID
 
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	private Date arrivalTime;// 到达时间
 
 	private Object arrivalLoc;// 到达位置

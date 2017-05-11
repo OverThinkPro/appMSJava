@@ -59,6 +59,14 @@ public interface TBUrlMapper {
 	public int getCountByConditon(Map<Object,Object> pageCondition) throws SQLException;
 	
 	/** 
+	 * @description 通过userID，查询该用户，的菜单列表
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<TBUrl> getUserUrl(String userId) throws SQLException;
+	
+	/** 
 	 * @description 根据上级菜单下的子菜单的最大编号
 	 * @param upModuleId
 	 * @return
