@@ -1,19 +1,29 @@
 package com.webleader.appms.controller.setting;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.webleader.appms.bean.alarm.AlarmSetting;
 import com.webleader.appms.common.PageConstants;
+import com.webleader.appms.common.PathHandler;
 import com.webleader.appms.db.service.setting.AlarmSettingService;
 import com.webleader.appms.util.Response;
 import com.webleader.appms.util.UUIDUtil;
@@ -36,6 +46,8 @@ public class AlarmSettingControl {
 	private PageConstants pageConstants;
 	@Autowired
 	private UUIDUtil uuidUtil;
+	@Autowired
+	private PathHandler pathHandler;
 	
 	/** 
 	 * @description 查询所有的报警类型列表
@@ -77,6 +89,27 @@ public class AlarmSettingControl {
 		if (result <= 0) {
 			return response.failure("添加报警类型失败，请重试").toSimpleResult();
 		}
+		return response.success().put("result", result).put("alarmTypeId", alarmSetting.getAlarmTypeId()).toCombineResult();
+	}
+	
+	/** 
+	 * @description 更新报警类型信息
+	 * @param alarmSetting
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/alarmType", method = RequestMethod.PUT)
+	public Map<Object, Object> updateAlarmSetting (@RequestBody AlarmSetting alarmSetting) {
+		Response response = new Response();
+		int result = 0;
+		
+		try {
+			result = alarmSettingService.updateByPrimaryKeySelective(alarmSetting);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (result <= 0) {
+			return response.failure("更新报警类型失败，请重试").toSimpleResult();
+		}
 		return response.success().put("result", result).toCombineResult();
 	}
 	
@@ -103,17 +136,47 @@ public class AlarmSettingControl {
 		}
 		return response.success().put("result", result).toCombineResult();
 	}
-
+	
+	
 	/** 
-	 * @description 更新报警类型信息
-	 * @param alarmSetting
+	 * @description 修改报警类型并上传报警声音文件
+	 * @param file
+	 * @param request
 	 * @return 
 	 */
-	@RequestMapping(value = "/base/alarmType", method = RequestMethod.PUT)
-	public Map<Object, Object> updateAlarmSetting (@RequestBody AlarmSetting alarmSetting) {
+	@RequestMapping(value = "/base/alarmType/upload", method = RequestMethod.POST)
+	public Map<Object, Object> uploadAlarmType(@RequestParam(value = "file", required = false) MultipartFile file,
+			@RequestParam(value = "alarmTypeId", required = false) String alarmTypeId, HttpServletRequest request) {
 		Response response = new Response();
-		int result = 0;
-		
+		if(alarmTypeId==""){
+			return response.failure("上传报警类型声音文件失败，请重试").toSimpleResult();
+		}
+		AlarmSetting alarmSetting = new AlarmSetting();
+		alarmSetting.setAlarmTypeId(alarmTypeId);
+		String alarmFile = null;
+		if(!file.isEmpty()){
+			// String filePath = "/fileLibrary/alarmTypeSounds/";
+			// String realPath = request.getSession().getServletContext().getRealPath(filePath);
+			String basePath = PathHandler.BASE_PATH;
+			String realPath = PathHandler.ALARM_TYPE_PATH;
+			String filePath = pathHandler.formatToBackSlash(basePath + realPath);
+			System.out.println(filePath);
+			String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			String fileNewName = alarmTypeId + suffix;
+	        //保存  
+	        try {  
+	        	//这里不必处理IO流关闭的问题，因为FileUtils.copyInputStreamToFile()方法内部会自动把用到的IO流关掉
+	        	FileUtils.copyInputStreamToFile(file.getInputStream(), new File(filePath, fileNewName));
+	        } catch (Exception e) {  
+	            e.printStackTrace();
+	            return response.failure("上传报警类型声音文件失败，请重试").toSimpleResult();
+	        } 
+	        alarmFile = pathHandler.formatToSlash(realPath + fileNewName);
+	        alarmSetting.setAlarmFile(alarmFile);
+		}else{
+			return response.failure("上传报警类型声音文件失败，请重试").toSimpleResult();
+		}
+        int result = 0;
 		try {
 			result = alarmSettingService.updateByPrimaryKeySelective(alarmSetting);
 		} catch (SQLException e) {
@@ -123,5 +186,67 @@ public class AlarmSettingControl {
 			return response.failure("更新报警类型失败，请重试").toSimpleResult();
 		}
 		return response.success().put("result", result).toCombineResult();
+		
+	}
+
+	
+	/** 
+	 * @description 流的方式得到音频
+	 * @param request
+	 * @param httpResponse 
+	 */
+	@RequestMapping(value = "/base/alarmType/getAlarmSoundByStream", method = RequestMethod.GET)
+	public void getAlarmSoundByStream(@RequestParam(value = "alarmSoundUrl", required = false) String alarmSoundUrl,HttpServletRequest request,HttpServletResponse httpResponse) {
+		if (!Objects.nonNull(alarmSoundUrl) || alarmSoundUrl.equals("")) {
+			throw new RuntimeException("Download file not exists!");  
+		} 
+		//String realPath = request.getSession().getServletContext().getRealPath(alarmSoundUrl);
+		//String filePath = realPath;
+		String basePath = PathHandler.BASE_PATH;
+		String filePath = basePath + alarmSoundUrl;
+		String fileUrl = pathHandler.formatToBackSlash(filePath);
+		File file = new File(fileUrl);
+		if (file.exists()){ 
+			FileInputStream fis = null;
+	        try {
+	    		httpResponse.setContentType("audio");
+	    		OutputStream out = httpResponse.getOutputStream();
+	            fis = new FileInputStream(file);
+	            byte[] b = new byte[fis.available()];
+	            
+	            fis.read(b);
+	            out.write(b);
+	            out.flush();
+	        } catch (Exception e) {
+	             e.printStackTrace();
+	        } finally {
+	            if (fis != null) {
+	                try {
+	                   fis.close();
+	                } catch (IOException e) {
+	    	        e.printStackTrace();
+	                }   
+	             }
+	        }
+		}else{
+			throw new RuntimeException("Download file not exists!");  
+		}
+	}
+	
+	/** 
+	 * @description 绝对路径的方式得到服务器声音文件（暂时没用，可删除）
+	 * @param request
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/alarmType/getAlarmSoundByURL", method = RequestMethod.GET)
+	public Map<Object, Object> getAlarmSoundByURL(@RequestParam(value = "alarmSoundUrl", required = false) String alarmSoundUrl,HttpServletRequest request,HttpServletResponse httpResponse) {
+		if (!Objects.nonNull(alarmSoundUrl) || alarmSoundUrl.equals("")) {
+			throw new RuntimeException("Download file not exists!");  
+		} 
+		Response response = new Response();
+		String realPath = request.getSession().getServletContext().getRealPath(alarmSoundUrl);
+		String filePath=realPath.replace("\\", "/");
+		System.out.println(filePath);
+		return response.success().put("audioUrl",filePath).toCombineResult();
 	}
 }
