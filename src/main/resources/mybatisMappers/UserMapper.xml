@@ -35,6 +35,13 @@
 		</if>
 	</select>
 	
+	<!-- 通过用户名查出用户 -->
+	<select id="getUserByUserName" parameterType="String" resultMap="UserMap">
+		SELECT <include refid="User_Column_List" />
+		FROM t_base_user_info 
+		WHERE user_name=#{userName}
+	</select>
+	
 	<!-- 验证用户是否存在(用于修改密码) -->
 	<select id="getUserForOldPwd" parameterType="Map" resultMap="UserMap">
 		SELECT <include refid="User_Column_List" />

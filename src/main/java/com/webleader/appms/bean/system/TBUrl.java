@@ -2,8 +2,6 @@ package com.webleader.appms.bean.system;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * @className TBUrl
  * @description 模块菜单表
@@ -33,7 +31,7 @@ public class TBUrl {
 	}
 
 	public void setModuleId(String moduleId) {
-		this.moduleId = moduleId == null ? null : moduleId.trim();
+		this.moduleId = moduleId;
 	}
 
 	public String getModuleName() {
@@ -41,7 +39,7 @@ public class TBUrl {
 	}
 
 	public void setModuleName(String moduleName) {
-		this.moduleName = moduleName == null ? null : moduleName.trim();
+		this.moduleName = moduleName;
 	}
 
 	public String getUpModuleId() {
@@ -49,39 +47,7 @@ public class TBUrl {
 	}
 
 	public void setUpModuleId(String upModuleId) {
-		this.upModuleId = upModuleId == null ? null : upModuleId.trim();
-	}
-
-	public String getInUse() {
-		return inUse;
-	}
-
-	public void setInUse(String inUse) {
-		this.inUse = inUse == null ? null : inUse.trim();
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description == null ? null : description.trim();
-	}
-
-	public String getModuleUrl() {
-		return moduleUrl;
-	}
-
-	public void setModuleUrl(String moduleUrl) {
-		this.moduleUrl = moduleUrl == null ? null : moduleUrl.trim();
-	}
-	@JsonIgnore
-	public List<TBUrl> getChildren() {
-		return children;
-	}
-
-	public void setChildren(List<TBUrl> children) {
-		this.children = children;
+		this.upModuleId = upModuleId;
 	}
 
 	public String getUpModuleName() {
@@ -92,13 +58,42 @@ public class TBUrl {
 		this.upModuleName = upModuleName;
 	}
 
-	@Override
-	public String toString() {
-		return "TBUrl [moduleId=" + moduleId + ", moduleName=" + moduleName
-				+ ", upModuleId=" + upModuleId + ", upModuleName="
-				+ upModuleName + ", inUse=" + inUse + ", description="
-				+ description + ", moduleUrl=" + moduleUrl + "]";
+	public String getInUse() {
+		return inUse;
 	}
 
-	
+	public void setInUse(String inUse) {
+		this.inUse = inUse;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getModuleUrl() {
+		return moduleUrl;
+	}
+
+	public void setModuleUrl(String moduleUrl) {
+		this.moduleUrl = moduleUrl;
+	}
+
+	public List<TBUrl> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<TBUrl> children) {
+		this.children = children;
+	}
+
+	@Override
+	public String toString() {
+		return "TBUrl [moduleId=" + moduleId + ", moduleName=" + moduleName + ", upModuleId=" + upModuleId
+				+ ", upModuleName=" + upModuleName + ", inUse=" + inUse + ", description=" + description
+				+ ", moduleUrl=" + moduleUrl + ", children=" + children + "]";
+	}
 }

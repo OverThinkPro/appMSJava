@@ -188,7 +188,7 @@
 	<!-- 实时统计符合条件的实时员工的坐标点(部门编号，区域编号，分站编号，员工编号，员工姓名，定位卡号，开始时间，结束时间) -->
 	<select id="listStaffPointByConditon" parameterType="Map" resultType="Map">
 		SELECT st_x(geo_point) pointx, st_y(geo_point) pointy, st_asgeojson(geo_point) point, 
-			id staff_info_id, staff_id, staff_name
+			id staff_info_id, staff_id, staff_name, unit_name, unit_id
 		FROM t_ls_staff_info
 		WHERE daq_time<![CDATA[>= ]]> #{startTime} AND daq_time<![CDATA[<= ]]> #{endTime}
 			<if test="unitId!=null &amp;&amp; unitId!=''">

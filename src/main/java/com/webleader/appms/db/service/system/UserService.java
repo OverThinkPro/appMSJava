@@ -24,6 +24,14 @@ public interface UserService {
 	public User selectByPrimaryKey(String userId) throws SQLException;
 	
 	/** 
+	 * @description 通过用户名，查询用户是否存在
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public User getUserByUserName(String userName) throws SQLException;
+	
+	/** 
 	 * @description 查询出用户的信息(用户编号,用户名,密码,是否启用,创建时间,最近登录时间,备注,员工编号)
 	 * @param map pageCondition(userId,userName,inUse,pageSize,pageBegin)
 	 * @return List<User>

@@ -85,6 +85,9 @@ public class TBUrlTest {
 		try {
 			List<TBUrl> tbUrls = tbUrlMapper.getUrlByPageCondition(pageCondition);
 			System.out.println(tbUrls.size());
+			tbUrls.forEach(x -> {
+				System.out.println(x.getChildren().toString());
+			});
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -104,6 +107,14 @@ public class TBUrlTest {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void getUserUrl() throws SQLException{
+		List<TBUrl> urlList = tbUrlMapper.getUserUrl("1000001");
+		urlList.forEach(x ->{
+			System.out.println(x);
+		});
 	}
 
 	/** 
