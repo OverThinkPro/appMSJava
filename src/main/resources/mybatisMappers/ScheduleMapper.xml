@@ -8,11 +8,19 @@
 		<result column="duty_name" jdbcType="VARCHAR" property="dutyName" />
 		<result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
 		<result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+		<result column="up_duty_id" jdbcType="VARCHAR" property="upDutyId"/>
+		<result column="is_use" jdbcType="VARCHAR" property="isUse"/>
+		<result column="shift_circle" jdbcType="VARCHAR" property="shiftCircle"/>
+		<result column="shift_order" jdbcType="VARCHAR" property="shiftOrder"/>
+		<result column="overtime_value" jdbcType="VARCHAR" property="overtimeValue"/>
+		<result column="mosttime_value" jdbcType="VARCHAR" property="mostTimeValue"/>
+		<collection property="children" ofType="Schedule" column="duty_id" select="selectSchedule"></collection>
 	</resultMap>
 	
 	<!-- 列名 -->
 	<sql id="Schedule_Column_List">
-		duty_id, duty_name, start_time, end_time
+		duty_id, duty_name, start_time, end_time, up_duty_id, is_use, shift_circle, 
+		shift_order, overtime_value, mosttime_value
 	</sql>
 
 	<!-- 查询语句开始 -->
@@ -21,8 +29,25 @@
 		SELECT	<include refid="Schedule_Column_List" />
 		FROM t_base_duty_schedule
 		WHERE duty_id = #{dutyId}
+		ORDER BY start_time ASC
 	</select>
-
+	
+	<!-- 查询得出班次树 -->
+	<select id="getScheduleTree" resultMap="ScheduleMap">
+		SELECT <include refid="Schedule_Column_List" />
+		FROM t_base_duty_schedule
+		WHERE up_duty_id='0'
+		ORDER BY start_time ASC
+	</select>
+	
+	<!-- 通过上级ID，查询所有下级 -->
+	<select id="selectSchedule" parameterType="String" resultMap="ScheduleMap">
+		SELECT <include refid="Schedule_Column_List" />
+		FROM t_base_duty_schedule
+		WHERE up_duty_id=#{upDutyId}
+		ORDER BY start_time ASC
+	</select>
+	
 	<!-- 组合条件分页查询班次信息(班次编号，班次名称， 起始记录数，每页的记录数) -->
 	<select id="getScheduleByPageCondition" parameterType="Map" resultMap="ScheduleMap">
 		SELECT	<include refid="Schedule_Column_List" />
@@ -35,7 +60,7 @@
 				AND duty_name = #{dutyName}
 			</if>
 		</where>
-		ORDER BY duty_id ASC
+		ORDER BY start_time ASC
 		<if test="pageBegin != null and pageSize != null">LIMIT #{pageSize} OFFSET #{pageBegin}</if>
 	</select>
 
@@ -51,13 +76,22 @@
 				AND duty_name = #{dutyName}
 			</if>
 		</where>
+		ORDER BY start_time ASC
+	</select>
+	
+	<!-- 查询得到要插入的下级部门的ID -->
+	<select id="getMaxDutyId" parameterType="String" resultType="String">
+		SELECT MAX(duty_id)
+		FROM t_base_duty_schedule
+		WHERE up_duty_id=#{upDutyId}
 	</select>
 	<!-- 查询语句结束 -->
 	<!-- 添加语句开始 -->
 	<!-- 添加班次 -->
 	<insert id="insert" parameterType="Schedule">
 		INSERT INTO t_base_duty_schedule(<include refid="Schedule_Column_List" />)
-		VALUES(#{dutyId}, #{dutyName}, #{startTime}, #{endTime})
+		VALUES(#{dutyId}, #{dutyName}, #{startTime}, #{endTime}, #{upDutyId}, #{isUse}, 
+			#{shiftCircle}, #{shiftOrder}, #{overtimeValue}, #{mostTimeValue})
 	</insert>
 
 	<!-- 添加语句结束 -->
@@ -82,6 +116,21 @@
 			</if>
 			<if test="endTime != null &amp;&amp; endTime !='' ">
 				end_time = #{endTime},
+			</if>
+			<if test="isUse != null &amp;&amp; isUse !='' ">
+				is_use = #{isUse},
+			</if>
+			<if test="shiftCircle != null &amp;&amp; shiftCircle !='' ">
+				shift_circle = #{shiftCircle},
+			</if>
+			<if test="shiftOrder != null &amp;&amp; shiftOrder !='' ">
+				shift_order = #{shiftOrder},
+			</if>
+			<if test="overtimeValue != null &amp;&amp; overtimeValue !='' ">
+				overtime_value = #{overtimeValue},
+			</if>
+			<if test="mostTimeValue != null &amp;&amp; mostTimeValue !='' ">
+				mosttime_value = #{mostTimeValue},
 			</if>
 		</set>
 		WHERE duty_id = #{dutyId}

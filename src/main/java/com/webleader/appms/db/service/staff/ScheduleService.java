@@ -1,4 +1,4 @@
-package com.webleader.appms.db.mapper.staff;
+package com.webleader.appms.db.service.staff;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -7,16 +7,13 @@ import java.util.Map;
 import com.webleader.appms.bean.staff.Schedule;
 
 /**
- * @className ScheduleMapper
- * @description 数据库关于Schedule的接口
- * @author HaoShaSha
- * @date 2017年4月15日 上午1:54:28
+ * @className ScheduleService
+ * @description 班次管理
+ * @author ding
+ * @date 2017年5月8日 下午8:53:27
  * @version 1.0.0
  */
-public interface ScheduleMapper {
-	
-	/*****************START BY HaoShaSha*********/
-	/*****************查询接口开始*******************/
+public interface ScheduleService {
 	
 	/** 
 	 * @description 根据班次编号查询班次信息
@@ -64,9 +61,6 @@ public interface ScheduleMapper {
 	 */
 	public String getMaxDutyId(String upDutyId) throws SQLException;
 	
-	/*****************查询接口结束*******************/
-	/*****************插入接口开始*******************/
-	
 	/** 
 	 * @description 添加班次
 	 * @param schedule
@@ -75,9 +69,6 @@ public interface ScheduleMapper {
 	 */
 	public int insert(Schedule schedule) throws SQLException;
 	
-	/*****************插入接口结束*******************/
-	/*****************删除接口开始*******************/
-	
 	/** 
 	 * @description 根据班次编号删除班次
 	 * @param dutyId
@@ -85,11 +76,7 @@ public interface ScheduleMapper {
 	 * @throws SQLException 
 	 */
 	public int deleteByPrimaryKey(String dutyId) throws SQLException;
-	
 
-	/*****************删除接口结束*******************/
-	/*****************更新接口开始*******************/
-	
 	/** 
 	 * @description 更新班次信息
 	 * @param schedule
@@ -98,7 +85,4 @@ public interface ScheduleMapper {
 	 */
 	public int updateByPrimaryKeySelective(Schedule schedule) throws SQLException;
 	
-	/*****************更新接口结束*******************/
-	/*****************END BY HaoShaSha***********/
-
 }
