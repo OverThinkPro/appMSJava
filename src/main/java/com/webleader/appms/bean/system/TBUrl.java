@@ -26,6 +26,8 @@ public class TBUrl {
 
 	private String moduleUrl;// 模块url
 	
+	private String baseModule; //是不是基础模块
+	
 	private List<TBUrl> children;
 
 	public String getModuleId() {
@@ -92,12 +94,21 @@ public class TBUrl {
 		this.upModuleName = upModuleName;
 	}
 
+	public String getBaseModule() {
+		return baseModule;
+	}
+
+	public void setBaseModule(String baseModule) {
+		this.baseModule = baseModule;
+	}
+
 	@Override
 	public String toString() {
 		return "TBUrl [moduleId=" + moduleId + ", moduleName=" + moduleName
 				+ ", upModuleId=" + upModuleId + ", upModuleName="
 				+ upModuleName + ", inUse=" + inUse + ", description="
-				+ description + ", moduleUrl=" + moduleUrl + "]";
+				+ description + ", moduleUrl=" + moduleUrl + ", baseModule="
+				+ baseModule + "]";
 	}
 
 	

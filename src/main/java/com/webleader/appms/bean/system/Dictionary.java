@@ -26,6 +26,8 @@ public class Dictionary {
 	private String dataType;// 数据类型
 
 	private String remark;// 备注
+	
+	private String baseDic; //表示字典是否是基础数据字典
 
 	//private List<Dictionary> subDics;
 
@@ -93,16 +95,6 @@ public class Dictionary {
 		this.upDictionaryName = upDictionaryName;
 	}
 
-	@Override
-	public String toString() {
-		return "Dictionary [dictionaryId=" + dictionaryId + ", dictionaryName="
-				+ dictionaryName + ", description=" + description
-				+ ", upDictionaryId=" + upDictionaryId + ", upDictionaryName="
-				+ upDictionaryName + ", inUse=" + inUse + ", englishName="
-				+ englishName + ", dataType=" + dataType + ", remark=" + remark
-				+ "]";
-	}
-
 	public String getEnglishName() {
 		return englishName;
 	}
@@ -110,7 +102,23 @@ public class Dictionary {
 	public void setEnglishName(String englishName) {
 		this.englishName = englishName;
 	}
-	
-	
+
+	public String getBaseDic() {
+		return baseDic;
+	}
+
+	public void setBaseDic(String baseDic) {
+		this.baseDic = baseDic;
+	}
+
+	@Override
+	public String toString() {
+		return "Dictionary [dictionaryId=" + dictionaryId + ", dictionaryName="
+				+ dictionaryName + ", description=" + description
+				+ ", upDictionaryId=" + upDictionaryId + ", upDictionaryName="
+				+ upDictionaryName + ", inUse=" + inUse + ", englishName="
+				+ englishName + ", dataType=" + dataType + ", remark=" + remark
+				+ ", baseDic=" + baseDic + "]";
+	}
 	
 }

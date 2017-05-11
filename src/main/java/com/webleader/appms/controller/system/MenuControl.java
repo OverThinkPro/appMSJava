@@ -198,10 +198,15 @@ public class MenuControl {
 		}
 		try {
 			result = tbUrlService.updateByPrimaryKeySelective(tbUrl);
+			if(result!=0 && tbUrl.getInUse().equals("0")){
+				Map<Object,Object> condition = new HashMap<Object,Object>();
+				condition.put("inUse", tbUrl.getInUse());
+				condition.put("upModuleId", tbUrl.getModuleId());
+				result += tbUrlService.updateInUseByUpModuleId(condition);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		if (result == 0) {
 			return response.failure("修改菜单失败，请重试").toSimpleResult();
 		}

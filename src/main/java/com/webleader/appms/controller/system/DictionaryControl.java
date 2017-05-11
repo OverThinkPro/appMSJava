@@ -197,6 +197,12 @@ public class DictionaryControl {
 		}
 		try {
 			result = dictionaryService.updateByPrimaryKeySelective(dictionary);
+			if(result!=0 && dictionary.getInUse().equals("0")){
+				Map<Object,Object> condition = new HashMap<Object,Object>();
+				condition.put("inUse", dictionary.getInUse());
+				condition.put("upDictionaryId", dictionary.getDictionaryId());
+				result += dictionaryService.updateInUseByUpDicId(condition);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

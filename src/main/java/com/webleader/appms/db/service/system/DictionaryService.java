@@ -77,4 +77,12 @@ public interface DictionaryService {
 	 * @throws SQLException 
 	 */
 	public int updateByPrimaryKeySelective(Dictionary dictionary) throws SQLException;
+
+	/** 
+	 * @description 根据上级数据字典编号修改数据字典的启用和禁用 
+	 * @param condition(inUse, upDictionaryId)
+	 * @return 是否启用，上级数据字典编号
+	 * @throws SQLException 
+	 */
+	public int updateInUseByUpDicId(Map<Object,Object> condition) throws SQLException;
 }

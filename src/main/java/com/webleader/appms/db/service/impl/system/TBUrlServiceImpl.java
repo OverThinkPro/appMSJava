@@ -131,4 +131,17 @@ public class TBUrlServiceImpl implements TBUrlService {
 		}
 		return tbUrlMapper.updateByPrimaryKeySelective(tbUrl);
 	}
+	
+	/** 
+	 * @description 根据上级菜单编号修改菜单的启用和禁用 
+	 * @param condition(inUse, upModuleId)
+	 * @return 是否启用，上级菜单编号
+	 * @throws SQLException 
+	 */
+	public int updateInUseByUpModuleId(Map<Object,Object> condition) throws SQLException {
+		if (Objects.isNull(condition)) {
+			return 0;
+		}
+		return tbUrlMapper.updateInUseByUpModuleId(condition);
+	}
 }

@@ -12,12 +12,13 @@
 		<result column="in_use" jdbcType="CHAR" property="inUse" />
 		<result column="description" jdbcType="VARCHAR" property="description" />
 		<result column="module_url" jdbcType="VARCHAR" property="moduleUrl" />
+		<result column="base_module" jdbcType="CHAR" property="baseModule" />
 		<collection property="children" ofType="TBUrl" column="module_id" select="getUrlByUpModuleId"></collection>
 	</resultMap>
 	
 	<!-- 列名 -->
 	<sql id="TBUrl_Column_List">
-		module_id, module_name, up_module_id, in_use, description, module_url
+		module_id, module_name, up_module_id, in_use, description, module_url,base_module
 	</sql>
 	
 								<!-- 查询语句开始 -->
@@ -25,7 +26,7 @@
 	<!-- 主键查询菜单信息moduleId -->
 	<select id="selectByPrimaryKey" parameterType="String" resultMap="TBUrlMap">
 		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
-			   url1.description, url1.module_url, url2.module_name up_module_name
+			   url1.description, url1.module_url, url1.base_module, url2.module_name up_module_name
 		FROM t_base_defined_url url1
 		LEFT JOIN t_base_defined_url url2
 		ON url1.up_module_id = url2.module_id
@@ -36,7 +37,7 @@
 	<!-- 根据上级菜单编号查询子菜单 upModuleId-->
 	<select id="getUrlByUpModuleId" parameterType="String" resultMap="TBUrlMap">
 		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
-			   url1.description, url1.module_url, url2.module_name up_module_name
+			   url1.description, url1.module_url, url1.base_module, url2.module_name up_module_name
 		FROM t_base_defined_url url1
 		LEFT JOIN t_base_defined_url url2
 		ON url1.up_module_id = url2.module_id
@@ -47,7 +48,7 @@
 	<!-- 查询菜单树 -->
 	<select id="getUrlTree" parameterType="String" resultMap="TBUrlMap">
 		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
-			   url1.description, url1.module_url, url2.module_name up_module_name
+			   url1.description, url1.module_url, url1.base_module, url2.module_name up_module_name
 		FROM t_base_defined_url url1
 		LEFT JOIN t_base_defined_url url2
 		ON url1.up_module_id = url2.module_id
@@ -62,7 +63,7 @@
 	<!-- 组合条件分页查询菜单信息(菜单编号，菜单名称，上级菜单编号，是否启用， 起始记录数，每页的记录数) -->
 	<select id="getUrlByPageCondition" parameterType="Map" resultMap="TBUrlMap">
 		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
-			   url1.description, url1.module_url, url2.module_name up_module_name
+			   url1.description, url1.module_url, url1.base_module, url2.module_name up_module_name
 		FROM t_base_defined_url url1
 		LEFT JOIN t_base_defined_url url2
 		ON url1.up_module_id = url2.module_id
@@ -119,7 +120,7 @@
 	<insert id="insert" parameterType="TBUrl">
 		INSERT INTO
 		t_base_defined_url(<include refid="TBUrl_Column_List" />)
-		VALUES(#{moduleId},#{moduleName},#{upModuleId},#{inUse},#{description},#{moduleUrl})
+		VALUES(#{moduleId},#{moduleName},#{upModuleId},#{inUse},#{description},#{moduleUrl},#{baseModule})
 	</insert>
 	
 	<!-- 选择性的添加菜单 -->
@@ -144,6 +145,9 @@
 			<if test="moduleUrl != null">
 				module_url,
 			</if>
+			<if test="baseModule != null">
+				base_module,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="moduleId != null">
@@ -163,6 +167,9 @@
 			</if>
 			<if test="moduleUrl != null">
 				#{moduleUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="baseModule != null">
+				#{baseModule,jdbcType=CHAR},
 			</if>
 		</trim>
 	</insert>
@@ -186,20 +193,30 @@
 	<update id="updateByPrimaryKeySelective" parameterType="TBUrl">
 		UPDATE t_base_defined_url
 		<set>
-			<if test="moduleName != null">
+			<if test="moduleName != null &amp;&amp; moduleName !=''">
 				module_name = #{moduleName},
 			</if>
-			<if test="inUse != null">
+			<if test="inUse != null  &amp;&amp; inUse !=''">
 				in_use = #{inUse},
 			</if>
-			<if test="description != null">
+			<if test="description != null &amp;&amp; description !=''">
 				description = #{description},
 			</if>
-			<if test="moduleUrl != null">
+			<if test="moduleUrl != null &amp;&amp; moduleUrl !=''">
 				module_url = #{moduleUrl},
+			</if>
+			<if test="baseModule != null &amp;&amp; baseModule !=''">
+				base_module = #{baseModule},
 			</if>
 		</set>
 		WHERE module_id = #{moduleId}
+	</update>
+	
+	<!-- 根据上级菜单编号修改菜单的启用和禁用 -->
+	<update id="updateInUseByUpModuleId" parameterType="Map">
+		UPDATE t_base_defined_url
+		SET in_use = #{inUse}
+		WHERE up_module_id = #{upModuleId}
 	</update>
 
 								<!-- 修改语句结束 -->

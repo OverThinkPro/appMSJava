@@ -115,6 +115,13 @@ public interface TBUrlMapper {
 	 */
 	public int updateByPrimaryKeySelective(TBUrl tbUrl) throws SQLException;
 	
+	/** 
+	 * @description 根据上级菜单编号修改菜单的启用和禁用 
+	 * @param condition(inUse, upModuleId)
+	 * @return 是否启用，上级菜单编号
+	 * @throws SQLException 
+	 */
+	public int updateInUseByUpModuleId(Map<Object,Object> condition) throws SQLException;
 	/*****************更新接口结束*******************/
 	/*****************END BY HaoShaSha***********/
 

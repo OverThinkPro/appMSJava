@@ -14,12 +14,13 @@
 	    <result column="english_name" jdbcType="VARCHAR" property="englishName" />
 	    <result column="data_type" jdbcType="VARCHAR" property="dataType" />
 	    <result column="remark" jdbcType="VARCHAR" property="remark" />
+	    <result column="base_dic" jdbcType="CHAR" property="baseDic" />
 	   <!--  <collection property="subDics" ofType="Dictionary" column="dictionary_id" select="getDicByUpDicId"></collection> -->
 	</resultMap>
 	 
 	<!-- 列名 -->
 	<sql id="Dictionary_Column_List">
-	    dictionary_id, dictionary_name, description, up_dictionary_id, in_use, english_name, data_type, remark
+	    dictionary_id, dictionary_name, description, up_dictionary_id, in_use, english_name, data_type, remark, base_dic
 	</sql>
 	
 								<!-- 查询语句开始 -->
@@ -41,7 +42,7 @@
 	<!-- 主键查询数字字典信息  -->
 	<select id="selectByPrimaryKey" parameterType="String" resultMap="DictionaryMap">
 		SELECT dic1.dictionary_id, dic1.dictionary_name, dic1.description, dic1.up_dictionary_id, 
-			 dic1.in_use, dic1.english_name, dic1.data_type, dic1.remark, dic2.dictionary_name up_dictionary_name
+			 dic1.in_use, dic1.english_name, dic1.data_type, dic1.remark, dic1.base_dic, dic2.dictionary_name up_dictionary_name
 		FROM t_base_sys_dic dic1
 		LEFT JOIN t_base_sys_dic dic2
 		ON dic1.up_dictionary_id = dic2.dictionary_id
@@ -51,7 +52,7 @@
 	<!-- 根据上级数字字典编号查询子数字字典 -->
 	<select id="getDicByUpDicId" parameterType="String" resultMap="DictionaryMap">
 		SELECT dic1.dictionary_id, dic1.dictionary_name, dic1.description, dic1.up_dictionary_id, 
-			 dic1.in_use, dic1.english_name, dic1.data_type, dic1.remark, dic2.dictionary_name up_dictionary_name
+			 dic1.in_use, dic1.english_name, dic1.data_type, dic1.remark, dic1.base_dic, dic2.dictionary_name up_dictionary_name
 		FROM t_base_sys_dic dic1
 		LEFT JOIN t_base_sys_dic dic2
 		ON dic1.up_dictionary_id = dic2.dictionary_id
@@ -62,7 +63,7 @@
 	<!-- 查询一级数字字典 -->
 	<select id="getDicTree" parameterType="String" resultMap="DictionaryMap">
 		SELECT dic1.dictionary_id, dic1.dictionary_name, dic1.description, dic1.up_dictionary_id, 
-			 dic1.in_use, dic1.english_name, dic1.data_type, dic1.remark, dic2.dictionary_name up_dictionary_name
+			 dic1.in_use, dic1.english_name, dic1.data_type, dic1.remark, dic1.base_dic, dic2.dictionary_name up_dictionary_name
 		FROM t_base_sys_dic dic1
 		LEFT JOIN t_base_sys_dic dic2
 		ON dic1.up_dictionary_id = dic2.dictionary_id
@@ -77,7 +78,7 @@
 	<!-- 组合条件分页查询数字字典信息(数字字典编号，数字字典名称，上级数字字典编号，是否启用， 起始记录数，每页的记录数) -->
 	<select id="getDicByPageCondition" parameterType="Map" resultMap="DictionaryMap">
 		SELECT dic1.dictionary_id, dic1.dictionary_name, dic1.description, dic1.up_dictionary_id, 
-			 dic1.in_use, dic1.english_name, dic1.data_type, dic1.remark, dic2.dictionary_name up_dictionary_name
+			 dic1.in_use, dic1.english_name, dic1.data_type, dic1.remark, dic1.base_dic, dic2.dictionary_name up_dictionary_name
 		FROM t_base_sys_dic dic1
 		LEFT JOIN t_base_sys_dic dic2
 		ON dic1.up_dictionary_id = dic2.dictionary_id
@@ -128,7 +129,7 @@
 	<!-- 添加数字字典 -->
 	<insert id="insert" parameterType="Dictionary">
 		INSERT INTO t_base_sys_dic(<include refid="Dictionary_Column_List" />)
-		VALUES(#{dictionaryId}, #{dictionaryName}, #{description}, #{upDictionaryId}, #{inUse}, #{englishName}, #{dataType}, #{remark})
+		VALUES(#{dictionaryId}, #{dictionaryName}, #{description}, #{upDictionaryId}, #{inUse}, #{englishName}, #{dataType}, #{remark}, #{baseDic})
 	</insert>
 	
 	<!-- 选择性的添加数字字典 -->
@@ -159,6 +160,9 @@
 	      <if test="remark != null">
 	        remark,
 	      </if>
+	      <if test="baseDic != null">
+	        base_dic,
+	      </if>
 	    </trim>
 	    <trim prefix="values (" suffix=")" suffixOverrides=",">
 	      <if test="dictionaryId != null">
@@ -185,6 +189,9 @@
 	      <if test="remark != null">
 	        #{remark},
 	      </if>
+	      <if test="baseDic != null">
+	        #{baseDic},
+	      </if>
 	    </trim>
 	</insert>
 								<!-- 添加语句结束 -->
@@ -207,26 +214,36 @@
 	<update id="updateByPrimaryKeySelective" parameterType="Dictionary">
 		UPDATE t_base_sys_dic
 		<set>
-	      <if test="dictionaryName != null">
+	      <if test="dictionaryName != null  &amp;&amp; dictionaryName !=''">
 	        dictionary_name = #{dictionaryName},
 	      </if>
-	      <if test="description != null">
+	      <if test="description != null  &amp;&amp; description !=''">
 	        description = #{description},
 	      </if>
-	      <if test="inUse != null">
+	      <if test="inUse != null  &amp;&amp; inUse !=''">
 	        in_use = #{inUse},
 	      </if>
-	      <if test="englishName != null">
+	      <if test="englishName != null  &amp;&amp; englishName !=''">
 	        english_name = #{englishName},
 	      </if>
-	      <if test="dataType != null">
+	      <if test="dataType != null  &amp;&amp; dataType !=''">
 	        data_type = #{dataType},
 	      </if>
-	      <if test="remark != null">
+	      <if test="remark != null  &amp;&amp; remark !=''">
 	        remark = #{remark},
+	      </if>
+	      <if test="baseDic != null  &amp;&amp; baseDic !=''">
+	        base_dic = #{baseDic},
 	      </if>
 	    </set>
 	    WHERE dictionary_id = #{dictionaryId}
+	</update>
+	
+	<!-- 根据上级数字字典编号修改数字字典的启用和禁用 -->
+	<update id="updateInUseByUpDicId" parameterType="Map">
+		UPDATE t_base_sys_dic
+		SET in_use = #{inUse}
+		WHERE up_dictionary_id = #{upDictionaryId}
 	</update>
 
 								<!-- 修改语句结束 -->
