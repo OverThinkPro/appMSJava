@@ -16,6 +16,17 @@
 		<collection property="children" ofType="TBUrl" column="module_id" select="getUrlByUpModuleId"></collection>
 	</resultMap>
 	
+	<!-- 普通的POJO与数据库映射Map -->
+	<resultMap id="TBUrlManagementMap" type="TBUrl">
+		<id column="module_id" jdbcType="VARCHAR" property="moduleId" />
+		<result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+		<result column="up_module_id" jdbcType="VARCHAR" property="upModuleId" />
+		<result column="up_module_name" jdbcType="VARCHAR" property="upModuleName" />
+		<result column="in_use" jdbcType="CHAR" property="inUse" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="module_url" jdbcType="VARCHAR" property="moduleUrl" />
+		<result column="base_module" jdbcType="CHAR" property="baseModule" />
+	</resultMap>
 	<!-- 列名 -->
 	<sql id="TBUrl_Column_List">
 		module_id, module_name, up_module_id, in_use, description, module_url,base_module
@@ -24,7 +35,7 @@
 								<!-- 查询语句开始 -->
 	
 	<!-- 主键查询菜单信息moduleId -->
-	<select id="selectByPrimaryKey" parameterType="String" resultMap="TBUrlMap">
+	<select id="selectByPrimaryKey" parameterType="String" resultMap="TBUrlManagementMap">
 		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
 			   url1.description, url1.module_url, url1.base_module, url2.module_name up_module_name
 		FROM t_base_defined_url url1
@@ -62,7 +73,7 @@
 	</select>
 	
 	<!-- 查询菜单树 -->
-	<select id="getUrlTree" parameterType="String" resultMap="TBUrlMap">
+	<select id="getUrlTree" parameterType="String" resultMap="TBUrlManagementMap">
 		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
 			   url1.description, url1.module_url, url1.base_module, url2.module_name up_module_name
 		FROM t_base_defined_url url1
@@ -77,7 +88,7 @@
 	</select>
 	
 	<!-- 组合条件分页查询菜单信息(菜单编号，菜单名称，上级菜单编号，是否启用， 起始记录数，每页的记录数) -->
-	<select id="getUrlByPageCondition" parameterType="Map" resultMap="TBUrlMap">
+	<select id="getUrlByPageCondition" parameterType="Map" resultMap="TBUrlManagementMap">
 		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
 			   url1.description, url1.module_url, url1.base_module, url2.module_name up_module_name
 		FROM t_base_defined_url url1
