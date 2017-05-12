@@ -66,6 +66,19 @@ public class TBUrlServiceImpl implements TBUrlService {
 	}
 	
 	/** 
+	 * @description 通过userID，查询该用户是否需要直接访问首页
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int isContainsHomePage(String userId) throws SQLException {
+		if (Objects.isNull(userId)) {
+			return 0;
+		}
+		return (tbUrlMapper.isContainsHomePage(userId) == null) ? 0 : 1; 
+	}
+	
+	/** 
 	 * @description 根据上级菜单下的子菜单的最大编号
 	 * @param upModuleId
 	 * @return

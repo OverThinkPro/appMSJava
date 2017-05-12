@@ -67,6 +67,14 @@ public interface TBUrlMapper {
 	public List<TBUrl> getUserUrl(String userId) throws SQLException;
 	
 	/** 
+	 * @description 通过userID，查询该用户是否需要直接访问首页
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Integer isContainsHomePage(String userId) throws SQLException;
+	
+	/** 
 	 * @description 根据上级菜单下的子菜单的最大编号
 	 * @param upModuleId
 	 * @return

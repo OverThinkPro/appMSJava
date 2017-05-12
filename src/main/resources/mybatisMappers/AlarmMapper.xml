@@ -28,7 +28,7 @@
 	
 	<!-- 实时统计未被处理的各个类型的报警信息的数量 -->
 	<select id="countRealAlarmType" resultType="Map">
-		SELECT count(alarm_id) total,alarm_type_id,alarm_name
+		<!-- SELECT count(alarm_id) total,alarm_type_id,alarm_name
 		FROM	
 			(SELECT alarm_sound.alarm_type_id, alarm_name,alarm_id
 			 FROM t_base_alarm_sound_setting alarm_sound
@@ -39,6 +39,19 @@
 				)alarm
 			 ON alarm.alarm_type_id=alarm_sound.alarm_type_id) alarm_detail
 		GROUP BY alarm_type_id,alarm_name
+		ORDER BY alarm_type_id -->
+
+		SELECT count(alarm_id) total,alarm_type_id,alarm_name, alarm_detail.alarm_file
+		FROM	
+			(SELECT alarm_sound.alarm_type_id, alarm_name,alarm_id, alarm_file
+			 FROM t_base_alarm_sound_setting alarm_sound
+			 LEFT OUTER JOIN
+				(SELECT alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time, alarm_type_id
+				 FROM t_base_alarm_info
+				 WHERE alarm_inhandle='0'
+				)alarm
+			 ON alarm.alarm_type_id=alarm_sound.alarm_type_id) alarm_detail
+		GROUP BY alarm_type_id,alarm_name, alarm_file
 		ORDER BY alarm_type_id
 	</select>
 	

@@ -46,6 +46,7 @@ public class UserLoginControl {
 		String userName = user.get("userName");
 		String password = user.get("password");
 		User userInfo = null;
+		int isConstantsHome = 0;
 		
 		if (Objects.isNull(userName) || Objects.isNull(password)) {
 			return response.failure("用户名或密码不能为空").toSimpleResult();
@@ -53,19 +54,22 @@ public class UserLoginControl {
 		
 		try {
 			userInfo = userService.getUserByUserName(userName);
+			if (Objects.nonNull(userInfo)) {
+				isConstantsHome = tbUrlService.isContainsHomePage(userInfo.getUserId());
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		if (Objects.isNull(userInfo)) {
 			return response.failure(ErrorMsg.USER_NOT_FOUND).toSimpleResult();
-//			return response.failure("用户名错误，请重新输入").toSimpleResult();
 		}
 		if (!userInfo.getPassword().equals(password)) {
 			return response.failure(ErrorMsg.USER_PASSWORD_ERROR).toSimpleResult();
 		}
 		userInfo.setPassword("");
-		return response.success().put("user", userInfo).toCombineResult();
+		
+		return response.success().put("user", userInfo).put("isHome", isConstantsHome).toCombineResult();
 	}
 	
 	/** 
