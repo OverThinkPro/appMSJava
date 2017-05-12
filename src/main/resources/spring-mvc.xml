@@ -19,6 +19,7 @@
 	<!-- 静态资源解析，包括js,css,img -->
 	<mvc:resources location="/controls/" mapping="/controls/**" />
 	<mvc:resources location="/headPortraits/" mapping="/headPortraits/**" />
+	<mvc:resources location="/" mapping="/**" />
 
 	<!-- 视图解析器 -->
 	<bean id="viewResolver"

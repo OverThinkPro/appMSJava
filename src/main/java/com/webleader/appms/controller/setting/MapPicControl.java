@@ -75,7 +75,7 @@ public class MapPicControl{
 	@RequestMapping(value = "/base/map/getMapPicByStream", method = RequestMethod.GET)
 	public void getMapPicByStream(HttpServletRequest request,HttpServletResponse httpResponse) {
 		//String fileName = request.getSession().getServletContext().getRealPath("/fileLibrary/map/map.jpg");
-		String basePath = PathHandler.BASE_PATH;
+		String basePath = request.getSession().getServletContext().getRealPath("/static/");
 		String realPath = PathHandler.MAP_PIC_PATH;
 		String filePath = pathHandler.formatToBackSlash(basePath + realPath);
 		System.out.println(filePath);
@@ -119,7 +119,7 @@ public class MapPicControl{
 	@RequestMapping(value = "/base/map/getMapPicByURL", method = RequestMethod.GET)
 	public Map<Object, Object> getMapPicByURL(HttpServletRequest request) {
 		Response response = new Response();
-		String realPath = request.getSession().getServletContext().getRealPath("/fileLibrary/map/");
+		String realPath = request.getSession().getServletContext().getRealPath("/static/map/");
 		String fileNewName = "map.jpg"; 
 		String picUrl = realPath + fileNewName;
 		System.out.println(picUrl);

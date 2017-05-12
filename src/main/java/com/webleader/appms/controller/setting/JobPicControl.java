@@ -81,9 +81,7 @@ public class JobPicControl {
 		if (file.isEmpty() || !Objects.nonNull(jobId) || jobId.equals("")) {
 			return response.failure("工种图例上传失败，请重试").toSimpleResult();
 		} 
-		//String realPath = "/fileLibrary/jobTypePics/";
-		//String filePath = request.getSession().getServletContext().getRealPath(filePath);
-		String basePath = PathHandler.BASE_PATH;
+		String basePath = request.getSession().getServletContext().getRealPath("/static/");
 		String realPath = PathHandler.JOB_TYPE_PIC_PATH;
 		String filePath = pathHandler.formatToBackSlash(basePath + realPath);
 		System.out.println(filePath);
@@ -130,7 +128,7 @@ public class JobPicControl {
 		//String realPath = request.getSession().getServletContext().getRealPath(jobIconUrl);
 		//String filePath = realPath;
 		//System.out.println("filePath:"+filePath);
-		String basePath = PathHandler.BASE_PATH;
+		String basePath =  request.getSession().getServletContext().getRealPath("/static/");;
 		String fileUrl = pathHandler.formatToBackSlash(basePath + jobIconUrl);
 		File file = new File(fileUrl);
 		if (file.exists()){ 

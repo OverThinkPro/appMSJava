@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PathHandler {
 	
-	public static final String BASE_PATH ="D:/codeku/bishe/appMSVue/static";
+	public static final String BASE_PATH ="D:/apache-tomcat-8.0.35/webapps/appMSJava/static";
 	
 	public static final String MAP_PIC_PATH ="/map/";
 	

@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.webleader.appms.bean.alarm.AlarmSetting;
-import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.common.PathHandler;
 import com.webleader.appms.db.service.setting.AlarmSettingService;
 import com.webleader.appms.util.Response;
@@ -42,8 +41,6 @@ public class AlarmSettingControl {
 	
 	@Autowired
 	private AlarmSettingService alarmSettingService;
-	@Autowired
-	private PageConstants pageConstants;
 	@Autowired
 	private UUIDUtil uuidUtil;
 	@Autowired
@@ -103,6 +100,7 @@ public class AlarmSettingControl {
 		int result = 0;
 		
 		try {
+			alarmSetting.setAlarmFile(null);
 			result = alarmSettingService.updateByPrimaryKeySelective(alarmSetting);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -155,9 +153,8 @@ public class AlarmSettingControl {
 		alarmSetting.setAlarmTypeId(alarmTypeId);
 		String alarmFile = null;
 		if(!file.isEmpty()){
-			// String filePath = "/fileLibrary/alarmTypeSounds/";
-			// String realPath = request.getSession().getServletContext().getRealPath(filePath);
-			String basePath = PathHandler.BASE_PATH;
+			 String basePath = request.getSession().getServletContext().getRealPath("/static/");
+//			String basePath = filePath;
 			String realPath = PathHandler.ALARM_TYPE_PATH;
 			String filePath = pathHandler.formatToBackSlash(basePath + realPath);
 			System.out.println(filePath);
@@ -202,7 +199,7 @@ public class AlarmSettingControl {
 		} 
 		//String realPath = request.getSession().getServletContext().getRealPath(alarmSoundUrl);
 		//String filePath = realPath;
-		String basePath = PathHandler.BASE_PATH;
+		String basePath =  request.getSession().getServletContext().getRealPath("/static/");;
 		String filePath = basePath + alarmSoundUrl;
 		String fileUrl = pathHandler.formatToBackSlash(filePath);
 		File file = new File(fileUrl);
