@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.staff.DutyUnitMapper">
+
+	<resultMap id="BaseResultMap" type="DutyUnit">
+		<id column="u_id" jdbcType="VARCHAR" property="uId" />
+		<result column="d_id" jdbcType="VARCHAR" property="dId" />
+		<result column="unit_id" jdbcType="VARCHAR" property="unitId" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		u_id, d_id, unit_id
+	</sql>
+	
+	<!-- 通过uid查询一条记录 -->
+	<select id="selectByPrimaryKey" parameterType="String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_duty_unit
+		where u_id = #{uId,jdbcType=VARCHAR}
+	</select>
+
+	<!-- 添加一条记录 -->
+	<insert id="insert" parameterType="DutyUnit">
+		insert into t_duty_unit (u_id, d_id, unit_id)
+		values (#{uId,jdbcType=VARCHAR}, #{dId,jdbcType=VARCHAR},
+			#{unitId,jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="insertList" parameterType="List">
+		<foreach item="item" index="index" collection="list" separator=";">
+	        insert into t_duty_unit (u_id, d_id, unit_id)
+			values (#{item.uId,jdbcType=VARCHAR}, #{item.dId,jdbcType=VARCHAR}, #{item.unitId,jdbcType=VARCHAR})
+       </foreach>
+	</insert>
+	
+	<!-- 通过uID删除一条记录 -->
+	<delete id="deleteDutyUnitById" parameterType="String">
+		delete from t_duty_unit
+		where u_id = #{uId,jdbcType=VARCHAR}
+	</delete>
+
+	<!-- 更新一条记录 -->
+	<update id="updateDutyUnit" parameterType="DutyUnit">
+		update t_duty_unit
+		<set>
+			<if test="dId != null">
+				d_id = #{dId,jdbcType=VARCHAR},
+			</if>
+			<if test="unitId != null">
+				unit_id = #{unitId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where u_id = #{uId,jdbcType=VARCHAR}
+	</update>
+</mapper>

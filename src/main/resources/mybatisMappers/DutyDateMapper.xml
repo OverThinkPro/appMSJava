@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.webleader.appms.db.mapper.staff.DutyDateMapper">
+
+	<resultMap id="DutyDateMap" type="DutyDate">
+		<id column="d_id" jdbcType="VARCHAR" property="dId" />
+		<result column="duty_id" jdbcType="VARCHAR" property="dutyId" />
+		<result column="work_date" jdbcType="DATE" property="workDate" />
+		<result column="charge_person" jdbcType="VARCHAR" property="chargePerson" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		d_id, duty_id, work_date, charge_person
+	</sql>
+
+	<!-- 通过dId查询详细记录 -->
+	<select id="selectByPrimaryKey" parameterType="String"
+		resultMap="DutyDateMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_duty_date
+		where d_id = #{dId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectDutyDateByCondition" parameterType="DutyDate" resultMap="DutyDateMap">
+		SELECT * 
+		FROM t_duty_date
+		WHERE duty_id='201'
+		AND	work_date='2017-5-10'
+	</select>
+
+	<!-- 插入一条记录 -->
+	<insert id="insert" parameterType="DutyDate">
+		insert into t_duty_date (d_id, duty_id, work_date,
+		charge_person)
+		values (#{dId,jdbcType=VARCHAR}, #{dutyId,jdbcType=VARCHAR},
+		#{workDate,jdbcType=DATE},
+		#{chargePerson,jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 通过dId，删除一条记录 -->
+	<delete id="deleteDutyDateById" parameterType="String">
+		delete from t_duty_date
+		where d_id = #{dId,jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 删除当前时间之后的所有排班记录 -->
+	<delete id="deleteDutyDateListByDate" parameterType="Date">
+		delete from t_duty_date
+		where work_date <![CDATA[>]]> #{workDate} 
+	</delete>
+
+	<!-- 更新一条记录 -->
+	<update id="updateDutyDate" parameterType="DutyDate">
+		update t_duty_date
+		<set>
+			<if test="dutyId != null and dutyId != ''">
+				duty_id = #{dutyId,jdbcType=VARCHAR},
+			</if>
+			<if test="workDate != null and workDate != ''">
+				work_date = #{workDate,jdbcType=DATE},
+			</if>
+			<if test="chargePerson != null and chargePerson != ''">
+				charge_person = #{chargePerson,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where d_id = #{dId,jdbcType=VARCHAR}
+	</update>
+</mapper>
