@@ -1,6 +1,7 @@
 package com.webleader.appms.controller.login;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -81,16 +82,34 @@ public class UserLoginControl {
 	public Map<Object, Object> getUserUrlList(@PathVariable String userId) {
 		Response response = new Response();
 		List<TBUrl> urlList = null;
+		List<String> urlOnly = null;
+		Map<String, Object> convert = null;
 		
 		try {
 			urlList = tbUrlService.getUserUrl(userId);
+			urlOnly = tbUrlService.getUserURLOnly(userId);
+			
+			convert = convertMenuList(urlOnly);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		if (Objects.isNull(urlList)) {
+		if (Objects.isNull(urlList) || Objects.isNull(urlOnly)) {
 			return response.failure("查询菜单失败，请重试").toSimpleResult();
 		}
-		return response.success().put("menuList", urlList).toCombineResult();
+		return response.success().put("menuList", urlList).put("urlOnly", convert).toCombineResult();
+	}
+	
+	private Map<String, Object> convertMenuList(List<String> urlOnly) {
+		Map<String, Object> convert = new HashMap<String, Object>();
+		
+		for (int i = 0; i < urlOnly.size(); i++) {
+			String url = urlOnly.get(i);
+			
+			if (!"/".equals(url)) {
+				convert.put(urlOnly.get(i), true);
+			}
+		}
+		return convert;
 	}
 }

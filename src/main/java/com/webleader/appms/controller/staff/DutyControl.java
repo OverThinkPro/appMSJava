@@ -66,6 +66,7 @@ public class DutyControl {
 			dutyDateService.deleteDutyDateListByDate(date);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
+			return response.failure("排班失败，请重试").toSimpleResult();
 		}
 
 		for (int i = 1; i <= days; i++) {
@@ -81,11 +82,13 @@ public class DutyControl {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
+				return response.failure("排班失败，请重试").toSimpleResult();
 			}
 
 		}
 
-		return response.failure("排班失败，请重试").toSimpleResult();
+		return response.success("排班成功").toSimpleResult();
+		
 	}
 
 	/**

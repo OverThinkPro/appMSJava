@@ -1,6 +1,7 @@
 package com.webleader.appms.controller.query;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -49,6 +50,8 @@ public class HistoryTrackControl {
 		
 		hisCondition.put("pageBegin", pageConstants.getRecordNums(currentPage));
 		hisCondition.put("pageSize", pageConstants.getPageSize());
+		hisCondition.put("startTime", Timestamp.valueOf(hisCondition.get("startTime").toString()));
+		hisCondition.put("endTime", Timestamp.valueOf(hisCondition.get("endTime").toString()));
 		
 		try {
 			pastdocList = pastDocService.listPastDocByPageCondition(hisCondition);
@@ -71,6 +74,8 @@ public class HistoryTrackControl {
 	public Map<Object, Object> getHisStaffPoint (@RequestBody Map<Object, Object> hisCondition){
 		List<Map<Object, Object>> listMapPoint = null;
 		Response response = new Response();
+		hisCondition.put("startTime", Timestamp.valueOf(hisCondition.get("startTime").toString()));
+		hisCondition.put("endTime", Timestamp.valueOf(hisCondition.get("endTime").toString()));
 		
 		try {
 			listMapPoint = pastDocService.listMapPoint(hisCondition);

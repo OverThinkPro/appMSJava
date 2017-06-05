@@ -66,6 +66,19 @@ public class TBUrlServiceImpl implements TBUrlService {
 	}
 	
 	/** 
+	 * @description 通过userId 只查询用户的url
+	 * @param userId
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<String> getUserURLOnly(String userId) throws SQLException {
+		if (Objects.isNull(userId)) {
+			return null;
+		}
+		return tbUrlMapper.getUserURLOnly(userId);
+	}
+	
+	/** 
 	 * @description 通过userID，查询该用户是否需要直接访问首页
 	 * @param userId
 	 * @return

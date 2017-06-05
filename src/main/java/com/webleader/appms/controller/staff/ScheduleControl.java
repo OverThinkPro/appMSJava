@@ -137,6 +137,10 @@ public class ScheduleControl {
 		Response response = new Response();
 		int result = 0;
 		
+		if (Objects.isNull(schedule.getUpDutyId())) {
+			schedule.setUpDutyId("1");
+		}
+		
 		try {
 			schedule.setDutyId(scheduleService.getMaxDutyId(schedule.getUpDutyId()));
 			result = scheduleService.insert(schedule);

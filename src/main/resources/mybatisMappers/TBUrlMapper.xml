@@ -72,6 +72,21 @@
 		ORDER BY url.module_id ASC
 	</select>
 	
+	<!-- 通过userId 只查询用户的url -->
+	<select id="getUserURLOnly" parameterType="String" resultType="String">
+		SELECT url.module_url
+		FROM t_base_user_role userrole, t_base_role_info role, 
+			t_base_role_module module, t_base_defined_url url
+		WHERE userrole.role_id="role".role_id
+		AND userrole.role_id="module".role_id
+		AND url.module_id=module.module_id
+		AND role.in_use='1'
+		AND url.in_use='1'
+		AND userrole.user_id=#{userId}
+		GROUP BY url.module_id
+		ORDER BY url.module_id ASC
+	</select>
+	
 	<select id="isContainsHomePage" parameterType="String" resultType="Integer">
 		SELECT count(url.module_id)
 		FROM t_base_user_role userrole, t_base_role_info role, 
