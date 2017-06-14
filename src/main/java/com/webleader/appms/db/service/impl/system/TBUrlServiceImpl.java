@@ -22,9 +22,22 @@ import com.webleader.appms.db.service.system.TBUrlService;
  */
 @Service("tbUrlService")
 public class TBUrlServiceImpl implements TBUrlService {
-
+	
 	@Autowired
 	private TBUrlMapper tbUrlMapper;
+	
+	/** 
+	 * @description 根据菜单名称查询菜单信息
+	 * @param moduleName 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public TBUrl selectModuleByModuleName(String moduleName) throws SQLException {
+		if (Objects.isNull(moduleName)){
+			return null;
+		}
+		return tbUrlMapper.selectModuleByModuleName(moduleName);
+	}
 	
 	/** 
 	 * @description 组合条件分页查询菜单信息(菜单编号，菜单名称，上级菜单编号，是否启用， 起始记录数，每页的记录数)

@@ -34,7 +34,32 @@ public class DictionaryControl {
 	private DictionaryService dictionaryService;
 	@Autowired
 	private PageConstants pageConstants;
-
+	
+	/** 
+	 * @description 根据字典名称查询字典信息(用于增加字典)
+	 * @param dictionaryName
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/dictionary/{dictionaryName}", method = RequestMethod.GET)
+	public Map<Object, Object> getDicByDictionaryName(@PathVariable String dictionaryName){
+		Response response = new Response();
+		boolean result = true;
+		Dictionary dictionary = null;
+		try {
+			dictionary = dictionaryService.getDicByDictionaryName(dictionaryName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		if (Objects.isNull(dictionary)) {
+			result = true;
+		}else{
+			result = false;
+		}
+		return response.success().put("result", result).toCombineResult();
+		
+	}
+		 
 	/** 
 	 * @description 条件查询字典信息
 	 * @param dictionaryId

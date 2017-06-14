@@ -39,6 +39,13 @@
 		WHERE dictionary_name=#{dictionaryName};
 	</select>
 	
+	<!-- 根据字典名称查询字典 -->
+	<select id="getDicByDictionaryName" parameterType="String" resultMap="DictionaryMap">
+		SELECT <include refid="Dictionary_Column_List" /> 
+		From t_base_sys_dic 
+		WHERE dictionary_name=#{dictionaryName};
+	</select>
+	
 	<!-- 主键查询数字字典信息  -->
 	<select id="selectByPrimaryKey" parameterType="String" resultMap="DictionaryMap">
 		SELECT dic1.dictionary_id, dic1.dictionary_name, dic1.description, dic1.up_dictionary_id, 

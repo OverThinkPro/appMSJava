@@ -40,6 +40,20 @@ public class RoleServiceImpl implements RoleService{
 	}
 	
 	/** 
+	 * @description 根据角色名称查询角色信息
+	 * @param roleName 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Role selectRoleByRoleName(String roleName) throws SQLException {
+		if (Objects.isNull(roleName)) {
+			return null;
+		}
+		return roleMapper.selectRoleByRoleName(roleName);
+	}
+
+	
+	/** 
 	 * @description 组合条件分页查询角色信息(角色编号，角色名称，是否启用， 起始记录数，每页的记录数)
 	 * @param pageCondition(roleId,roleName,inUse,pageSize,pageBegin)
 	 * @return

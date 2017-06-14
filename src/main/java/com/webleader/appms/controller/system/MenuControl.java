@@ -34,7 +34,32 @@ public class MenuControl {
 	private TBUrlService tbUrlService;
 	@Autowired
 	private PageConstants pageConstants;
-
+	
+	/** 
+	 * @description 根据菜单名称查询菜单信息(用于增加菜单)
+	 * @param dictionaryName
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/module/{moduleName}", method = RequestMethod.GET)
+	public Map<Object, Object> getModuleByModuleName(@PathVariable String moduleName){
+		Response response = new Response();
+		boolean result = true;
+		TBUrl tbUrl = null;
+		try {
+			tbUrl = tbUrlService.selectModuleByModuleName(moduleName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		if (Objects.isNull(tbUrl)) {
+			result = true;
+		}else{
+			result = false;
+		}
+		return response.success().put("result", result).toCombineResult();
+		
+	}
+	
 	/** 
 	 * @description 条件查询菜单信息
 	 * @param moduleId

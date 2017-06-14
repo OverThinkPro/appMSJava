@@ -16,12 +16,18 @@
 	    role_id, role_name, description, in_use
 	</sql>
 								<!-- 查询语句开始 -->
-	
 	<!-- 主键查询角色信息 -->
 	<select id="selectByPrimaryKey" parameterType="String" resultMap="RoleMap">
 	    SELECT <include refid="Role_Column_List" />
 	    FROM t_base_role_info
 	    WHERE role_id = #{roleId}
+	 </select>
+	 
+	<!-- 根据角色名称查询角色信息 -->
+	<select id="selectRoleByRoleName" parameterType="String" resultMap="RoleMap">
+	    SELECT <include refid="Role_Column_List" />
+	    FROM t_base_role_info
+	    WHERE role_name = #{roleName}
 	 </select>
 	 
 	 <!-- 组合条件分页查询角色信息(角色编号，角色名称，是否启用， 起始记录数，每页的记录数) -->

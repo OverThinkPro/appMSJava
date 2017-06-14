@@ -43,9 +43,33 @@ public class RoleControl {
 	@Autowired
 	private UUIDUtil uuidUtil;
 	
+	/** 
+	 * @description 根据角色名称查询角色信息(用于增加角色)
+	 * @param dictionaryName
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/role/{roleName}", method = RequestMethod.GET)
+	public Map<Object, Object> getRoleByRoleName(@PathVariable String roleName){
+		Response response = new Response();
+		boolean result = true;
+		Role role = null;
+		try {
+			role = roleService.selectRoleByRoleName(roleName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		if (Objects.isNull(role)) {
+			result = true;
+		}else{
+			result = false;
+		}
+		return response.success().put("result", result).toCombineResult();
+		
+	}
 	
 	/**
-	 * @description 查询角色基本信息
+	 * @description 根据条件查询角色基本信息
 	 * @return List<Role>
 	 * @exception SQLException
 	 */

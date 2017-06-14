@@ -14,7 +14,15 @@ import com.webleader.appms.bean.system.TBUrl;
  * @version 1.0.0
  */
 public interface TBUrlService {
-
+	
+	/** 
+	 * @description 根据菜单名称查询菜单信息
+	 * @param moduleName 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public TBUrl selectModuleByModuleName(String moduleName) throws SQLException;
+	
 	/** 
 	 * @description 组合条件分页查询菜单信息(菜单编号，菜单名称，上级菜单编号，是否启用， 起始记录数，每页的记录数)
 	 * @param pageCondition(moduleId,moduleName,upModuleId,inUse,pageSize,pageBegin)

@@ -20,12 +20,12 @@ public interface DictionaryMapper {
 	
 	/*****************查询接口开始*******************/
 	/** 
-	 * @description 根据字典编码查询字典名称
+	 * @description 根据字典名称查询字典
 	 * @param dictionaryName
 	 * @return
 	 * @throws SQLException 
 	 */
-	public String getNameByCode(String dictionaryId) throws SQLException;
+	public Dictionary getDicByDictionaryName(String dictionaryName) throws SQLException;
 	
 	/** 
 	 * @description 根据字典名称查询字典编码
