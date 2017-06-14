@@ -7,17 +7,8 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.aspectj.lang.JoinPoint;
-<<<<<<< HEAD
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-=======
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
->>>>>>> c8908bf0b1995e2c0df7d988068c5d4e0a1444f4
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +30,8 @@ import com.webleader.appms.db.service.system.TBLogService;
 @Aspect
 public class SystemLogAspect {
 	
-<<<<<<< HEAD
 	public static User user;
-=======
-	private User user;
->>>>>>> c8908bf0b1995e2c0df7d988068c5d4e0a1444f4
-	
+
 	@Autowired
 	private TBLogService logService;
 	
@@ -59,44 +46,15 @@ public class SystemLogAspect {
 	public void controllerAspect() {
 		System.out.println("=========controllerAspecr===");
 	}
-<<<<<<< HEAD
-=======
-	
-	@Around("controllerAspect()")
-	public void advice(ProceedingJoinPoint joinPoint){
-	    System.out.println("环绕通知之开始");
-	    try {
-	        joinPoint.proceed();
-	    } catch (Throwable e) {
-	        e.printStackTrace();
-	    }
-	    System.out.println("环绕通知之结束");
-	}
-	
-	@Before("controllerAspect()")  
-    public void doBefore(JoinPoint joinPoint) {  
-        System.out.println("=====SysLogAspect前置通知开始=====");  
-    }  
-      
-    @AfterReturning(pointcut="controllerAspect()")  
-    public  void doAfter(JoinPoint joinPoint) {  
-        System.out.println("=====SysLogAspect后置通知开始=====");  
-    }  
-      
->>>>>>> c8908bf0b1995e2c0df7d988068c5d4e0a1444f4
    
 	/** 
 	 * @description 后置通知 用于拦截Controller层记录用户的操作
 	 * @param joinPoint切点 
 	 */
-<<<<<<< HEAD
+
 	@AfterReturning("controllerAspect()")
 	public void doAfter(JoinPoint joinPoint) {
 		System.out.println("=====SysLogAspect后置通知开始=====");  
-=======
-	@After("controllerAspect()")
-	public void after(JoinPoint joinPoint) {
->>>>>>> c8908bf0b1995e2c0df7d988068c5d4e0a1444f4
 		try {
 			//获取目标类名  
 	        String targetName = joinPoint.getTarget().getClass().getName();  
@@ -124,27 +82,18 @@ public class SystemLogAspect {
 			/* ==========数据库日志========= */
 			TBLog log = new TBLog();
 			Date now = new Date();
-<<<<<<< HEAD
+
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-=======
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
->>>>>>> c8908bf0b1995e2c0df7d988068c5d4e0a1444f4
+
 			String datetime = dateFormat.format(now); 
 			log.setLogId(UUID.randomUUID().toString());
 			log.setOpType(opType);
 			log.setOpContent(opContent);
 			log.setOpDate(Timestamp.valueOf(datetime));
-<<<<<<< HEAD
 			log.setUserId(SystemLogAspect.user.getUserId());
 			log.setUserName(SystemLogAspect.user.getUserName());
 			System.out.println("------------------------------");
 			System.out.println(log);
-=======
-			/*log.setUserId(this.user.getUserId());
-			log.setUserName(this.user.getUserName());*/
-			log.setUserId("root");
-			log.setUserName("root");
->>>>>>> c8908bf0b1995e2c0df7d988068c5d4e0a1444f4
 			logService.insert(log); 
 			
 		} catch (Exception e) {
@@ -153,14 +102,4 @@ public class SystemLogAspect {
 		}
 	}
 
-<<<<<<< HEAD
-=======
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
->>>>>>> c8908bf0b1995e2c0df7d988068c5d4e0a1444f4
 }

@@ -43,14 +43,5 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-<<<<<<< HEAD
-=======
-	
-	<aop:aspectj-autoproxy/> 
-    <!-- 自动装载bean使能-->
-    <context:component-scan base-package="com.webleader.appms.controller"/>
-    <context:component-scan base-package="com.webleader.appms.annotation"/>
-    <context:annotation-config/>
->>>>>>> c8908bf0b1995e2c0df7d988068c5d4e0a1444f4
     
 </beans>
