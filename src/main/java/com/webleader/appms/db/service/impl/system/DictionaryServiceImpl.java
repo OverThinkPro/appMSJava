@@ -27,6 +27,19 @@ public class DictionaryServiceImpl implements DictionaryService {
 	private DictionaryMapper dictionaryMapper;
 	
 	/** 
+	 * @description 根据字典名称查询字典信息
+	 * @param dictionaryName
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Dictionary getDicByDictionaryName(String dictionaryName) throws SQLException {
+		if (Objects.isNull(dictionaryName)){
+			return null;
+		}
+		return dictionaryMapper.getDicByDictionaryName(dictionaryName);
+	}
+
+	/** 
 	 * @description 组合条件分页查询字典信息(字典编号，字典名称，上级字典编号，是否启用， 起始记录数，每页的记录数)
 	 * @param pageCondition(dictionaryId,dictionaryName,upDictionaryId,inUse,pageSize,pageBegin)
 	 * @return

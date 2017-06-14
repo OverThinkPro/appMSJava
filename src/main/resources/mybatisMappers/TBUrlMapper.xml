@@ -33,6 +33,16 @@
 	</sql>
 	
 								<!-- 查询语句开始 -->
+	<!-- 根据菜单名称查询菜单信息 -->
+	<select id="selectModuleByModuleName" parameterType="String" resultMap="TBUrlManagementMap">
+		SELECT url1.module_id, url1.module_name,url1.up_module_id, url1.in_use, 
+			   url1.description, url1.module_url, url1.base_module, url2.module_name up_module_name
+		FROM t_base_defined_url url1
+		LEFT JOIN t_base_defined_url url2
+		ON url1.up_module_id = url2.module_id
+		FROM t_base_defined_url
+		WHERE url1.module_name = #{moduleName}
+	</select>
 	
 	<!-- 主键查询菜单信息moduleId -->
 	<select id="selectByPrimaryKey" parameterType="String" resultMap="TBUrlManagementMap">

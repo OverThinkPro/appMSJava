@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.system.TBLog;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.system.TBLogService;
@@ -46,6 +47,7 @@ public class TBLogControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/log/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="查询日志列表信息")
 	public Map<Object, Object> getTBLogListByCondition (@RequestBody Map<Object, Object> condition,@PathVariable int currentPage) {
 		Response response = new Response();
 		List<TBLog> logList = null;

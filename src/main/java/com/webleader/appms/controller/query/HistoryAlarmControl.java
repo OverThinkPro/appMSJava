@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.alarm.OvermanAlarm;
 import com.webleader.appms.bean.alarm.OvertimeAlarm;
 import com.webleader.appms.bean.alarm.SpecialRegionAlarm;
@@ -39,6 +40,7 @@ public class HistoryAlarmControl {
 	private PageConstants pageConstants;
 
 	@RequestMapping(value = "/history/alarm/type/{alarmType}/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="条件查询历史报警信息列表")
 	public Map<Object, Object> getAlarmHistoryByCondition(@RequestBody Map<Object, Object> alarmCondition,
 			@PathVariable int alarmType, @PathVariable int currentPage) {
 		Response response = new Response();

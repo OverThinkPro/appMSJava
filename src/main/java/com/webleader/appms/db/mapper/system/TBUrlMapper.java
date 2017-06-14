@@ -18,6 +18,13 @@ public interface TBUrlMapper {
 	/*****************START BY HaoShaSha*********/
 	
 	/*****************查询接口开始*******************/
+	/** 
+	 * @description 根据菜单名称查询菜单信息
+	 * @param moduleName 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public TBUrl selectModuleByModuleName(String moduleName) throws SQLException;
 	
 	/** 
 	 * @description 根据菜单编号查询菜单信息

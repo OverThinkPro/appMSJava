@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.staff.JobType;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.staff.JobTypeService;
@@ -48,6 +49,7 @@ public class JobTypeControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/jobtype/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="条件查询工种列表信息")
 	public Map<Object, Object> getJobTypeListByCondition (@RequestParam(value = "jobId", required = false) String jobId,
 			@RequestParam(value = "jobName", required = false) String jobName, @PathVariable int currentPage) {
 		Response response = new Response();
@@ -82,6 +84,7 @@ public class JobTypeControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/jobtype", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加一个新的工种")
 	public Map<Object, Object> addJobType (@RequestBody JobType jobType) {
 		Response response = new Response();
 		int result = 0;
@@ -104,6 +107,7 @@ public class JobTypeControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/jobtype", method = RequestMethod.DELETE)
+	@SystemLogController(opType="查询",opContent="通过工种ID，删除工种")
 	public Map<Object, Object> deleteJobType (@RequestParam String jobId) {
 		Response response = new Response();
 		int result = 0;
@@ -125,6 +129,7 @@ public class JobTypeControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/jobtype", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="更新工种信息")
 	public Map<Object, Object> updateJobType (@RequestBody JobType jobType) {
 		Response response = new Response();
 		int result = 0;

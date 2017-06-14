@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.common.PathHandler;
 import com.webleader.appms.util.Response;
 
@@ -42,13 +43,14 @@ public class MapPicControl{
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/map/upload", method = RequestMethod.POST)
+	@SystemLogController(opType="上传",opContent="上传地图底图")
 	public Map<Object, Object> uploadMap(@RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest request) {
 		Response response = new Response();
-		//String realPath = request.getSession().getServletContext().getRealPath("/fileLibrary/map/");
+		String basePath = request.getSession().getServletContext().getRealPath("/fileLibrary/map/");
 		if (file.isEmpty()) {
 			return response.failure("文件上传失败，请重试").toSimpleResult();
 		} 
-		String basePath = PathHandler.BASE_PATH;
+		//String basePath = PathHandler.BASE_PATH;
 		String realPath = PathHandler.MAP_PIC_PATH;
 		String filePath = pathHandler.formatToBackSlash(basePath + realPath);
 		String fileNewName = "map.jpg"; 
@@ -73,6 +75,7 @@ public class MapPicControl{
 	 * @param httpResponse 
 	 */
 	@RequestMapping(value = "/base/map/getMapPicByStream", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="流的方式得到图片")
 	public void getMapPicByStream(HttpServletRequest request,HttpServletResponse httpResponse) {
 		//String fileName = request.getSession().getServletContext().getRealPath("/fileLibrary/map/map.jpg");
 		String basePath = request.getSession().getServletContext().getRealPath("/static/");
@@ -117,6 +120,7 @@ public class MapPicControl{
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/map/getMapPicByURL", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="URL的方式得到图片")
 	public Map<Object, Object> getMapPicByURL(HttpServletRequest request) {
 		Response response = new Response();
 		String realPath = request.getSession().getServletContext().getRealPath("/static/map/");

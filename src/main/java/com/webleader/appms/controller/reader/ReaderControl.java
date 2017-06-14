@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.positioning.Reader;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.positioning.ReaderService;
@@ -46,6 +47,7 @@ public class ReaderControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/reader/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="组合条件分页查询分站信息")
 	public Map<Object, Object> getReaderListByCondition(@RequestBody Map<Object, Object> condition, 
 			@PathVariable int currentPage) {
 		Response response = new Response();
@@ -74,6 +76,7 @@ public class ReaderControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/reader", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加分站信息")
 	public Map<Object, Object> insertReader(@RequestBody Reader reader) {
 		Response response = new Response();
 		int result = 0;
@@ -99,6 +102,7 @@ public class ReaderControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/reader", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="修改分站信息")
 	public Map<Object, Object> updateReader(@RequestBody Reader reader) {
 		Response response = new Response();
 		int result = 0;
@@ -127,6 +131,7 @@ public class ReaderControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/reader/{readerId}", method = RequestMethod.DELETE)
+	@SystemLogController(opType="删除",opContent="通过readerID，删除分站")
 	public Map<Object, Object> deleteReader(@PathVariable String readerId) {
 		Response response = new Response();
 		int result = 0;
@@ -148,6 +153,7 @@ public class ReaderControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/map/reader", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询所有的分站坐标信息")
 	public Map<Object, Object> getReaderMapList() {
 		Response response = new Response();
 		List<Map<Object, Object>> readerList = null;
@@ -170,6 +176,7 @@ public class ReaderControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/reader/range", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过geoPoint， 判断该点，是否在区域内")
 	public Map<Object, Object> getRegionId(@RequestParam String geoPoint) {
 		Response response = new Response();
 		List<Map<Object, Object>> resultList = null;

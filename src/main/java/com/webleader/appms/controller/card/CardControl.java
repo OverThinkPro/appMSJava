@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.positioning.Card;
 import com.webleader.appms.common.ModalPageConstants;
 import com.webleader.appms.common.PageConstants;
@@ -48,6 +49,7 @@ public class CardControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/card/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="条件分页查询定位卡信息")
 	public Map<Object, Object> getCardListByCondition(@PathVariable int currentPage, 
 			@RequestBody Map<Object,Object> condition) {
 		Response response = new Response();
@@ -82,6 +84,7 @@ public class CardControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/staffcard/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="通过 unitId，staffName，staffAbbr分页查询出，所有员工及其卡的信息")
 	public Map<Object, Object> getStaffCardInfo(@PathVariable int currentPage, 
 			@RequestBody Map<Object, Object> condition){
 		Response response = new Response();
@@ -108,6 +111,7 @@ public class CardControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/card/{cardId}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过cardID 查询卡的信息")
 	public Map<Object, Object> getCardInfoById(@PathVariable String cardId) {
 		Response response = new Response();
 		Card card = null;
@@ -129,6 +133,7 @@ public class CardControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/card", method = RequestMethod.PUT)
+	@SystemLogController(opType="发卡",opContent="发卡")
 	public Map<Object, Object> addStaffCard (@RequestBody Card card) {
 		Response response = new Response();
 		int result = 0;
@@ -152,6 +157,7 @@ public class CardControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/card/{cardId}", method = RequestMethod.PUT)
+	@SystemLogController(opType="收卡",opContent="收卡")
 	public Map<Object, Object> addStaffCard (@PathVariable String cardId) {
 		Response response = new Response();
 		Card card = new Card();
@@ -179,6 +185,7 @@ public class CardControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/card/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="换卡模态框，查询所有未使用的卡信息")
 	public Map<Object, Object> getUnuseCardList(@PathVariable int currentPage, @RequestParam(value = "cardId", required = false) String cardId) {
 		Response response = new Response();
 		Map<Object, Object> condition = new HashMap<Object, Object>();
@@ -210,6 +217,7 @@ public class CardControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/newcard", method = RequestMethod.PUT)
+	@SystemLogController(opType="换卡",opContent="进行换卡操作")
 	public Map<Object, Object> updateCard(@RequestBody Map<Object, Object> condition) {
 		Response response = new Response();
 		Card card = new Card();

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.positioning.TLStaff;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.positioning.TLStaffService;
@@ -42,6 +43,7 @@ public class RealtimeStaffInfoControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/realtime/staff/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="组合条件查询实时员工列表")
 	public Map<Object, Object> getRealTimeStaffInfo(@RequestBody Map<Object, Object> condition,
 			@PathVariable int currentPage) {
 		List<TLStaff> tlStaffList = null;
@@ -71,6 +73,7 @@ public class RealtimeStaffInfoControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/map/staff/count", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="组合条件查询实时员工位置坐标")
 	public Map<Object, Object> getRealtimeStaffMap(@RequestBody Map<Object, Object> condition) {
 		List<Map<Object, Object>> staffPointList = null;
 		Response response = new Response();

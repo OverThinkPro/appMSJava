@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.system.Role;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.system.RoleService;
@@ -43,13 +44,38 @@ public class RoleControl {
 	@Autowired
 	private UUIDUtil uuidUtil;
 	
+	/** 
+	 * @description 根据角色名称查询角色信息(用于增加角色)
+	 * @param dictionaryName
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/role/{roleName}", method = RequestMethod.GET)
+	public Map<Object, Object> getRoleByRoleName(@PathVariable String roleName){
+		Response response = new Response();
+		boolean result = true;
+		Role role = null;
+		try {
+			role = roleService.selectRoleByRoleName(roleName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		if (Objects.isNull(role)) {
+			result = true;
+		}else{
+			result = false;
+		}
+		return response.success().put("result", result).toCombineResult();
+		
+	}
 	
 	/**
-	 * @description 查询角色基本信息
+	 * @description 根据条件查询角色基本信息
 	 * @return List<Role>
 	 * @exception SQLException
 	 */
 	@RequestMapping(value = "/base/role/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="查询角色列表信息")
 	public Map<Object, Object> getRoleListByCondition(@RequestBody Map<Object, Object> condition,@PathVariable int currentPage) {
 		/* 查询条件 */
 		condition.put("pageBegin", pageConstants.getRecordNums(currentPage));
@@ -77,6 +103,7 @@ public class RoleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/role", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加一个新的角色")
 	public Map<Object, Object> addRole (@RequestBody Role role) {
 		Response response = new Response();
 		int result = 0;
@@ -100,6 +127,7 @@ public class RoleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/role", method = RequestMethod.DELETE)
+	@SystemLogController(opType="删除",opContent="删除角色列表信息")
 	public Map<Object, Object> deleteRole (@RequestParam String roleIds) {
 		Response response = new Response();
 		boolean result = true;
@@ -124,6 +152,7 @@ public class RoleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/role", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="修改角色信息")
 	public Map<Object, Object> updateRole (@RequestBody Role role) {
 		Response response = new Response();
 		int result = 0;
@@ -145,6 +174,7 @@ public class RoleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/role/module", method = RequestMethod.POST)
+	@SystemLogController(opType="分配",opContent="为角色分配权限")
 	public Map<Object, Object> addModuleToRole (@RequestBody Map<Object, Object> roleAndModule) {
 		Response response = new Response();
 		boolean result = true;

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogAspect;
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.system.TBUrl;
 import com.webleader.appms.bean.system.User;
 import com.webleader.appms.db.service.system.TBUrlService;
@@ -42,6 +44,7 @@ public class UserLoginControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
+	@SystemLogController(opType="登录",opContent="用户登录系统")
 	public Map<Object, Object> userLogin(@RequestBody Map<String, String> user) {
 		Response response = new Response();
 		String userName = user.get("userName");
@@ -69,6 +72,8 @@ public class UserLoginControl {
 			return response.failure(ErrorMsg.USER_PASSWORD_ERROR).toSimpleResult();
 		}
 		userInfo.setPassword("");
+		
+		SystemLogAspect.user = userInfo;
 		
 		return response.success().put("user", userInfo).put("isHome", isConstantsHome).toCombineResult();
 	}

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.staff.Unit;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.staff.UnitService;
@@ -44,6 +45,7 @@ public class UnitControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/unit/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="条件查询部门列表")
 	public Map<Object, Object> getUnitListByCondition(@RequestParam(value = "unitId", required = false) String unitId, 
 			@RequestParam(value = "unitName", required = false) String unitName, @PathVariable int currentPage){
 		Response response = new Response();
@@ -80,6 +82,7 @@ public class UnitControl {
 	 * @return 
 	 */
 	@RequestMapping(value= "/base/unit/up/{upUnitId}/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过点击部门树，查询下级部门")
 	public Map<Object, Object> getUnitByUpUnitId (@PathVariable String upUnitId, @PathVariable int currentPage) {
 		Response response = new Response();
 		Map<Object,Object> condition = new HashMap<Object, Object>();
@@ -109,6 +112,7 @@ public class UnitControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/unit/up/{upUnitId}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="点击添加时，查询得到下级部门编号")
 	public Map<Object, Object> getNextId(@PathVariable String upUnitId){
 		Response response = new Response();
 		String currentUnitId = null;;
@@ -130,6 +134,7 @@ public class UnitControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/unit/unittree", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询部门数")
 	public Map<Object, Object> getUnitTree () {
 		Response response = new Response();
 		List<Unit> unitList = null;
@@ -151,6 +156,7 @@ public class UnitControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/unit", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加一个新的部门")
 	public Map<Object, Object> addUnit(@RequestBody Unit unit) {
 		Response response = new Response();
 		int result = 0;
@@ -176,6 +182,7 @@ public class UnitControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/unit", method = RequestMethod.DELETE)
+	@SystemLogController(opType="删除",opContent="删除部门")
 	public Map<Object, Object> deleteUnit(@RequestParam(value = "unitId") String unitId) {
 		Response response = new Response();
 		int result = 0;
@@ -201,6 +208,7 @@ public class UnitControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/unit", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="修改部门信息")
 	public Map<Object, Object> updateUnit(@RequestBody Unit unit) {
 		Response response = new Response();
 		int result = 0;

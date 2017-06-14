@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.alarm.AlarmSetting;
 import com.webleader.appms.common.PathHandler;
 import com.webleader.appms.db.service.setting.AlarmSettingService;
@@ -43,14 +44,13 @@ public class AlarmSettingControl {
 	private AlarmSettingService alarmSettingService;
 	@Autowired
 	private UUIDUtil uuidUtil;
-	@Autowired
-	private PathHandler pathHandler;
 	
 	/** 
 	 * @description 查询所有的报警类型列表
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/alarmType/", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询所有的报警类型列表")
 	public Map<Object, Object> getAlarmSettingListByCondition () {
 		Response response = new Response();
 		List<AlarmSetting> alarmSettingList = null;
@@ -73,6 +73,7 @@ public class AlarmSettingControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/alarmType", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加报警类型")
 	public Map<Object, Object> addAlarmSetting (@RequestBody AlarmSetting alarmSetting) {
 		Response response = new Response();
 		int result = 0;
@@ -95,6 +96,7 @@ public class AlarmSettingControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/alarmType", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="更新报警类型")
 	public Map<Object, Object> updateAlarmSetting (@RequestBody AlarmSetting alarmSetting) {
 		Response response = new Response();
 		int result = 0;
@@ -117,6 +119,7 @@ public class AlarmSettingControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/alarmType", method = RequestMethod.DELETE)
+	@SystemLogController(opType="删除",opContent="删除报警类型")
 	public Map<Object, Object> deleteAlarmSetting (@RequestParam String alarmTypeIds) {
 		Response response = new Response();
 		boolean result = true;
@@ -143,6 +146,7 @@ public class AlarmSettingControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/alarmType/upload", method = RequestMethod.POST)
+	@SystemLogController(opType="上传",opContent="修改报警类型并上传报警声音文件")
 	public Map<Object, Object> uploadAlarmType(@RequestParam(value = "file", required = false) MultipartFile file,
 			@RequestParam(value = "alarmTypeId", required = false) String alarmTypeId, HttpServletRequest request) {
 		Response response = new Response();
@@ -152,14 +156,19 @@ public class AlarmSettingControl {
 		AlarmSetting alarmSetting = new AlarmSetting();
 		alarmSetting.setAlarmTypeId(alarmTypeId);
 		String alarmFile = null;
+		String basePath = null;
+		String realPath = null;
+		String filePath = null;
+		String fileNewName = null;
 		if(!file.isEmpty()){
-			 String basePath = request.getSession().getServletContext().getRealPath("/static/");
-//			String basePath = filePath;
-			String realPath = PathHandler.ALARM_TYPE_PATH;
-			String filePath = pathHandler.formatToBackSlash(basePath + realPath);
+			basePath = request.getSession().getServletContext().getRealPath("/");
+			realPath = PathHandler.BASE_PATH + PathHandler.ALARM_TYPE_PATH;
+			filePath = PathHandler.formatToBackSlash(basePath + realPath);
+			System.out.println("============================");
 			System.out.println(filePath);
+			System.out.println("============================");
 			String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-			String fileNewName = alarmTypeId + suffix;
+			fileNewName = alarmTypeId + suffix;
 	        //保存  
 	        try {  
 	        	//这里不必处理IO流关闭的问题，因为FileUtils.copyInputStreamToFile()方法内部会自动把用到的IO流关掉
@@ -168,7 +177,7 @@ public class AlarmSettingControl {
 	            e.printStackTrace();
 	            return response.failure("上传报警类型声音文件失败，请重试").toSimpleResult();
 	        } 
-	        alarmFile = pathHandler.formatToSlash(realPath + fileNewName);
+	        alarmFile = PathHandler.formatToSlash(realPath + fileNewName);
 	        alarmSetting.setAlarmFile(alarmFile);
 		}else{
 			return response.failure("上传报警类型声音文件失败，请重试").toSimpleResult();
@@ -182,6 +191,7 @@ public class AlarmSettingControl {
 		if (result <= 0) {
 			return response.failure("更新报警类型失败，请重试").toSimpleResult();
 		}
+		
 		return response.success().put("result", result).toCombineResult();
 		
 	}
@@ -193,15 +203,16 @@ public class AlarmSettingControl {
 	 * @param httpResponse 
 	 */
 	@RequestMapping(value = "/base/alarmType/getAlarmSoundByStream", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="流的方式得到音频")
 	public void getAlarmSoundByStream(@RequestParam(value = "alarmSoundUrl", required = false) String alarmSoundUrl,HttpServletRequest request,HttpServletResponse httpResponse) {
 		if (!Objects.nonNull(alarmSoundUrl) || alarmSoundUrl.equals("")) {
 			throw new RuntimeException("Download file not exists!");  
 		} 
 		//String realPath = request.getSession().getServletContext().getRealPath(alarmSoundUrl);
 		//String filePath = realPath;
-		String basePath =  request.getSession().getServletContext().getRealPath("/static/");;
+		String basePath =  request.getSession().getServletContext().getRealPath("/");;
 		String filePath = basePath + alarmSoundUrl;
-		String fileUrl = pathHandler.formatToBackSlash(filePath);
+		String fileUrl = PathHandler.formatToBackSlash(filePath);
 		File file = new File(fileUrl);
 		if (file.exists()){ 
 			FileInputStream fis = null;

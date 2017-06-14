@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.positioning.PastDoc;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.positioning.PastDocService;
@@ -42,6 +43,7 @@ public class HistoryTrackControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/history/staff/count/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="条件查询历史轨迹的列表")
 	public Map<Object, Object> getHistoryTrackList(@RequestBody Map<Object, Object> hisCondition,
 			@PathVariable int currentPage) {
 		List<PastDoc> pastdocList = null;
@@ -71,6 +73,7 @@ public class HistoryTrackControl {
 	 * @return 
 	 */
 	@RequestMapping (value = "/map/history/staff/count", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="条件查询历史轨迹的地图")
 	public Map<Object, Object> getHisStaffPoint (@RequestBody Map<Object, Object> hisCondition){
 		List<Map<Object, Object>> listMapPoint = null;
 		Response response = new Response();

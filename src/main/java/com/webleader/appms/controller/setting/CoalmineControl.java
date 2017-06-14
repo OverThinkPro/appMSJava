@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.setting.Coalmine;
 import com.webleader.appms.db.service.setting.CoalmineService;
 import com.webleader.appms.util.Response;
@@ -35,6 +36,7 @@ public class CoalmineControl {
 	 * @exception SQLException
 	 */
 	@RequestMapping(value = "/base/setting/coalmine", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询煤矿基本信息")
 	public Map<Object, Object> getCoalmineBaseInfo() {
 		Coalmine coalmineInfo = new Coalmine();
 		String coalmineId = "1";
@@ -57,6 +59,7 @@ public class CoalmineControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/coalmine", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="更新煤矿信息")
 	public Map<Object, Object> updateCoalmine (@RequestBody Coalmine coalmine) {
 		Response response = new Response();
 		int result = 0;

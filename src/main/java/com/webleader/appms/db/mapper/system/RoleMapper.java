@@ -28,6 +28,14 @@ public interface RoleMapper {
 	public Role selectByPrimaryKey(String roleId) throws SQLException;
 	
 	/** 
+	 * @description 根据角色名称查询角色信息
+	 * @param roleName 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Role selectRoleByRoleName(String roleName) throws SQLException;
+	
+	/** 
 	 * @description 组合条件分页查询角色信息
 	 * @param pageCondition(roleId,roleName,inUse,pageSize,pageBegin)
 	 * @return

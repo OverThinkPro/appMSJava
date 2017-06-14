@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.alarm.OvermanAlarm;
 import com.webleader.appms.bean.alarm.OvertimeAlarm;
 import com.webleader.appms.bean.alarm.SpecialRegionAlarm;
@@ -66,6 +67,7 @@ public class HomeControl {
 	 * @exception SQLException
 	 */
 	@RequestMapping(value = "/base/coalmine", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="首页查询煤矿基本信息")
 	public Map<Object, Object> getCoalmineInfo() {
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		Map<Object, Object> coalmineInfo = new HashMap<Object, Object>();
@@ -95,6 +97,7 @@ public class HomeControl {
 	 * @exception SQLException
 	 */
 	@RequestMapping(value = "/realtime/count", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询首页右侧的信息，当班人数，区域人数，未处理的警报")
 	public Map<Object, Object> getRealTimeInfo() {
 		Response response = new Response();
 		/* 查询条件 */
@@ -133,6 +136,7 @@ public class HomeControl {
 	 * @throws SQLException
 	 */
 	@RequestMapping(value = "/realtime/staff/unit/{unitId}/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过UnitID，查询员工列表， 当班人数详细信息")
 	public Map<Object, Object> getStaffListsByUnitId(@PathVariable String unitId,
 			@PathVariable("currentPage") int currentPage) {
 		Response response = new Response();
@@ -172,6 +176,7 @@ public class HomeControl {
 	 * @throws SQLException
 	 */
 	@RequestMapping(value = "/realtime/staff/region/{regionId}/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过regionID，查询员工列表， 区域人数的详细信息")
 	public Map<Object, Object> getStaffListsByRegionId(@PathVariable String regionId, @PathVariable int currentPage) {
 		Response response = new Response();
 		
@@ -211,6 +216,7 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/realtime/evacuate/region/{regionId}/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过区域ID，查询撤离呼叫的详细信息")
 	public Map<Object, Object> getEvacuateDetailByRegionId(@PathVariable String regionId,
 			@PathVariable int currentPage) {
 		Response response = new Response();
@@ -262,6 +268,7 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/realtime/alarm/{alarmType}/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过alarmID查询各种警报的详细信息")
 	public Map<Object, Object> getCurrentAlarmInfoByType(@PathVariable int alarmType, @PathVariable int currentPage) {
 		Response response = new Response();
 		Map<Object, Object> condition = new HashMap<Object, Object>();
@@ -343,6 +350,7 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/base/region/count/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent=" 撤离呼叫中，查询区域统计信息")
 	public Map<Object, Object> getRegionInfo(@PathVariable int currentPage) {
 		return realStaffByCondition(null, currentPage);
 	}
@@ -353,6 +361,7 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/base/region/count/{regionId}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="撤离呼叫中，通过区域ID，查询出区域信息")
 	public Map<Object, Object> getRegionInfoByRegionId(@PathVariable String regionId) {
 		return realStaffByCondition(regionId, null);
 	}
@@ -401,6 +410,7 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/base/evacuate/region/u/{userId}", method = RequestMethod.POST)
+	@SystemLogController(opType="呼叫",opContent="记录一条或多条撤离呼叫")
 	public Map<Object, Object> evacuationCall(@RequestParam("regionIdArr[]") String[] regionIdArr,
 			@PathVariable String userId) {
 		Response response = new Response();
@@ -456,6 +466,7 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/base/staff/count/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="回电呼叫，条件查询所有员工信息")
 	public Map<Object, Object> getStaffByCondition(@PathVariable int currentPage,
 			@RequestParam(value = "unitId", required = false) String unitId,
 			@RequestParam(value = "staffName", required = false) String staffName) {
@@ -496,6 +507,7 @@ public class HomeControl {
 	}
 
 	@RequestMapping(value = "/base/callback/staff/u/{userId}", method = RequestMethod.POST)
+	@SystemLogController(opType="呼叫",opContent="回电呼叫")
 	public Map<Object, Object> callStaffBack(@PathVariable String userId,
 			@RequestParam(value = "staffIdArr[]", required = false) String[] staffIdArr) {
 		Response response = new Response();
@@ -535,6 +547,7 @@ public class HomeControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/map/realtime/staff", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="首页实时查询实时员工位置坐标")
 	public Map<Object, Object> getRealtimeStaffMap(@RequestParam(value = "unitId", required = false) String unitId) {
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		List<Map<Object, Object>> staffPointList = null;

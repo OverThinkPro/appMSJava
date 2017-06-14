@@ -14,6 +14,14 @@ import com.webleader.appms.bean.system.Dictionary;
  * @version 1.0.0
  */
 public interface DictionaryService {
+	
+	/** 
+	 * @description 根据字典名称查询字典
+	 * @param dictionaryName
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Dictionary getDicByDictionaryName(String dictionaryName) throws SQLException;
 
 	/** 
 	 * @description 组合条件分页查询字典信息(数字字典编号，数字字典名称，上级数字字典编号，是否启用， 起始记录数，每页的记录数)

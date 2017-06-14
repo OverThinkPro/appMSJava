@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.staff.Schedule;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.staff.ScheduleService;
@@ -40,6 +41,7 @@ public class ScheduleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/schedule/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="条件查询班次列表")
 	public Map<Object, Object> getScheduleListByCondition(@PathVariable int currentPage, 
 			@RequestBody Map<Object, Object> condition) {
 		Response response = new Response();
@@ -68,6 +70,7 @@ public class ScheduleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/schedule/u/{upDutyId}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过上级班次ID，查询下级所有班次信息")
 	public Map<Object, Object> getScheduleByUpDutyId(@PathVariable String upDutyId) {
 		Response response = new Response();
 		List<Schedule> scheduleList = null;
@@ -90,6 +93,7 @@ public class ScheduleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/schedule/{dutyId}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过dutyId查询当前班次信息")
 	public Map<Object, Object> getCurrentSchedule(@PathVariable String dutyId) {
 		Response response = new Response();
 		Schedule schedule = null;
@@ -111,6 +115,7 @@ public class ScheduleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/schedule/tree", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询班次树")
 	public Map<Object, Object> getScheduleTree() {
 		Response response = new Response();
 		List<Schedule> scheduleList = null;
@@ -133,6 +138,7 @@ public class ScheduleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/schedule", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加一个新的班次信息")
 	public Map<Object, Object> insertSchedule(@RequestBody Schedule schedule) {
 		Response response = new Response();
 		int result = 0;
@@ -160,6 +166,7 @@ public class ScheduleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/schedule/{dutyId}", method = RequestMethod.DELETE)
+	@SystemLogController(opType="删除",opContent="通过班组ID，删除该班组")
 	public Map<Object, Object> deleteSchedule(@PathVariable String dutyId) {
 		Response response = new Response();
 		int result = 0;
@@ -182,6 +189,7 @@ public class ScheduleControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/schedule", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="更新班次信息")
 	public Map<Object, Object> updateSchedule(@RequestBody Schedule schedule) {
 		Response response = new Response();
 		int result = 0;

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.staff.DutyDate;
 import com.webleader.appms.bean.staff.DutyUnit;
 import com.webleader.appms.db.service.staff.DutyDateService;
@@ -48,6 +49,7 @@ public class DutyControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/base/duty/{days}", method = RequestMethod.POST)
+	@SystemLogController(opType="排班",opContent="进行排班")
 	public Map<Object, Object> arrangeDuty(@PathVariable int days, @RequestBody List<Map<String, Object>> dutyList) {
 		Response response = new Response();
 		int m = 0;

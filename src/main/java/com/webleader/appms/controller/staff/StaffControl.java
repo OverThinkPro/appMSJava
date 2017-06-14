@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.staff.Staff;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.staff.StaffService;
@@ -46,6 +47,7 @@ public class StaffControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/staff/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="分页条件查询，员工信息列表")
 	public Map<Object, Object> getStaffListByCondition(@PathVariable int currentPage,
 			@RequestParam(required = false) String unitId, @RequestParam(required = false) String staffName,
 			@RequestParam(required = false) String staffId, @RequestParam(required = false) String jobId) {
@@ -89,6 +91,7 @@ public class StaffControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/staff/u/{unitId}/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="通过点击部门树，查询该部门下的所有员工")
 	public Map<Object, Object> getStaffListByUnitId (@PathVariable String unitId, @PathVariable int currentPage) {
 		Response response = new Response();
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
@@ -118,6 +121,7 @@ public class StaffControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/staff", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加一个新的员工")
 	public Map<Object, Object> addStaff (@RequestBody Staff staff) {
 		Response response = new Response();
 		int result = 0;
@@ -139,6 +143,7 @@ public class StaffControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/staff", method = RequestMethod.DELETE)
+	@SystemLogController(opType="删除",opContent="通过员工ID,删除员工")
 	public Map<Object, Object> deleteStaff (@RequestParam String staffId) {
 		Response response = new Response();
 		int result = 0;
@@ -160,6 +165,7 @@ public class StaffControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/staff", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="修改员工信息")
 	public Map<Object, Object> updateStaff (@RequestBody Staff staff) {
 		Response response = new Response();
 		int result = 0;

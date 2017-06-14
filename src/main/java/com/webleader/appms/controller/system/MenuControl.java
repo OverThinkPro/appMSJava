@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.system.TBUrl;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.system.TBUrlService;
@@ -34,7 +35,32 @@ public class MenuControl {
 	private TBUrlService tbUrlService;
 	@Autowired
 	private PageConstants pageConstants;
-
+	
+	/** 
+	 * @description 根据菜单名称查询菜单信息(用于增加菜单)
+	 * @param dictionaryName
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/module/{moduleName}", method = RequestMethod.GET)
+	public Map<Object, Object> getModuleByModuleName(@PathVariable String moduleName){
+		Response response = new Response();
+		boolean result = true;
+		TBUrl tbUrl = null;
+		try {
+			tbUrl = tbUrlService.selectModuleByModuleName(moduleName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		if (Objects.isNull(tbUrl)) {
+			result = true;
+		}else{
+			result = false;
+		}
+		return response.success().put("result", result).toCombineResult();
+		
+	}
+	
 	/** 
 	 * @description 条件查询菜单信息
 	 * @param moduleId
@@ -43,6 +69,7 @@ public class MenuControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/module/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="条件查询菜单列表信息")
 	public Map<Object, Object> getTBUrlListByCondition(@RequestBody Map<Object, Object> condition,@PathVariable int currentPage){
 		Response response = new Response();
 		List<TBUrl> urlList = null;
@@ -68,6 +95,7 @@ public class MenuControl {
 	 * @return 
 	 */
 	@RequestMapping(value= "/base/module/up/{upModuleId}/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="点击菜单树，查询下级菜单信息")
 	public Map<Object, Object> getTBUrlByUpTBUrlId (@PathVariable String upModuleId, @PathVariable int currentPage) {
 		Response response = new Response();
 		Map<Object,Object> condition = new HashMap<Object, Object>();
@@ -97,6 +125,7 @@ public class MenuControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/module/up/{upModuleId}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="点击添加时，查询得到下级菜单编号")
 	public Map<Object, Object> getNextId(@PathVariable String upModuleId){
 		Response response = new Response();
 		String currentTBUrlId = null;;
@@ -116,6 +145,7 @@ public class MenuControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/module/moduleTree", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询菜单树")
 	public Map<Object, Object> getTBUrlTree () {
 		Response response = new Response();
 		List<TBUrl> urlList = null;
@@ -136,6 +166,7 @@ public class MenuControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/module", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加一个新的菜单")
 	public Map<Object, Object> addTBUrl(@RequestBody TBUrl tbUrl) {
 		Response response = new Response();
 		int result = 0;
@@ -162,6 +193,7 @@ public class MenuControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/module", method = RequestMethod.DELETE)
+	@SystemLogController(opType="删除",opContent="通过菜单编号批量删除菜单")
 	public Map<Object, Object> deleteTBUrl(@RequestParam(value = "moduleIds") String moduleIds) {
 		Response response = new Response();
 		boolean result = true;
@@ -189,6 +221,7 @@ public class MenuControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/module", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="修改菜单信息")
 	public Map<Object, Object> updateTBUrl(@RequestBody TBUrl tbUrl) {
 		Response response = new Response();
 		int result = 0;

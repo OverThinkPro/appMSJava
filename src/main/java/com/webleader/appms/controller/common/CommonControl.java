@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.positioning.Reader;
 import com.webleader.appms.bean.positioning.Region;
 import com.webleader.appms.bean.staff.JobType;
@@ -77,6 +78,7 @@ public class CommonControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/region", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询所有区域列表")
 	public Map<Object, Object> getAllRegion(){
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
 		List<Region> regionList = null;
@@ -98,6 +100,7 @@ public class CommonControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/unit", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询所有的部门列表")
 	public Map<Object, Object> getAllUnit(){
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
 		List<Unit> unitList = null;
@@ -119,6 +122,7 @@ public class CommonControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/reader", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询所有的分站")
 	public Map<Object, Object> getAllReader() {
 		Map<Object,Object> pageCondition = new HashMap<Object,Object>();
 		List<Reader> readerList = null;
@@ -141,6 +145,7 @@ public class CommonControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/jobtype", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="默认查询得到工种下拉列表")
 	public Map<Object, Object> getAllJobType () {
 		Response response = new Response();
 		List<JobType> jobTypeList = null;

@@ -33,19 +33,7 @@ public class DictionaryTest {
 	/*****************START BY HaoShaSha*********/
 	
 	/*****************查询接口开始*******************/
-	/** 
-	 * @description 根据字典编码查询字典名称 
-	 */
-	@Test
-	public void getNameByCode(){
-		String dictionaryId = "10";
-		try {
-			String dictioanryName = dictionaryMapper.getNameByCode(dictionaryId);
-			System.out.println(dictioanryName);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	
 	/** 
 	 * @description 根据字典名称查询字典编码
 	 */
@@ -94,7 +82,7 @@ public class DictionaryTest {
 	@Test
 	public void getDicTree(){
 		try {
-			List<Dictionary> urlTree = dictionaryMapper.getDicTree();
+			List<Dictionary> urlTree = dictionaryMapper.getDicTree("1");
 			System.out.println(urlTree);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -160,7 +148,7 @@ public class DictionaryTest {
 		dictionary.setDictionaryId("1000001");
 		dictionary.setDictionaryName("添加数字字典");
 		dictionary.setUpDictionaryId("1");
-		dictionary.setEnglistName("EnglishName");
+		dictionary.setEnglishName("EnglishName");
 		dictionary.setInUse("1");
 		try {
 			int count = dictionaryMapper.insert(dictionary);
@@ -178,7 +166,7 @@ public class DictionaryTest {
 		dictionary.setDictionaryId("1000002");
 		dictionary.setDictionaryName("添加数字字典2");
 		dictionary.setUpDictionaryId("1");
-		dictionary.setEnglistName("EnglishName");
+		dictionary.setEnglishName("EnglishName");
 		dictionary.setInUse("1");
 		try {
 			int count = dictionaryMapper.insert(dictionary);
@@ -229,7 +217,7 @@ public class DictionaryTest {
 		Dictionary dictionary = new Dictionary();
 		dictionary.setDictionaryId("1000002");
 		dictionary.setDictionaryName("修改数字字典2");
-		dictionary.setEnglistName("English");
+		dictionary.setEnglishName("English");
 		dictionary.setInUse("1");
 		try {
 			int count = dictionaryMapper.updateByPrimaryKeySelective(dictionary);

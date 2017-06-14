@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.positioning.Region;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.positioning.RegionService;
@@ -44,6 +45,7 @@ public class RegionControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/region/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="条件查询区域坐标列表")
 	public Map<Object, Object> getRegionListByCondition(@PathVariable int currentPage,
 			@RequestBody Map<Object, Object> condition) {
 		Response response = new Response();
@@ -71,6 +73,7 @@ public class RegionControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/map/region", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="条件查询区域坐标列表")
 	public Map<Object, Object> getRegionMapByCondition(@RequestBody Map<Object, Object> condition) {
 		Response response = new Response();
 		List<Map<Object, Object>> regionList = null;
@@ -93,6 +96,7 @@ public class RegionControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/region", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加一个区域信息")
 	public Map<Object, Object> insertRegion(@RequestBody Region region) {
 		Response response = new Response();
 		int result = 0;
@@ -115,6 +119,7 @@ public class RegionControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/region", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="修改区域普通信息")
 	public Map<Object, Object> updateReader(@RequestBody Region region) {
 		Response response = new Response();
 		int result = 0;
@@ -136,6 +141,7 @@ public class RegionControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/map/region", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="修改区域地图信息")
 	public Map<Object, Object> updateMapReader(@RequestBody List<Map<Object, Object>> mapInfo) {
 		Response response = new Response();
 		int result = 0;
@@ -158,6 +164,7 @@ public class RegionControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/region/{regionId}", method = RequestMethod.DELETE)
+	@SystemLogController(opType="删除",opContent="删除区域")
 	public Map<Object, Object> deleteReader(@PathVariable String regionId) {
 		Response response = new Response();
 		int result = 0;
@@ -179,6 +186,7 @@ public class RegionControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/map/region", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询所有区域地图坐标")
 	public Map<Object, Object> getRegionMapList() {
 		Response response = new Response();
 		List<Map<Object, Object>> regionList = null;

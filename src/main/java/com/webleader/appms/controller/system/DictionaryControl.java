@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webleader.appms.annotation.SystemLogController;
 import com.webleader.appms.bean.system.Dictionary;
 import com.webleader.appms.common.PageConstants;
 import com.webleader.appms.db.service.system.DictionaryService;
@@ -34,7 +35,32 @@ public class DictionaryControl {
 	private DictionaryService dictionaryService;
 	@Autowired
 	private PageConstants pageConstants;
-
+	
+	/** 
+	 * @description 根据字典名称查询字典信息(用于增加字典)
+	 * @param dictionaryName
+	 * @return 
+	 */
+	@RequestMapping(value = "/base/dictionary/{dictionaryName}", method = RequestMethod.GET)
+	public Map<Object, Object> getDicByDictionaryName(@PathVariable String dictionaryName){
+		Response response = new Response();
+		boolean result = true;
+		Dictionary dictionary = null;
+		try {
+			dictionary = dictionaryService.getDicByDictionaryName(dictionaryName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		if (Objects.isNull(dictionary)) {
+			result = true;
+		}else{
+			result = false;
+		}
+		return response.success().put("result", result).toCombineResult();
+		
+	}
+		 
 	/** 
 	 * @description 条件查询字典信息
 	 * @param dictionaryId
@@ -43,6 +69,7 @@ public class DictionaryControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/dictionary/p/{currentPage}", method = RequestMethod.POST)
+	@SystemLogController(opType="查询",opContent="条件查询字典列表信息")
 	public Map<Object, Object> getDictionaryListByCondition(@RequestBody Map<Object, Object> condition,@PathVariable int currentPage){
 		Response response = new Response();
 		List<Dictionary> dictionaryList = null;
@@ -69,6 +96,7 @@ public class DictionaryControl {
 	 * @return 
 	 */
 	@RequestMapping(value= "/base/dictionary/up/{upDictionaryId}/p/{currentPage}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="点击字典树，查询下级字典")
 	public Map<Object, Object> getDictionaryByUpDictionaryId (@PathVariable String upDictionaryId, @PathVariable int currentPage) {
 		Response response = new Response();
 		Map<Object,Object> condition = new HashMap<Object, Object>();
@@ -98,6 +126,7 @@ public class DictionaryControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/dictionary/up/{upDictionaryId}", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="点击添加时，查询得到下级字典编号")
 	public Map<Object, Object> getNextId(@PathVariable String upDictionaryId){
 		Response response = new Response();
 		String currentDictionaryId = null;;
@@ -118,6 +147,7 @@ public class DictionaryControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/dictionary/dictionaryTree", method = RequestMethod.GET)
+	@SystemLogController(opType="查询",opContent="查询字典树")
 	public Map<Object, Object> getDictionaryTree () {
 		Response response = new Response();
 		List<Dictionary> dictionaryList = null;
@@ -138,6 +168,7 @@ public class DictionaryControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/dictionary", method = RequestMethod.POST)
+	@SystemLogController(opType="添加",opContent="添加一个新的数据字典")
 	public Map<Object, Object> addDictionary(@RequestBody Dictionary dictionary) {
 		Response response = new Response();
 		int result = 0;
@@ -161,6 +192,7 @@ public class DictionaryControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/dictionary", method = RequestMethod.DELETE)
+	@SystemLogController(opType="删除",opContent="通过字典编号批量删除字典")
 	public Map<Object, Object> deleteDictionary(@RequestParam(value = "dictionaryIds") String dictionaryIds) {
 		Response response = new Response();
 		boolean result = true;
@@ -188,6 +220,7 @@ public class DictionaryControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/base/dictionary", method = RequestMethod.PUT)
+	@SystemLogController(opType="修改",opContent="修改字典信息")
 	public Map<Object, Object> updateDictionary(@RequestBody Dictionary dictionary) {
 		Response response = new Response();
 		int result = 0;
