@@ -50,8 +50,11 @@ public class RealtimeStaffInfoControl {
 		int totalCounts = 0;
 		Response response = new Response();
 		
-		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
-		condition.put("endTime", Timestamp.from(Instant.now()));
+//		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+//		condition.put("endTime", Timestamp.from(Instant.now()));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-50)));
+		condition.put("endTime", Timestamp.from(Instant.now().plusSeconds(50)));
+		
 		condition.put("pageBegin", pageConstants.getRecordNums(currentPage));
 		condition.put("pageSize", pageConstants.getPageSize());
 		
@@ -78,8 +81,10 @@ public class RealtimeStaffInfoControl {
 		List<Map<Object, Object>> staffPointList = null;
 		Response response = new Response();
 		
-		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
-		condition.put("endTime", Timestamp.from(Instant.now()));
+//		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+//		condition.put("endTime", Timestamp.from(Instant.now()));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-50)));
+		condition.put("endTime", Timestamp.from(Instant.now().plusSeconds(50)));
 		
 		try {
 			staffPointList = tlStaffService.listStaffPointByConditon(condition);

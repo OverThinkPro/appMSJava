@@ -556,8 +556,9 @@ public class HomeControl {
 		if (Objects.nonNull(unitId) && !unitId.equals("")){
 			condition.put("unitId", unitId);
 		}
-		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
-		condition.put("endTime", Timestamp.from(Instant.now()));
+//		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-50)));
+		condition.put("endTime", Timestamp.from(Instant.now().plusSeconds(50)));
 		
 		try {
 			staffPointList = tlStaffService.listStaffPointByConditon(condition);
