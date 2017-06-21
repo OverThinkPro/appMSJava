@@ -162,7 +162,8 @@ public class AlarmSettingControl {
 		String fileNewName = null;
 		if(!file.isEmpty()){
 			basePath = request.getSession().getServletContext().getRealPath("/");
-			realPath = PathHandler.BASE_PATH + PathHandler.ALARM_TYPE_PATH;
+			
+			realPath = PathHandler.ALARM_TYPE_PATH;
 			filePath = PathHandler.formatToBackSlash(basePath + realPath);
 			System.out.println("============================");
 			System.out.println(filePath);
