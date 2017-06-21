@@ -1,6 +1,6 @@
 package com.webleader.appms.bean.positioning;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -23,7 +23,7 @@ public class Reader {
 	private String readerStatus;// 分站状态
 
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-	private Date installDate;// 安装时间
+	private Timestamp installDate;// 安装时间
 
 	private String powerSupplyMode;// 供电方式，0：电源 1:电池
 
@@ -83,11 +83,11 @@ public class Reader {
 		this.readerStatus = readerStatus == null ? null : readerStatus.trim();
 	}
 
-	public Date getInstallDate() {
+	public Timestamp getInstallDate() {
 		return installDate;
 	}
 
-	public void setInstallDate(Date installDate) {
+	public void setInstallDate(Timestamp installDate) {
 		this.installDate = installDate;
 	}
 
