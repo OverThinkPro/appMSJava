@@ -163,7 +163,7 @@ public class AlarmSettingControl {
 		if(!file.isEmpty()){
 			basePath = request.getSession().getServletContext().getRealPath("/");
 			
-			realPath = PathHandler.ALARM_TYPE_PATH;
+			realPath = PathHandler.BASE_PATH + PathHandler.ALARM_TYPE_PATH;
 			filePath = PathHandler.formatToBackSlash(basePath + realPath);
 			System.out.println("============================");
 			System.out.println(filePath);
@@ -178,7 +178,7 @@ public class AlarmSettingControl {
 	            e.printStackTrace();
 	            return response.failure("上传报警类型声音文件失败，请重试").toSimpleResult();
 	        } 
-	        alarmFile = PathHandler.formatToSlash(realPath + fileNewName);
+	        alarmFile = PathHandler.formatToSlash(PathHandler.ALARM_TYPE_PATH + fileNewName);
 	        alarmSetting.setAlarmFile(alarmFile);
 		}else{
 			return response.failure("上传报警类型声音文件失败，请重试").toSimpleResult();

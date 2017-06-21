@@ -224,7 +224,7 @@ public class JobPicControl {
     	//FileUtils.copyInputStreamToFile(file.getInputStream(), new File(filePath, fileNewName));
         
         //更新数据库
-        String fileUrl = PathHandler.formatToSlash(realPath + fileNewName);
+        String fileUrl = PathHandler.formatToSlash(PathHandler.JOB_TYPE_PIC_PATH + fileNewName);
         System.out.println(fileUrl);
         JobType jobType = new JobType();
         jobType.setJobId(jobId);
