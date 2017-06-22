@@ -51,6 +51,58 @@ public class AlarmServiceImpl implements AlarmService {
 	}
 	
 	/** 
+	 * @description 查询超员的区域，是否已经在报警表中存在
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Map<Object, Object> getRegionOverman(Map<Object, Object> condition) throws SQLException {
+		if (Objects.isNull(condition)) {
+			return null;
+		}
+		return overmanAlarmMapper.getRegionOverman(condition);
+	}
+	
+	/** 
+	 * @description 在报警信息表中，插入一条记录
+	 * @param alarmInfo
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertAlarmInfo(Map<Object, Object> alarmInfo) throws SQLException {
+		if (Objects.isNull(alarmInfo)) {
+			return 0;
+		}
+		return alarmMapper.insertAlarmInfo(alarmInfo);
+	}
+	
+	/** 
+	 * @description 添加一条超员报警
+	 * @param overmanAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertOvermanAlarm(Map<Object, Object> overmanAlarm) throws SQLException {
+		if (Objects.isNull(overmanAlarm)) {
+			return 0;
+		}
+		return overmanAlarmMapper.insertOvermanAlarm(overmanAlarm);
+	}
+	
+	/** 
+	 * @description 添加一条员工呼叫报警
+	 * @param staffAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertStaffAlarm (Map<Object, Object> staffAlarm) throws SQLException {
+		if (Objects.isNull(staffAlarm)) {
+			return 0;
+		}
+		return staffAlarmMapper.insertStaffAlarm(staffAlarm);
+	}
+	
+	/** 
 	 * @description 组合条件分页查询超时报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数)
 	 * @param pageCondition(alarmInhandle,regionName,alarmStartTime,alarmEndTime,pageSize,pageBegin)
 	 * @return
@@ -152,5 +204,31 @@ public class AlarmServiceImpl implements AlarmService {
 			return 0;
 		}
 		return staffAlarmMapper.countStaffAlarmByConditon(condition);
+	}
+	
+	/** 
+	 * @description 修改报警总表
+	 * @param alarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateByPrimaryKeySelective(Map<Object, Object> alarm) throws SQLException {
+		if (Objects.isNull(alarm)) {
+			return 0;
+		}
+		return alarmMapper.updateByPrimaryKeySelective(alarm);
+	}
+	
+	/** 
+	 * @description 修改一条超员报警
+	 * @param overmanAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateOvermanAlarm(Map<Object, Object> overmanAlarm) throws SQLException {
+		if (Objects.isNull(overmanAlarm)) {
+			return 0;
+		}
+		return overmanAlarmMapper.updateOvermanAlarm(overmanAlarm);
 	}
 }

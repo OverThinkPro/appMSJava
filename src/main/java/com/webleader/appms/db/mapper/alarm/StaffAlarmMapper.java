@@ -39,6 +39,14 @@ public interface StaffAlarmMapper {
 	 
 	/*****************查询接口结束*******************/
    	/*****************END BY HaoShaSha***********/
+	
+	/** 
+	 * @description 添加一条员工呼叫报警
+	 * @param staffAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertStaffAlarm (Map<Object, Object> staffAlarm) throws SQLException;
 
 }
 

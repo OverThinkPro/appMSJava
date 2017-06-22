@@ -39,6 +39,30 @@ public interface OvermanAlarmMapper {
 	 
 	/*****************查询接口结束*******************/
    	/*****************END BY HaoShaSha***********/
+	
+	/** 
+	 * @description 查询超员的区域，是否已经在报警表中存在
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public Map<Object, Object> getRegionOverman(Map<Object, Object> condition) throws SQLException;
+	
+	/** 
+	 * @description 添加一条超员报警
+	 * @param overmanAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertOvermanAlarm(Map<Object, Object> overmanAlarm) throws SQLException;
+	
+	/** 
+	 * @description 修改一条超员报警
+	 * @param overmanAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int updateOvermanAlarm(Map<Object, Object> overmanAlarm) throws SQLException;
 
 }
 

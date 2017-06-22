@@ -37,6 +37,15 @@ public interface AlarmMapper {
 	public List<Map<Object,Object>> countRealAlarmType() throws SQLException;
     
 	/*****************查询接口结束*******************/
+	
+	/** 
+	 * @description 在报警信息表中，插入一条记录
+	 * @param alarmInfo
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertAlarmInfo(Map<Object, Object> alarmInfo) throws SQLException;
+	
     /*****************删除接口开始*******************/
     
    
@@ -57,7 +66,7 @@ public interface AlarmMapper {
      * @return
      * @throws SQLException 
      */
-    public int updateByPrimaryKeySelective(Alarm alarm) throws SQLException;
+    public int updateByPrimaryKeySelective(Map<Object, Object> alarm) throws SQLException;
     
     /*****************更新接口结束*******************/
 	/*****************END BY HaoShaSha***********/

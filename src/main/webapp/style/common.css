@@ -1,0 +1,632 @@
+/**
+ * @author Zychaowill
+ * @date 2017/03/31
+ * @description 项目统一样式表
+ */
+/* 通用样式设置 */
+main {
+  margin: 0 15px;
+  /*border: 2px solid #337AB7;*/
+}
+
+/* 内容包装盒样式 */
+.content-box {
+  background-color: #FFF;
+  overflow: hidden;
+  zoom: 1;
+}
+
+/* 浮动和清除浮动 */
+.flex {}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.clear {
+  clear: both;
+  float: none;
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 0;
+  background: none;
+  overflow: hidden;
+  visibility: visible;
+}
+
+/* 面包片专用 */
+.bread-box {
+  text-align: left;
+  font-weight: 400;
+}
+.breadcrumb {
+  border-radius: 0;
+  margin-bottom: 0;
+}
+.breadcrumb a {
+  text-decoration: none;
+}
+
+/* 分割线 */
+.hr {
+  border-top: 1px solid #EEE;
+  margin: 20px auto;
+  width: 100%;
+}
+.search-hr {
+  border: 5px solid #EEE;
+  width: 100%;
+}
+.white-hr {
+  border: 1px solid white;
+  margin: 20px auto;
+  width: 100%;
+}
+.gray-hr {
+  border-top: 1px solid #E5E5E5;
+  margin: 20px auto;
+  width: 100%;
+}
+
+/* 下拉选择框同步样式 */
+select {
+  border: 1px solid #DDD;
+  border-radius: 4px;
+  padding-left: 5px;
+  height: 34px;
+}
+
+/* 指定18px的字号 */
+.strong {
+  font-size: 18px;
+}
+
+/* 字体加粗100~900 */
+.bold-1 {font-weight: 100;}
+.bold-2 {font-weight: 200;}
+.bold-3 {font-weight: 300;}
+.bold-4 {font-weight: 400;}
+.bold-5 {font-weight: 500;}
+.bold-6 {font-weight: 600;}
+.bold-7 {font-weight: 700;}
+.bold-8 {font-weight: 800;}
+.bold-9 {font-weight: 900;}
+
+/* 一行居中 */
+.line {
+  height: 34px;
+  line-height: 34px;
+  text-align: center;
+  width: 100%;
+  margin: 10px 5px;
+  overflow: hidden;
+  zoom: 1;
+}
+
+/**
+ * @deprecated 暂时不用
+ * @description 组合信息展示样式
+ */
+.input-group-line {
+  width: 100%;
+  height: 34px;
+  line-height: 34px;
+  margin: 8px auto;
+  overflow: hidden;
+  zoom: 1;
+}
+.group-left, .group-right {
+  float: left;
+  height: 34px;
+  line-height: 34px;
+  overflow: hidden;
+  zoom: 1;
+}
+.group-left {
+  text-align: right;
+  width: 150px;
+  margin-right: 15px;
+}
+.group-right {
+  width: 60%;
+  text-align: left;
+}
+.label-left {}
+.label-right {}
+
+/* 外部包装盒背景色 */
+.outside-box {
+  background-color: #FFF;
+  overflow: hidden;
+  zoom: 1;
+}
+
+/* 可清空值的标记 */
+.refresh {}
+/* 页面查询条件组合样式设置（不可用于模态框中） */
+.search-bar-box {
+  width: 100%;
+  overflow: hidden;
+  zoom: 1;
+}
+.search-bar {
+  margin: 10px 0px;
+  padding: 10px;
+  background-color: white;
+  overflow: hidden;
+  zoom: 1;
+}
+/* 当查询条件过多存在多行时使用 */
+.search-bar-line {
+  margin: 10px 0;
+  overflow: hidden;
+  zoom: 1;
+}
+/* 组合查询条件包装盒 */
+.search-bar-input {
+  width: 20%;
+  margin: 0 10px;
+}
+.search-bar-select {
+  width: 20%;
+  margin: 0 10px;
+}
+.search-bar-button {
+  /*width: 20%;*/
+  margin: 0 10px;
+}
+
+/* 模态框样式统一设置 */
+.modal-dialog {
+  width: 700px;
+}
+.modal-header {
+  background-color: #337AB7;
+  color: white;
+}
+.modal-title {}
+/* 模态框modal-body内使用的内容包装盒样式 */
+.modal-body {
+  /*background-color: #EEE;*/
+}
+.modal-table-box {
+  padding: 10px;
+  overflow: hidden;
+  zoom: 1;
+}
+/* 模态框中展示信息时使用的组合样式 */
+.show-info-group {
+  text-align: center;
+  border: 1px solid #CCC;
+  border-radius: 4px;
+  overflow: hidden;
+  zoom: 1;
+}
+.s-group-left, .s-group-right {
+  float: left;
+  height: 34px;
+  line-height: 34px;
+  overflow: hidden;
+  zoom: 1;
+}
+.s-group-left {
+  width: 40%;
+  background-color: #EEE;
+}
+.s-group-right {
+  width: 60%;
+}
+
+.show-info-group .group-left {
+  width: 20%;
+  margin-right: 0;
+  text-align: center;
+  background-color: #EEE;
+}
+.show-info-group .group-right {
+  width: 30%;
+  text-align: center;
+}
+
+/* 模态框中组合查询条件样式设置（模态框专用） */
+.modal-search-bar {
+  width: 100%;
+  margin: 10px 0;
+  padding: 5px 0;
+  background-color: white;
+  overflow: hidden;
+  zoom: 1;
+}
+.ms-bar-input {
+  width: 25%;
+  margin: 0 5px;
+}
+.ms-bar-select {
+  width: 25%;
+  margin: 0 5px;
+}
+.ms-bar-button {
+  width: 25%;
+  /*margin: 0 10px;*/
+}
+
+/* 针对使用大标题性文字的统一样式设置 */
+.h1, h1 {}
+.h2, h2 {}
+.h3, h3 {
+  font-weight: 400;
+}
+.h4, h4 {
+  font-size: 22px;
+  font-weight: 400;
+}
+.h5, h5 {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* 旁白信息展示块（比如首页的右侧实时信息展示块），为通用样式 */
+.wrap-info {
+  width: 90%;
+  min-height: 160px;
+  margin: 0 5% 10px 5%;
+  border-bottom: 1px solid #DDD;
+}
+.wrap-info:last-child {
+  border-bottom: 0;
+}
+
+/* 大标题包装盒样式 */
+.title-box {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 15px 0;
+  background: #337AB7;
+  color: white;
+}
+/* 大标题居中样式 */
+.title-center {
+  text-align: center;
+}
+
+/* 小标题包装盒 */
+.s-title-box {
+  width: 100%;
+  padding: 5px 0;
+}
+
+/* 左右组合展示数据（包含左右的一行）*/
+.document-line {
+  margin: 10px 5px;
+  overflow: hidden;
+  zoom: 1;
+}
+.label-line-left, .label-line-right {
+  width: 40%;
+  float:left;
+}
+.label-line-left {
+  text-align: right;
+  margin-right: 5%;
+  font-weight: 400;
+}
+.label-line-right {
+  text-align: left;
+  margin-left: 5%;
+}
+
+/* 不同button的专用样式 */
+.btn-save {
+  width: 100px;
+  /*background-color: #337AB7;
+	color: white;*/
+}
+.modal-btn {width: 100px;}
+
+/* 按钮包装盒 */
+.btn-box {
+  margin: 10px 5px 10px 10px;
+  overflow: hidden;
+  zoom: 1;
+}
+.btn-box button {
+  margin-right: 5px;
+  font-weight: 400;
+}
+.btn-box select {
+  height: 34px;
+  margin-right: 5px;
+  padding: 6px 12px;
+  border: 1px solid #DDD;
+  border-radius: 5px solid #DDD;
+}
+.btn-box input[type='checkbox'] {
+  display: inline-block;
+  height: 34px;
+  vertical-align: middle;
+  margin: 0 5px 0 0;
+}
+
+/* 地图包装盒 */
+.map-box {
+  margin: 10px;
+  border: 1px solid #DDD;
+  min-height: 600px;
+}
+
+#map {
+  min-height: 600px;
+  max-height: 600px;
+}
+
+/* 页面主体部分包装盒样式（不包含查询条件） */
+.table-box {
+  margin: 10px 0;
+  padding: 10px;
+  overflow: hidden;
+  zoom: 1;
+}
+.table-box-left {
+  width: 21%;
+}
+.table-box-right {
+  width: 78%;
+}
+/* 真正的表格数据包装盒样式 */
+.data-box {
+  margin: 0 0 20px 0;
+  overflow: hidden;
+  zoom: 1;
+}
+/* 表格样式（不区分页面和模态框，通用样式） */
+table {}
+table thead {
+  color: #FFF;
+  background-color: rgb(51, 122, 183);
+}
+table thead th {
+  text-align: center;
+  font-weight: bold;
+}
+table tbody {
+  text-align: center;
+  background-color: #FFF;
+}
+
+/* 分页样式设置 */
+.pagination-box {
+  height: 44px;
+}
+.pagination {
+  margin: 0;
+  padding: 5px 0;
+}
+
+.pagination {
+	position: relative;
+  text-align: center;
+	zoom: 1;
+}
+
+.m-pagination {
+    margin: 10px 0;
+    height: 38px;
+}
+
+.m-pagination-page,
+.m-pagination-info,
+.m-pagination-size,
+.m-pagination-jump {
+    float: left;
+    margin-top: 2px;
+    padding-right: 10px;
+}
+
+    /* font */
+    .m-pagination-page > li > a,
+    .m-pagination-size > select,
+    .m-pagination-group > input,
+    .m-pagination-group > button,
+    .m-pagination-info {
+        font-size: 16px;
+        font-family: 'Microsoft YaHei';
+        color: #888;
+    }
+
+    /* border */
+    .m-pagination-page > li > a,
+    .m-pagination-size > select,
+    .m-pagination-group > input,
+    .m-pagination-group > button {
+        outline: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -khtml-user-select: none;
+        border: 1px solid #ddd;
+    }
+
+    /* button */
+    .m-pagination-page > li > a,
+    .m-pagination-group > button {
+        cursor: pointer;
+        background-color: #fff;
+    }
+
+        .m-pagination-page > li:hover > a,
+        .m-pagination-group > button:hover {
+            background-color: #eee;
+            border-color: #ddd;
+        }
+
+
+
+    /*************  pagination-page  *************/
+
+    .m-pagination-page > li {
+        list-style: none;
+        float: left;
+    }
+
+        .m-pagination-page > li > a {
+            height: 34px;
+            line-height: 34px;
+            margin-left: -1px;
+            display: inline-block;
+            padding: 0 12px;
+            text-decoration: none;
+            box-sizing: content-box;
+        }
+
+        .m-pagination-page > li.active > a {
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .m-pagination-page > li:first-child > a {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .m-pagination-page > li:last-child > a {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+
+
+    /*************  pagination-perpage  *************/
+
+    .m-pagination-size > select {
+        cursor: pointer;
+        height: 36px;
+        padding: 0px 8px;
+        border-radius: 4px;
+    }
+
+
+/*************  pagination-go   *************/
+
+    .m-pagination-group > input,
+    .m-pagination-group > button {
+          float: left;
+    }
+
+    .m-pagination-group > input {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        width: 50px;
+        height: 34px;
+        padding: 0px;
+        text-align: center;
+        box-sizing: content-box;
+    }
+
+    .m-pagination-group > button {
+        border-left: none;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        height: 36px;
+        padding: 0px 12px;
+    }
+
+
+/************  pagination-info   *************/
+
+.m-pagination-info {
+    height: 36px;
+    line-height: 36px;
+}
+
+
+/* 侧边栏的组合查询条件 */
+.sidebar {
+  position: fixed;
+  top: 100px;
+  width: 340px;
+  overflow: auto;
+  transition: all 0.2s ease 0s;
+  z-index: 5;
+}
+.sidebar-right {left: 0;}
+.sidebar-left {left: -340px;}
+.sidebar_toggle_box {
+  position: fixed;
+  top: 300px;
+  left: 0;
+  z-index: 10;
+}
+.sidebar_toggle_box a {
+  color: #337AB7;
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+  font-size: 25px;
+}
+.sidebar_toggle_box a:hover {
+  cursor: pointer;
+}
+/* 当查询条件过多存在多行时使用 */
+.ss-bar-line {
+  margin: 20px 0;
+  overflow: hidden;
+  zoom: 1;
+}
+/* 组合查询条件包装盒 */
+.ss-bar-input {
+  width: 90%;
+  margin: 0 10px;
+}
+.ss-bar-select {
+  width: 90%;
+  margin: 0 10px;
+}
+.ss-bar-button {
+  width: 90%;
+  margin: 0 10px;
+}
+.ss-bar-button button {
+  width: 100%;
+}
+
+/*
+   警告框统一样式
+   目前暂不使用
+ */
+.alert {
+  position: absolute;
+  top: 0;
+  right: 15px;
+  width: 20%;
+  margin-bottom: 0;
+  z-index: 2000;
+}
+
+/* 清除边框 */
+.clear-border {border: 0;}
+.clear-top {border-top: 0;}
+.clear-bottom {border-bottom: 0;}
+.clear-border-radius {border-radius: 0;}
+.clear-radius-top {border-top-left-radius: 0; border-top-right-radius: 0;}
+.clear-radius-bottom {border-bottom-left-radius: 0; border-bottom-right-radius: 0;}
+
+[v-cloak] {
+  display: none;
+}
+
+.is-danger {
+  border: 1px solid red;
+  border-radius: 4px;
+}
+
+.word-danger {
+  color: red;
+}

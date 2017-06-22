@@ -35,6 +35,7 @@
 		FROM t_overman_alarm overman, t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
 		WHERE overman.alarm_id=alarm.alarm_id 
 		AND alarm.alarm_type_id=alarm_sound.alarm_type_id 
+		AND alarm_inhandle='0'
 		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
 			AND alarm_inhandle = #{alarmInhandle}
 		</if>
@@ -65,6 +66,7 @@
 		FROM t_overman_alarm overman, t_base_alarm_info alarm, t_base_alarm_sound_setting alarm_sound
 		WHERE overman.alarm_id=alarm.alarm_id 
 		AND alarm.alarm_type_id=alarm_sound.alarm_type_id 
+		AND alarm_inhandle='0'
 		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
 			AND alarm_inhandle = #{alarmInhandle}
 		</if>
@@ -85,4 +87,34 @@
 		</if>
 	</select>
 	<!-- END BY HaoShaSha -->
+	
+	<select id="getRegionOverman" parameterType="Map" resultType="Map">
+		SELECT base.alarm_id, alarm_start_time, alarm_end_time, overman_id
+		FROM t_base_alarm_info base, t_overman_alarm overman
+		WHERE base.alarm_id=overman.alarm_id
+		AND alarm_inhandle='0'
+		AND alarm_type_id='2'
+		AND overman.region_id=#{regionId}
+	</select>
+	
+	<!-- 插入一条超员报警 -->
+	<insert id="insertOvermanAlarm" parameterType="Map">
+    insert into t_overman_alarm (overman_id, alarm_id, region_name, 
+      req_number, real_number, region_id
+      )
+    values (#{overmanId,jdbcType=VARCHAR}, #{alarmId,jdbcType=VARCHAR}, #{region_name,jdbcType=VARCHAR}, 
+      #{region_max_people,jdbcType=INTEGER}, #{total,jdbcType=INTEGER}, #{region_id,jdbcType=VARCHAR}
+      )
+  	</insert>
+  	
+  	<update id="updateOvermanAlarm" parameterType="Map">
+	    update t_overman_alarm
+	   <set>
+	      <if test="realNumber != null">
+	        real_number = #{realNumber,jdbcType=INTEGER},
+	      </if>
+	   </set>
+	    where overman_id = #{overman_id,jdbcType=VARCHAR}
+ 	</update>
+	
 </mapper>

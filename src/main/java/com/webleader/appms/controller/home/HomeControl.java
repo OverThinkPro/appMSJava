@@ -32,6 +32,7 @@ import com.webleader.appms.db.service.communication.CallBackService;
 import com.webleader.appms.db.service.communication.EvacuationService;
 import com.webleader.appms.db.service.positioning.TLStaffService;
 import com.webleader.appms.db.service.setting.CoalmineService;
+import com.webleader.appms.util.ErrorMsg;
 import com.webleader.appms.util.Response;
 import com.webleader.appms.util.UUIDUtil;
 
@@ -118,6 +119,58 @@ public class HomeControl {
 		try {
 			realStaffByUnit = tlStaffService.countRealStaffByUnit(condition);
 			realStaffByRegion = tlStaffService.countRealStaffByRegion(condition);
+			
+			/*判断是否有超员*/
+			Map<Object, Object> realStaffRegionInfo = null;
+			/*查询数据库是否有超员记录，条件*/
+			Map<Object, Object> overmanCondition = new HashMap<Object, Object>();
+			/*是否有超员记录结果*/
+			Map<Object, Object> overmanResult = null;
+			
+			for (int i = 0; i < realStaffByRegion.size(); i++) {
+				realStaffRegionInfo = realStaffByRegion.get(i);
+				
+				overmanCondition.put("regionId", realStaffRegionInfo.get("region_id"));
+				overmanResult = alarmService.getRegionOverman(overmanCondition);
+				
+				/*数据库中有该区域历史的超员报警*/
+				if (Objects.nonNull(overmanResult)) {
+					/*该区域再次超员*/
+					if (Integer.valueOf(realStaffRegionInfo.get("total").toString()) > Integer.valueOf(realStaffRegionInfo.get("region_max_people").toString())){
+						overmanResult.put("realNumber", realStaffRegionInfo.get("total"));
+						/*更新该区域在超员表中的实时人数*/
+						alarmService.updateOvermanAlarm(overmanResult);
+					}
+					
+					/*该区域没有超员*/
+					else {
+						realStaffRegionInfo.put("alarmInhandle", "1");
+						realStaffRegionInfo.put("alarmEndTime", Timestamp.from(Instant.now()));
+						realStaffRegionInfo.put("alarmId", overmanResult.get("alarm_id"));
+						alarmService.updateByPrimaryKeySelective(realStaffRegionInfo);
+					}
+					
+				}
+				
+				/*该区域没有历史超员报警*/
+				else {
+					/*该区域超员*/
+					if (Integer.valueOf(realStaffRegionInfo.get("total").toString()) > Integer.valueOf(realStaffRegionInfo.get("region_max_people").toString())){
+						realStaffRegionInfo.put("alarmId", uuidUtil.getUUID());
+						realStaffRegionInfo.put("alarmStartTime", Timestamp.from(Instant.now()));
+						realStaffRegionInfo.put("alarmInhandle", "0");
+						realStaffRegionInfo.put("alarmTypeId", "2");
+						realStaffRegionInfo.put("overmanId", uuidUtil.getUUID());
+						
+						alarmService.insertAlarmInfo(realStaffRegionInfo);
+						alarmService.insertOvermanAlarm(realStaffRegionInfo);
+					}
+				}
+
+				
+				
+			}
+			
 			realAlarmType = alarmService.countRealAlarmType();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -570,4 +623,67 @@ public class HomeControl {
 		}
 		return response.success().put("staffPointList", staffPointList).toCombineResult();
 	}
+	
+//	***************************************************************************测试
+	/** 
+	 * @description 添加一个呼叫报警记录 
+	 * @param condition
+	 * @return 
+	 */
+	@RequestMapping(value = "/staff/alarm/{cardId}", method = RequestMethod.POST)
+	public Map<Object, Object> insertStaffAlarm(@PathVariable String cardId) {
+		Response response = new Response();
+		Map<Object, Object> staffAlarm = new HashMap<Object, Object>();
+		int insertBaseAlarm = 0;
+		int insertStaffAlarm = 0;
+		
+		staffAlarm.put("alarmId", uuidUtil.getUUID());
+		staffAlarm.put("alarmStartTime", Timestamp.from(Instant.now()));
+		staffAlarm.put("alarmInhandle", "0");
+		staffAlarm.put("alarmTypeId", "4");
+		staffAlarm.put("cardId", cardId);
+		
+		try {
+			insertBaseAlarm = alarmService.insertAlarmInfo(staffAlarm);
+			insertStaffAlarm = alarmService.insertStaffAlarm(staffAlarm);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (insertStaffAlarm > 0 && insertBaseAlarm > 0) {
+			return response.success().toSimpleResult();
+		}
+		return response.failure("员工呼叫失败").toSimpleResult();
+	}
+	
+	
+	/** 
+	 * @description 解除员工呼叫报警
+	 * @param regionIdArr
+	 * @return 
+	 */
+	@RequestMapping(value = "/staff/alarm", method = RequestMethod.POST)
+	public Map<Object, Object> updateStaffAlarm(@RequestParam("alarmIdArr[]") String[] alarmIdArr) {
+		Response response = new Response();
+		Map<Object, Object> alarm = new HashMap<Object, Object>();
+		int updateBaseAlarm = 0;
+		
+		alarm.put("alarmInhandle", "1");
+		alarm.put("alarmEndTime", Timestamp.from(Instant.now()));
+		
+		try {
+			for (int i = 0; i < alarmIdArr.length; i++) {
+				alarm.put("alarmId", alarmIdArr[i]);
+				updateBaseAlarm = alarmService.updateByPrimaryKeySelective(alarm);
+				if (updateBaseAlarm <= 0) {
+					return response.failure("员工呼叫失败").toSimpleResult();
+				}
+			}
+		} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+			return response.success(ErrorMsg.SUCCESS).toSimpleResult();
+	}
+//**********************************************************************测试
 }

@@ -48,6 +48,7 @@
 		WHERE reader.reader_id=staff_alarm.reader_id
 			AND staff_alarm.alarm_id=alarm.alarm_id
 			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
+			AND alarm.alarm_inhandle='0'
 		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
 			AND alarm_inhandle = #{alarmInhandle}
 		</if>
@@ -85,6 +86,7 @@
 		WHERE reader.reader_id=staff_alarm.reader_id
 			AND staff_alarm.alarm_id=alarm.alarm_id
 			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
+			AND alarm.alarm_inhandle='0'
 		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
 			AND alarm_inhandle = #{alarmInhandle}
 		</if>
@@ -110,5 +112,13 @@
 		
 	</select>
 	<!-- END BY HaoShaSha -->
+	
+	<!-- 添加一条员工呼叫报警 -->
+	<insert id="insertStaffAlarm" parameterType="Map">
+	    INSERT INTO t_ls_staff_alarm (card_id, reader_id, alarm_id, staff_name, unit_id, unit_name)
+		SELECT card_id, reader_id, #{alarmId}, staff_name, unit_id, unit_name
+		FROM t_ls_staff_info
+		WHERE card_id = #{cardId}
+	 </insert>
 
 </mapper>

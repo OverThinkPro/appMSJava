@@ -55,6 +55,14 @@
 		ORDER BY alarm_type_id
 	</select>
 	
+	<!-- 插入一条报警信息 -->
+	<insert id="insertAlarmInfo" parameterType="Map">
+	    insert into t_base_alarm_info (alarm_id, alarm_start_time, alarm_inhandle, 
+	      alarm_type_id, alarm_end_time)
+	    values (#{alarmId,jdbcType=VARCHAR}, #{alarmStartTime,jdbcType=TIMESTAMP}, #{alarmInhandle,jdbcType=CHAR}, 
+	      #{alarmTypeId,jdbcType=VARCHAR}, #{alarmEndTime,jdbcType=TIMESTAMP})
+  	</insert>
+	
 	<!-- 删除语句开始 -->
 	<!-- 根据条件删除报警信息or清空表 -->
 	<delete id="deleteByCondition" parameterType="Map">
@@ -78,7 +86,7 @@
 	<!-- 删除语句结束 -->
 	<!-- 修改语句开始 -->
 	<!-- 更新报警处理结果 -->
-	<update id="updateByPrimaryKeySelective" parameterType="Alarm">
+	<update id="updateByPrimaryKeySelective" parameterType="Map">
 		UPDATE t_base_alarm_info
 		<set>
 			<if test="alarmInhandle != null">
