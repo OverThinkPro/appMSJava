@@ -31,7 +31,7 @@
 			<if test="unitId!=null &amp;&amp; unitId!=''">
 				AND unit_id = #{unitId}
 			</if>
-			<if test="cardId==null &amp;&amp; cardId==''">
+			<if test="cardId!=null &amp;&amp; cardId!=''">
 				AND card_id = #{cardId}
 			</if>
 			<if test="staffName!=null &amp;&amp; staffName!=''">
@@ -58,7 +58,7 @@
 			<if test="unitId!=null &amp;&amp; unitId!=''">
 				AND unit_id = #{unitId}
 			</if>
-			<if test="cardId==null &amp;&amp; cardId==''">
+			<if test="cardId!=null &amp;&amp; cardId!=''">
 				AND card_id = #{cardId}
 			</if>
 			<if test="staffName!=null &amp;&amp; staffName!=''">
@@ -83,7 +83,7 @@
 			<if test="unitId!=null &amp;&amp; unitId!=''">
 				AND unit_id = #{unitId}
 			</if>
-			<if test="cardId==null &amp;&amp; cardId==''">
+			<if test="cardId!=null &amp;&amp; cardId!=''">
 				AND card_id = #{cardId}
 			</if>
 			<if test="staffName!=null &amp;&amp; staffName!=''">

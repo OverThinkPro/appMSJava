@@ -74,8 +74,8 @@
 		(SELECT user_name FROM t_base_user_info WHERE user_id = #{userId}) user_name, #{userId} user_id
 	FROM t_ls_staff_info
 	WHERE region_id = #{regionId}
-		AND daq_time <![CDATA[>= ]]>  #{startTime}
-		AND daq_time <![CDATA[<= ]]>  #{endTime}
+		AND daq_time <![CDATA[>= ]]>  #{startTime,jdbcType=TIMESTAMP}
+		AND daq_time <![CDATA[<= ]]>  #{endTime,jdbcType=TIMESTAMP}
 	GROUP BY region_id, region_name, staff_id, staff_name, job_name, unit_name
 	ORDER BY staff_id asc
 	</select>
