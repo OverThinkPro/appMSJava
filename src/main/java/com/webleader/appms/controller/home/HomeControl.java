@@ -2,6 +2,7 @@ package com.webleader.appms.controller.home;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,16 +69,13 @@ public class HomeControl {
 	 * @exception SQLException
 	 */
 	@RequestMapping(value = "/base/coalmine", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent="首页查询煤矿基本信息")
 	public Map<Object, Object> getCoalmineInfo() {
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		Map<Object, Object> coalmineInfo = new HashMap<Object, Object>();
 		Response response = new Response();
 
 		/* 测试用 */
-		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
-		// condition.put("startTime",
-		// Timestamp.from(Instant.now().plusSeconds(-50)));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-50)));
 		condition.put("endTime", Timestamp.from(Instant.now()));
 		condition.put("currentCoalmineId", "1");
 		try {
@@ -98,7 +96,6 @@ public class HomeControl {
 	 * @exception SQLException
 	 */
 	@RequestMapping(value = "/realtime/count", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent="查询首页右侧的信息，当班人数，区域人数，未处理的警报")
 	public Map<Object, Object> getRealTimeInfo() {
 		Response response = new Response();
 		/* 查询条件 */
@@ -110,10 +107,7 @@ public class HomeControl {
 		/* 查询出来的未处理的报警 */
 		List<Map<Object, Object>> realAlarmType = new Stack<Map<Object, Object>>();
 
-		/* 测试用 */
-		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
-		// condition.put("startTime",
-		// Timestamp.from(Instant.now().plusSeconds(-50)));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-10)));
 		condition.put("endTime", Timestamp.from(Instant.now()));
 
 		try {
@@ -134,7 +128,7 @@ public class HomeControl {
 				overmanResult = alarmService.getRegionOverman(overmanCondition);
 				
 				/*数据库中有该区域历史的超员报警*/
-				if (Objects.nonNull(overmanResult)) {
+				if (Objects.nonNull(overmanResult) && overmanResult.size() > 0) {
 					/*该区域再次超员*/
 					if (Integer.valueOf(realStaffRegionInfo.get("total").toString()) > Integer.valueOf(realStaffRegionInfo.get("region_max_people").toString())){
 						overmanResult.put("realNumber", realStaffRegionInfo.get("total"));
@@ -151,7 +145,6 @@ public class HomeControl {
 					}
 					
 				}
-				
 				/*该区域没有历史超员报警*/
 				else {
 					/*该区域超员*/
@@ -166,12 +159,93 @@ public class HomeControl {
 						alarmService.insertOvermanAlarm(realStaffRegionInfo);
 					}
 				}
-
-				
-				
 			}
 			
 			realAlarmType = alarmService.countRealAlarmType();
+			
+			
+			/*限制区域报警*/
+			/*查询报警表中未处理的，但是实时表中已经没有记录的*/
+			List<Map<Object, Object>> listAlarm = alarmService.getSpecialAlarmInDB();
+			/*员工在危险区域，且没有在报警表中存在*/
+			List<Map<Object, Object>> listSpecial = alarmService.getSpecialStaffInDB();
+			Map<Object, Object> removeSpecialAlarm = new HashMap<>();
+			Map<Object, Object> addSpecialAlarm = new HashMap<>();
+			
+			if (Objects.nonNull(listAlarm) && listAlarm.size() > 0) {				
+				removeSpecialAlarm.put("alarmInhandle", "1");
+				removeSpecialAlarm.put("alarmEndTime", Timestamp.from(Instant.now()));
+				
+				for (int i = 0; i < listAlarm.size(); i++) {
+					removeSpecialAlarm.put("alarmId", listAlarm.get(i).get("alarm_id"));
+					/*解除报警*/
+					alarmService.updateByPrimaryKeySelective(removeSpecialAlarm);
+				}
+			}
+			if (Objects.nonNull(listSpecial) && listSpecial.size() > 0) {
+				for (int i = 0; i < listSpecial.size(); i++) {
+					addSpecialAlarm.put("alarmId", uuidUtil.getUUID());
+					addSpecialAlarm.put("alarmStartTime", Timestamp.from(Instant.now()));
+					addSpecialAlarm.put("alarmInhandle", "0");
+					addSpecialAlarm.put("alarmTypeId", "3");
+					addSpecialAlarm.put("cardId", listSpecial.get(i).get("card_id"));
+					
+					/*添加一条限制区域报警，到总表中*/
+					alarmService.insertAlarmInfo(addSpecialAlarm);
+					/*添加一条限制区域报警，到限制区域报警表中*/
+					alarmService.insertSpecialAlarm(addSpecialAlarm);
+					
+				}
+			}
+			
+			
+			
+			/*超时报警*/
+			Map<Object, Object> overtimeCondition = new HashMap<>();
+			Map<Object, Object> removeOvertimeAlarm = new HashMap<>();
+			Map<Object, Object> addOvertimeAlarm = new HashMap<>();
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			java.sql.Date currentDate = java.sql.Date.valueOf(formatter.format(Timestamp.from(Instant.now())));
+			overtimeCondition.put("workDate", currentDate);
+			overtimeCondition.put("currentDate", Timestamp.valueOf(currentDate.toString()+ " 00:00:00"));
+			
+			List<Map<Object, Object>> listUnOvertime = alarmService.getUnovertimeInfoInDB();
+			List<Map<Object, Object>> listRealtimeOvertime = alarmService.getRealtimeOvertimeInDB(overtimeCondition);
+			
+			if (Objects.nonNull(listUnOvertime) && listUnOvertime.size() > 0) {
+				removeOvertimeAlarm.put("alarmInhandle", "1");
+				removeOvertimeAlarm.put("alarmEndTime", Timestamp.from(Instant.now()));
+
+				for (int i = 0; i < listUnOvertime.size(); i++) {
+					removeOvertimeAlarm.put("alarmId", listUnOvertime.get(i).get("alarm_id"));
+					/*解除报警*/
+					alarmService.updateByPrimaryKeySelective(removeOvertimeAlarm);
+				}
+			}
+			if (Objects.nonNull(listRealtimeOvertime) && listRealtimeOvertime.size() > 0) {
+				addOvertimeAlarm.put("alarmStartTime", Timestamp.from(Instant.now()));
+				addOvertimeAlarm.put("alarmInhandle", "0");
+				addOvertimeAlarm.put("alarmTypeId", "1");
+				
+				for (int i = 0; i < listRealtimeOvertime.size(); i++) {
+					
+					if ((boolean) listRealtimeOvertime.get(i).get("isovertime")) {
+						addOvertimeAlarm.put("alarmId", uuidUtil.getUUID());
+						addOvertimeAlarm.put("staffId", listRealtimeOvertime.get(i).get("staff_id"));
+						addOvertimeAlarm.put("overtimeId", uuidUtil.getUUID());
+						addOvertimeAlarm.put("arriveTime", listRealtimeOvertime.get(i).get("arrive_time"));
+						
+						/*在报警总表中添加一条记录*/
+						alarmService.insertAlarmInfo(addOvertimeAlarm);
+						/*在超时报警表中，添加一条记录*/
+						alarmService.insertOvertimeAlarm(addOvertimeAlarm);
+					}
+				}
+			}
+			
+			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -189,7 +263,6 @@ public class HomeControl {
 	 * @throws SQLException
 	 */
 	@RequestMapping(value = "/realtime/staff/unit/{unitId}/p/{currentPage}", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent="通过UnitID，查询员工列表， 当班人数详细信息")
 	public Map<Object, Object> getStaffListsByUnitId(@PathVariable String unitId,
 			@PathVariable("currentPage") int currentPage) {
 		Response response = new Response();
@@ -202,7 +275,7 @@ public class HomeControl {
 		int countTotalPages = 0;
 
 		/* 测试用 */
-		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-50)));
 		// condition.put("startTime",
 		// Timestamp.from(Instant.now().plusSeconds(-50)));
 		condition.put("endTime", Timestamp.from(Instant.now()));
@@ -229,7 +302,6 @@ public class HomeControl {
 	 * @throws SQLException
 	 */
 	@RequestMapping(value = "/realtime/staff/region/{regionId}/p/{currentPage}", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent="通过regionID，查询员工列表， 区域人数的详细信息")
 	public Map<Object, Object> getStaffListsByRegionId(@PathVariable String regionId, @PathVariable int currentPage) {
 		Response response = new Response();
 		
@@ -241,7 +313,7 @@ public class HomeControl {
 		int countTotalPages = 0;
 
 		/* 测试用 */
-		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-10)));
 		// condition.put("startTime",
 		// Timestamp.from(Instant.now().plusSeconds(-50)));
 		condition.put("endTime", Timestamp.from(Instant.now()));
@@ -269,7 +341,6 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/realtime/evacuate/region/{regionId}/p/{currentPage}", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent="通过区域ID，查询撤离呼叫的详细信息")
 	public Map<Object, Object> getEvacuateDetailByRegionId(@PathVariable String regionId,
 			@PathVariable int currentPage) {
 		Response response = new Response();
@@ -287,7 +358,7 @@ public class HomeControl {
 		int callCount = 0;
 
 		/* 测试用 */
-		condition.put("startTime", Timestamp.valueOf("2017-03-02 02:20:57"));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-50)));
 		// condition.put("startTime",
 		// Timestamp.from(Instant.now().plusSeconds(-50)));
 		condition.put("endTime", Timestamp.from(Instant.now()));
@@ -321,7 +392,6 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/realtime/alarm/{alarmType}/p/{currentPage}", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent="通过alarmID查询各种警报的详细信息")
 	public Map<Object, Object> getCurrentAlarmInfoByType(@PathVariable int alarmType, @PathVariable int currentPage) {
 		Response response = new Response();
 		Map<Object, Object> condition = new HashMap<Object, Object>();
@@ -329,7 +399,7 @@ public class HomeControl {
 //		int countTotalPages = 0;
 
 		/* 测试用 */
-		condition.put("startTime", Timestamp.valueOf("2017-03-02 02:20:57"));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-50)));
 		// condition.put("startTime",
 		// Timestamp.from(Instant.now().plusSeconds(-50)));
 		condition.put("endTime", Timestamp.from(Instant.now()));
@@ -403,7 +473,6 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/base/region/count/p/{currentPage}", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent=" 撤离呼叫中，查询区域统计信息")
 	public Map<Object, Object> getRegionInfo(@PathVariable int currentPage) {
 		return realStaffByCondition(null, currentPage);
 	}
@@ -414,7 +483,6 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/base/region/count/{regionId}", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent="撤离呼叫中，通过区域ID，查询出区域信息")
 	public Map<Object, Object> getRegionInfoByRegionId(@PathVariable String regionId) {
 		return realStaffByCondition(regionId, null);
 	}
@@ -426,7 +494,7 @@ public class HomeControl {
 		Response response = new Response();
 
 		/* 测试用 */
-		condition.put("startTime", Timestamp.valueOf("2017-03-02 02:20:57"));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-50)));
 		condition.put("endTime", Timestamp.from(Instant.now()));
 		condition.put("regionId", regionId);
 
@@ -519,7 +587,6 @@ public class HomeControl {
 	 * @return
 	 */
 	@RequestMapping(value = "/base/staff/count/p/{currentPage}", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent="回电呼叫，条件查询所有员工信息")
 	public Map<Object, Object> getStaffByCondition(@PathVariable int currentPage,
 			@RequestParam(value = "unitId", required = false) String unitId,
 			@RequestParam(value = "staffName", required = false) String staffName) {
@@ -533,7 +600,7 @@ public class HomeControl {
 		int countTotalPages = 0;
 
 		/* 测试用 */
-		condition.put("startTime", Timestamp.valueOf("2017-04-14 18:32:14"));
+		condition.put("startTime", Timestamp.from(Instant.now().plusSeconds(-50)));
 		// condition.put("startTime",
 		// Timestamp.from(Instant.now().plusSeconds(-50)));
 		condition.put("endTime", Timestamp.from(Instant.now()));
@@ -600,7 +667,6 @@ public class HomeControl {
 	 * @return 
 	 */
 	@RequestMapping(value = "/map/realtime/staff", method = RequestMethod.GET)
-	@SystemLogController(opType="查询",opContent="首页实时查询实时员工位置坐标")
 	public Map<Object, Object> getRealtimeStaffMap(@RequestParam(value = "unitId", required = false) String unitId) {
 		Map<Object, Object> condition = new HashMap<Object, Object>();
 		List<Map<Object, Object>> staffPointList = null;

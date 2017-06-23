@@ -71,7 +71,7 @@ public class DutyControl {
 			return response.failure("排班失败，请重试").toSimpleResult();
 		}
 
-		for (int i = 1; i <= days; i++) {
+		for (int i = 0; i < days; i++) {
 
 			try {
 				if (m != 1) {

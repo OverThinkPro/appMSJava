@@ -58,6 +58,22 @@ public interface AlarmService {
 	public int insertStaffAlarm (Map<Object, Object> staffAlarm) throws SQLException;
 	
 	/** 
+	 * @description 添加一条特殊区域报警
+	 * @param specialAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertSpecialAlarm(Map<Object, Object> specialAlarm) throws SQLException;
+	
+	/** 
+	 * @description 在超时报警表中添加一条记录 
+	 * @param overtimeAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertOvertimeAlarm(Map<Object, Object> overtimeAlarm) throws SQLException;
+	
+	/** 
 	 * @description 组合条件分页查询超时报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数)
 	 * @param pageCondition(alarmInhandle,regionName,alarmStartTime,alarmEndTime,pageSize,pageBegin)
 	 * @return
@@ -120,6 +136,37 @@ public interface AlarmService {
 	 * @throws SQLException 
 	 */
 	public int countStaffAlarmByConditon(Map<Object,Object> condition) throws SQLException;
+	
+	/** 
+	 * @description 查询报警表中未处理的，但是实时表中已经没有记录的
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getSpecialAlarmInDB () throws SQLException;
+	
+	/** 
+	 * @description 员工在危险区域，且没有在报警表中存在
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getSpecialStaffInDB () throws SQLException;
+	
+	/** 
+	 * @description 查询实时表中有的，但限制区域表中没有的员工，需要查询这些员工是否超时
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getRealtimeOvertimeInDB(Map<Object, Object> condition) throws SQLException;
+
+	/** 
+	 * @description 查询得到数据库中，存在的超时报警，但员工以及离开的记录
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getUnovertimeInfoInDB() throws SQLException;
 	
 	/** 
 	 * @description 修改报警总表

@@ -42,12 +42,7 @@
 		WHERE
 			region_special.alarm_id=alarm.alarm_id
 			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
-		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
-			AND alarm_inhandle = #{alarmInhandle}
-		</if>
-		<if test="alarmInhandle==null &amp;&amp; alarmInhandle==''">
 			AND alarm_inhandle='0'
-		</if>
 		<if test="regionName!=null &amp;&amp; regionName!=''">
 			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
 		</if>
@@ -82,12 +77,7 @@
 		WHERE
 			region_special.alarm_id=alarm.alarm_id
 			AND alarm.alarm_type_id=alarm_sound.alarm_type_id
-		<if test="alarmInhandle!=null &amp;&amp; alarmInhandle!=''">
-			AND alarm_inhandle = #{alarmInhandle}
-		</if>
-		<if test="alarmInhandle==null &amp;&amp; alarmInhandle==''">
 			AND alarm_inhandle='0'
-		</if>
 		<if test="regionName!=null &amp;&amp; regionName!=''">
 			AND region_name LIKE CONCAT(CONCAT('%',#{regionName}),'%')
 		</if>
@@ -110,4 +100,51 @@
 		
 	</select>
 	<!-- END BY HaoShaSha -->
+	
+	<!-- 查询报警表中未处理的，但是实时表中已经没有记录的 -->
+	<select id="getSpecialAlarmInDB" resultType="Map">
+		SELECT base.alarm_id, special.card_id
+		FROM t_base_alarm_info base, t_region_special_alarm special, 
+			(SELECT special.staff_id
+				FROM t_base_alarm_info base, t_region_special_alarm special
+				WHERE base.alarm_id=special.alarm_id
+				AND base.alarm_inhandle='0'
+			EXCEPT
+			SELECT staff.staff_id
+				FROM t_ls_staff_info staff, t_base_region_info region
+				WHERE staff.region_id=region.region_id
+				AND staff.flag='0'
+				AND region.region_type='危险区域') tt
+		WHERE base.alarm_id=special.alarm_id
+		AND base.alarm_inhandle='0'
+		AND tt.staff_id=special.staff_id
+	</select>
+	
+	<!-- 员工在危险区域，且没有在报警表中存在 -->
+	<select id="getSpecialStaffInDB" resultType="Map">
+		SELECT staff.staff_id, staff.staff_name, staff.card_id, staff.reader_id, region.region_id, 
+			region.region_type, region.region_name, staff.unit_id, staff.unit_name
+		FROM t_ls_staff_info staff, t_base_region_info region, 
+			(SELECT staff.staff_id
+				FROM t_ls_staff_info staff, t_base_region_info region
+				WHERE staff.region_id=region.region_id
+				AND staff.flag='0'
+				AND region.region_type='危险区域'
+			EXCEPT
+			SELECT special.staff_id
+				FROM t_base_alarm_info base, t_region_special_alarm special
+				WHERE base.alarm_id=special.alarm_id
+				AND base.alarm_inhandle='0') tt
+		WHERE staff.region_id=region.region_id
+		AND staff.staff_id=tt.staff_id
+	</select>
+	
+	<!-- 添加限制区域报警 -->
+	<insert id="insertSpecialAlarm" parameterType="Map">
+		INSERT INTO t_region_special_alarm(staff_id, card_id, region_id, region_name, 
+			alarm_id, staff_name, unit_id, unit_name)
+		SELECT staff_id, card_id, region_id, region_name, #{alarmId}, staff_name, unit_id, unit_name
+		FROM t_ls_staff_info
+		WHERE card_id=#{cardId}
+  </insert>
 </mapper>

@@ -40,6 +40,30 @@ public interface SpecialRegionAlarmMapper {
 	 
 	/*****************查询接口结束*******************/
    	/*****************END BY HaoShaSha***********/
+	
+	/** 
+	 * @description 查询报警表中未处理的，但是实时表中已经没有记录的
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getSpecialAlarmInDB () throws SQLException;
+	
+	/** 
+	 * @description 员工在危险区域，且没有在报警表中存在
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getSpecialStaffInDB () throws SQLException;
+	
+	/** 
+	 * @description 添加一条特殊区域报警
+	 * @param specialAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertSpecialAlarm(Map<Object, Object> specialAlarm) throws SQLException;
 
 }
 

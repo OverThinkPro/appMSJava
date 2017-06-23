@@ -40,7 +40,29 @@ public interface OvertimeAlarmMapper {
 	 
 	/*****************查询接口结束*******************/
    	/*****************END BY HaoShaSha***********/
+	
+	/** 
+	 * @description 查询实时表中有的，但限制区域表中没有的员工，需要查询这些员工是否超时
+	 * @param condition
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getRealtimeOvertimeInDB(Map<Object, Object> condition) throws SQLException;
 
+	/** 
+	 * @description 查询得到数据库中，存在的超时报警，但员工以及离开的记录
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<Map<Object, Object>> getUnovertimeInfoInDB() throws SQLException;
+	
+	/** 
+	 * @description 在超时报警表中添加一条记录 
+	 * @param overtimeAlarm
+	 * @return
+	 * @throws SQLException 
+	 */
+	public int insertOvertimeAlarm(Map<Object, Object> overtimeAlarm) throws SQLException;
 }
 
 	
