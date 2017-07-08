@@ -2,7 +2,6 @@ package com.webleader.appms.controller.home;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,135 +113,135 @@ public class HomeControl {
 			realStaffByUnit = tlStaffService.countRealStaffByUnit(condition);
 			realStaffByRegion = tlStaffService.countRealStaffByRegion(condition);
 			
-			/*判断是否有超员*/
-			Map<Object, Object> realStaffRegionInfo = null;
-			/*查询数据库是否有超员记录，条件*/
-			Map<Object, Object> overmanCondition = new HashMap<Object, Object>();
-			/*是否有超员记录结果*/
-			Map<Object, Object> overmanResult = null;
-			
-			for (int i = 0; i < realStaffByRegion.size(); i++) {
-				realStaffRegionInfo = realStaffByRegion.get(i);
-				
-				overmanCondition.put("regionId", realStaffRegionInfo.get("region_id"));
-				overmanResult = alarmService.getRegionOverman(overmanCondition);
-				
-				/*数据库中有该区域历史的超员报警*/
-				if (Objects.nonNull(overmanResult) && overmanResult.size() > 0) {
-					/*该区域再次超员*/
-					if (Integer.valueOf(realStaffRegionInfo.get("total").toString()) > Integer.valueOf(realStaffRegionInfo.get("region_max_people").toString())){
-						overmanResult.put("realNumber", realStaffRegionInfo.get("total"));
-						/*更新该区域在超员表中的实时人数*/
-						alarmService.updateOvermanAlarm(overmanResult);
-					}
-					
-					/*该区域没有超员*/
-					else {
-						realStaffRegionInfo.put("alarmInhandle", "1");
-						realStaffRegionInfo.put("alarmEndTime", Timestamp.from(Instant.now()));
-						realStaffRegionInfo.put("alarmId", overmanResult.get("alarm_id"));
-						alarmService.updateByPrimaryKeySelective(realStaffRegionInfo);
-					}
-					
-				}
-				/*该区域没有历史超员报警*/
-				else {
-					/*该区域超员*/
-					if (Integer.valueOf(realStaffRegionInfo.get("total").toString()) > Integer.valueOf(realStaffRegionInfo.get("region_max_people").toString())){
-						realStaffRegionInfo.put("alarmId", uuidUtil.getUUID());
-						realStaffRegionInfo.put("alarmStartTime", Timestamp.from(Instant.now()));
-						realStaffRegionInfo.put("alarmInhandle", "0");
-						realStaffRegionInfo.put("alarmTypeId", "2");
-						realStaffRegionInfo.put("overmanId", uuidUtil.getUUID());
-						
-						alarmService.insertAlarmInfo(realStaffRegionInfo);
-						alarmService.insertOvermanAlarm(realStaffRegionInfo);
-					}
-				}
-			}
-			
+//			/*判断是否有超员*/
+//			Map<Object, Object> realStaffRegionInfo = null;
+//			/*查询数据库是否有超员记录，条件*/
+//			Map<Object, Object> overmanCondition = new HashMap<Object, Object>();
+//			/*是否有超员记录结果*/
+//			Map<Object, Object> overmanResult = null;
+//			
+//			for (int i = 0; i < realStaffByRegion.size(); i++) {
+//				realStaffRegionInfo = realStaffByRegion.get(i);
+//				
+//				overmanCondition.put("regionId", realStaffRegionInfo.get("region_id"));
+//				overmanResult = alarmService.getRegionOverman(overmanCondition);
+//				
+//				/*数据库中有该区域历史的超员报警*/
+//				if (Objects.nonNull(overmanResult) && overmanResult.size() > 0) {
+//					/*该区域再次超员*/
+//					if (Integer.valueOf(realStaffRegionInfo.get("total").toString()) > Integer.valueOf(realStaffRegionInfo.get("region_max_people").toString())){
+//						overmanResult.put("realNumber", realStaffRegionInfo.get("total"));
+//						/*更新该区域在超员表中的实时人数*/
+//						alarmService.updateOvermanAlarm(overmanResult);
+//					}
+//					
+//					/*该区域没有超员*/
+//					else {
+//						realStaffRegionInfo.put("alarmInhandle", "1");
+//						realStaffRegionInfo.put("alarmEndTime", Timestamp.from(Instant.now()));
+//						realStaffRegionInfo.put("alarmId", overmanResult.get("alarm_id"));
+//						alarmService.updateByPrimaryKeySelective(realStaffRegionInfo);
+//					}
+//					
+//				}
+//				/*该区域没有历史超员报警*/
+//				else {
+//					/*该区域超员*/
+//					if (Integer.valueOf(realStaffRegionInfo.get("total").toString()) > Integer.valueOf(realStaffRegionInfo.get("region_max_people").toString())){
+//						realStaffRegionInfo.put("alarmId", uuidUtil.getUUID());
+//						realStaffRegionInfo.put("alarmStartTime", Timestamp.from(Instant.now()));
+//						realStaffRegionInfo.put("alarmInhandle", "0");
+//						realStaffRegionInfo.put("alarmTypeId", "2");
+//						realStaffRegionInfo.put("overmanId", uuidUtil.getUUID());
+//						
+//						alarmService.insertAlarmInfo(realStaffRegionInfo);
+//						alarmService.insertOvermanAlarm(realStaffRegionInfo);
+//					}
+//				}
+//			}
+//			
 			realAlarmType = alarmService.countRealAlarmType();
-			
-			
-			/*限制区域报警*/
-			/*查询报警表中未处理的，但是实时表中已经没有记录的*/
-			List<Map<Object, Object>> listAlarm = alarmService.getSpecialAlarmInDB();
-			/*员工在危险区域，且没有在报警表中存在*/
-			List<Map<Object, Object>> listSpecial = alarmService.getSpecialStaffInDB();
-			Map<Object, Object> removeSpecialAlarm = new HashMap<>();
-			Map<Object, Object> addSpecialAlarm = new HashMap<>();
-			
-			if (Objects.nonNull(listAlarm) && listAlarm.size() > 0) {				
-				removeSpecialAlarm.put("alarmInhandle", "1");
-				removeSpecialAlarm.put("alarmEndTime", Timestamp.from(Instant.now()));
-				
-				for (int i = 0; i < listAlarm.size(); i++) {
-					removeSpecialAlarm.put("alarmId", listAlarm.get(i).get("alarm_id"));
-					/*解除报警*/
-					alarmService.updateByPrimaryKeySelective(removeSpecialAlarm);
-				}
-			}
-			if (Objects.nonNull(listSpecial) && listSpecial.size() > 0) {
-				for (int i = 0; i < listSpecial.size(); i++) {
-					addSpecialAlarm.put("alarmId", uuidUtil.getUUID());
-					addSpecialAlarm.put("alarmStartTime", Timestamp.from(Instant.now()));
-					addSpecialAlarm.put("alarmInhandle", "0");
-					addSpecialAlarm.put("alarmTypeId", "3");
-					addSpecialAlarm.put("cardId", listSpecial.get(i).get("card_id"));
-					
-					/*添加一条限制区域报警，到总表中*/
-					alarmService.insertAlarmInfo(addSpecialAlarm);
-					/*添加一条限制区域报警，到限制区域报警表中*/
-					alarmService.insertSpecialAlarm(addSpecialAlarm);
-					
-				}
-			}
-			
-			
-			
-			/*超时报警*/
-			Map<Object, Object> overtimeCondition = new HashMap<>();
-			Map<Object, Object> removeOvertimeAlarm = new HashMap<>();
-			Map<Object, Object> addOvertimeAlarm = new HashMap<>();
-			
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			java.sql.Date currentDate = java.sql.Date.valueOf(formatter.format(Timestamp.from(Instant.now())));
-			overtimeCondition.put("workDate", currentDate);
-			overtimeCondition.put("currentDate", Timestamp.valueOf(currentDate.toString()+ " 00:00:00"));
-			
-			List<Map<Object, Object>> listUnOvertime = alarmService.getUnovertimeInfoInDB();
-			List<Map<Object, Object>> listRealtimeOvertime = alarmService.getRealtimeOvertimeInDB(overtimeCondition);
-			
-			if (Objects.nonNull(listUnOvertime) && listUnOvertime.size() > 0) {
-				removeOvertimeAlarm.put("alarmInhandle", "1");
-				removeOvertimeAlarm.put("alarmEndTime", Timestamp.from(Instant.now()));
-
-				for (int i = 0; i < listUnOvertime.size(); i++) {
-					removeOvertimeAlarm.put("alarmId", listUnOvertime.get(i).get("alarm_id"));
-					/*解除报警*/
-					alarmService.updateByPrimaryKeySelective(removeOvertimeAlarm);
-				}
-			}
-			if (Objects.nonNull(listRealtimeOvertime) && listRealtimeOvertime.size() > 0) {
-				addOvertimeAlarm.put("alarmStartTime", Timestamp.from(Instant.now()));
-				addOvertimeAlarm.put("alarmInhandle", "0");
-				addOvertimeAlarm.put("alarmTypeId", "1");
-				
-				for (int i = 0; i < listRealtimeOvertime.size(); i++) {
-					
-					if ((boolean) listRealtimeOvertime.get(i).get("isovertime")) {
-						addOvertimeAlarm.put("alarmId", uuidUtil.getUUID());
-						addOvertimeAlarm.put("staffId", listRealtimeOvertime.get(i).get("staff_id"));
-						addOvertimeAlarm.put("overtimeId", uuidUtil.getUUID());
-						addOvertimeAlarm.put("arriveTime", listRealtimeOvertime.get(i).get("arrive_time"));
-						
-						/*在报警总表中添加一条记录*/
-						alarmService.insertAlarmInfo(addOvertimeAlarm);
-						/*在超时报警表中，添加一条记录*/
-						alarmService.insertOvertimeAlarm(addOvertimeAlarm);
-					}
-				}
-			}
+//			
+//			
+//			/*限制区域报警*/
+//			/*查询报警表中未处理的，但是实时表中已经没有记录的*/
+//			List<Map<Object, Object>> listAlarm = alarmService.getSpecialAlarmInDB();
+//			/*员工在危险区域，且没有在报警表中存在*/
+//			List<Map<Object, Object>> listSpecial = alarmService.getSpecialStaffInDB();
+//			Map<Object, Object> removeSpecialAlarm = new HashMap<>();
+//			Map<Object, Object> addSpecialAlarm = new HashMap<>();
+//			
+//			if (Objects.nonNull(listAlarm) && listAlarm.size() > 0) {				
+//				removeSpecialAlarm.put("alarmInhandle", "1");
+//				removeSpecialAlarm.put("alarmEndTime", Timestamp.from(Instant.now()));
+//				
+//				for (int i = 0; i < listAlarm.size(); i++) {
+//					removeSpecialAlarm.put("alarmId", listAlarm.get(i).get("alarm_id"));
+//					/*解除报警*/
+//					alarmService.updateByPrimaryKeySelective(removeSpecialAlarm);
+//				}
+//			}
+//			if (Objects.nonNull(listSpecial) && listSpecial.size() > 0) {
+//				for (int i = 0; i < listSpecial.size(); i++) {
+//					addSpecialAlarm.put("alarmId", uuidUtil.getUUID());
+//					addSpecialAlarm.put("alarmStartTime", Timestamp.from(Instant.now()));
+//					addSpecialAlarm.put("alarmInhandle", "0");
+//					addSpecialAlarm.put("alarmTypeId", "3");
+//					addSpecialAlarm.put("cardId", listSpecial.get(i).get("card_id"));
+//					
+//					/*添加一条限制区域报警，到总表中*/
+//					alarmService.insertAlarmInfo(addSpecialAlarm);
+//					/*添加一条限制区域报警，到限制区域报警表中*/
+//					alarmService.insertSpecialAlarm(addSpecialAlarm);
+//					
+//				}
+//			}
+//			
+//			
+//			
+//			/*超时报警*/
+//			Map<Object, Object> overtimeCondition = new HashMap<>();
+//			Map<Object, Object> removeOvertimeAlarm = new HashMap<>();
+//			Map<Object, Object> addOvertimeAlarm = new HashMap<>();
+//			
+//			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//			java.sql.Date currentDate = java.sql.Date.valueOf(formatter.format(Timestamp.from(Instant.now())));
+//			overtimeCondition.put("workDate", currentDate);
+//			overtimeCondition.put("currentDate", Timestamp.valueOf(currentDate.toString()+ " 00:00:00"));
+//			
+//			List<Map<Object, Object>> listUnOvertime = alarmService.getUnovertimeInfoInDB();
+//			List<Map<Object, Object>> listRealtimeOvertime = alarmService.getRealtimeOvertimeInDB(overtimeCondition);
+//			
+//			if (Objects.nonNull(listUnOvertime) && listUnOvertime.size() > 0) {
+//				removeOvertimeAlarm.put("alarmInhandle", "1");
+//				removeOvertimeAlarm.put("alarmEndTime", Timestamp.from(Instant.now()));
+//
+//				for (int i = 0; i < listUnOvertime.size(); i++) {
+//					removeOvertimeAlarm.put("alarmId", listUnOvertime.get(i).get("alarm_id"));
+//					/*解除报警*/
+//					alarmService.updateByPrimaryKeySelective(removeOvertimeAlarm);
+//				}
+//			}
+//			if (Objects.nonNull(listRealtimeOvertime) && listRealtimeOvertime.size() > 0) {
+//				addOvertimeAlarm.put("alarmStartTime", Timestamp.from(Instant.now()));
+//				addOvertimeAlarm.put("alarmInhandle", "0");
+//				addOvertimeAlarm.put("alarmTypeId", "1");
+//				
+//				for (int i = 0; i < listRealtimeOvertime.size(); i++) {
+//					
+//					if ((boolean) listRealtimeOvertime.get(i).get("isovertime")) {
+//						addOvertimeAlarm.put("alarmId", uuidUtil.getUUID());
+//						addOvertimeAlarm.put("staffId", listRealtimeOvertime.get(i).get("staff_id"));
+//						addOvertimeAlarm.put("overtimeId", uuidUtil.getUUID());
+//						addOvertimeAlarm.put("arriveTime", listRealtimeOvertime.get(i).get("arrive_time"));
+//						
+//						/*在报警总表中添加一条记录*/
+//						alarmService.insertAlarmInfo(addOvertimeAlarm);
+//						/*在超时报警表中，添加一条记录*/
+//						alarmService.insertOvertimeAlarm(addOvertimeAlarm);
+//					}
+//				}
+//			}
 			
 			
 			
