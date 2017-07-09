@@ -34,7 +34,7 @@
 	<!-- 查询语句开始 -->
 	<!-- 组合条件分页查询限制区域报警信息(警报处理状态，区域名称，警报开始时间，警报结束时间， 起始记录数，每页的记录数) -->
 	<select id="listRegionAlarmByPageCondition" parameterType="Map"	resultMap="SpecialRegionAlarmMap">
-		SELECT staff_id, card_id, region_id, region_name, region_dir, staff_name, unit_id, unit_name,
+		SELECT staff_id, region_special.card_id, region_id, region_name, region_dir, staff_name, unit_id, unit_name,
 			alarm.alarm_id, alarm_start_time, alarm_inhandle, alarm_end_time,
 			alarm.alarm_type_id,alarm_name
 		FROM t_region_special_alarm region_special,
