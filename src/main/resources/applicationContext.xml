@@ -39,9 +39,32 @@
 	</bean>
 
 	<!-- 事务管理 -->
-	<bean id="transactionManager"
+	<bean id="txManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="is*" propagation="REQUIRED" isolation="DEFAULT" read-only="true"/>
+			<tx:method name="if*" propagation="REQUIRED" isolation="DEFAULT" read-only="true"/>
+			<tx:method name="get*" propagation="REQUIRED" isolation="DEFAULT" read-only="true"/>
+			<tx:method name="*" propagation="REQUIRED" isolation="DEFAULT" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(* com.webleader.appms.db.service.*.*.*(..))" id="txPointCut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut expression="execution(* com.webleader.appms.db.service.*.*.*.*(..))" id="sysPointCut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="sysPointCut" />
+	</aop:config>
     
 </beans>
